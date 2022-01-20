@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://zoteroupdateifs/locale/overlay.dtd">
+
+<overlay
+    id="zoteroupdateifs"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script
+        type="application/x-javascript"
+        src="chrome://zoteroupdateifs/content/scripts/zoteroupdateifs.js"/>
+
+    <stringbundleset id="stringbundleset">
+        <stringbundle
+            id="zoteroupdateifs-bundle"
+            src="chrome://zoteroupdateifs/locale/zoteroupdateifs.properties"/>
+    </stringbundleset>
+
+    <menupopup id="zotero-tb-actions-popup">
+        <menuitem
+            id="zoteroupdateifs-tb-actions-export-playground"
+            label="&zotero.updateifs.updateAll.label;"
+            insertbefore="zotero-tb-actions-utilities-separator"
+            oncommand="Zotero.UpdateIFs.updateAll();"/>
+    </menupopup>
+
+    <popup id="zotero-collectionmenu">
+        <menuitem
+            id="zotero-collectionmenu-updateifs"
+            label="&zotero.updateifs.update.label;"
+            oncommand="Zotero.UpdateIFs.updateSelectedEntity()"/>
+    </popup>
+
+    <popup
+        id="zotero-itemmenu">
+        <menuitem
+            id="zotero-itemmenu-updateifs"
+            label="&zotero.updateifs.update.label;"
+            oncommand="Zotero.UpdateIFs.updateSelectedItems()"/>
+    </popup>
+</overlay>
