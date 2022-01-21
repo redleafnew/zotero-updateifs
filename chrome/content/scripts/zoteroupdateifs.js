@@ -22,7 +22,7 @@ Zotero.UpdateIFs.updateSelectedItems= async function( ){
 
 
 
-// 更新条目
+// 更新期刊影响因子
 Zotero.UpdateIFs.updateSelectedItem = async function(items) {
     var numSuccess = 0;
     var numFail = 0;
@@ -87,6 +87,57 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
                 } catch (error){
                     numFail = numFail + 1;
                 }
+                
+                // 得到中文期刊信息 与前面英文相比后缀加CN
+                try {
+                    var pubTitle = item.getField('publicationTitle');
+                    var urlCN = 'http://sci.justscience.cn/index.php?q=' + 
+                                encodeURIComponent(pubTitle) + '&sci=0'; // 中文期刊查询地址
+                    var respCN = await Zotero.HTTP.request("GET", urlCN);
+                    var parserCN = new DOMParser();
+                    var htmlCN = parserCN.parseFromString(
+                        respCN.responseText,
+                        "text/html"
+                    );
+                    var regInfo ='\n\t(.+)\n\t(.+)\n\t(.+)\n\t(.+)\n\t(.+)\n\t(.+)\n\t(.+)\n'; // 匹配期刊具体信息
+                    var reg = pubTitle + regInfo
+                    var old = item.getField('extra');
+                    var xPathCN = '//div[2]/div[1]/table[2]/tbody';
+                    var searchReg1 = /×/g; // 替换×
+                    var searchReg2 = /√/g; // 替换√
+                    var jourCN = Zotero.Utilities.xpath(htmlCN, xPathCN)[0].innerText.
+                                replace(searchReg1, '否').
+                                replace(searchReg2, '是').
+                                match(reg);
+                    
+                    var jourCNInfo = 'CSCD: ' +  jourCN[1] + ' ' + '北大核心: '  + jourCN[2] + ' ' +  '科技核心: ' + jourCN[3]  // 期刊信息组合
+                    
+                   
+                    var pattCN = /CSCD: (.+)北大核心: (.+)科技核心: (.+)/;   // 匹配以前影响因子的正则
+    
+                    if (old.length == 0 ) {   // 如果内容为空
+                        item.setField('extra', jourCNInfo);
+                    // } else if (old.search(/^\d{5} *\n/) != -1) {
+                    //     item.setField(
+                    //             'extra',
+                    //             old.replace(/^\d{5} */, citations + ' '));
+                     } else if (old.search(pattCN) != -1) { // 如果以前有影响因子则替换
+                        item.setField(
+                            'extra',
+                            old.replace(pattCN, jourCNInfo));
+                    // } else if (old.search(patt2) != -1) { // 如果以前有5年影响因子则替换
+                        // item.setField(
+                       //          'extra',
+                       //          old.replace(patt2, ifs5));
+                    } else {   // 以前没有，且内容不为空
+                         item.setField('extra', jourCNInfo + '\n' + old);
+                       // item.setField('extra', ifsc + ifsc5 + '\n' + old);
+                    }
+                    item.save();
+                    numSuccess = numSuccess + 1;    
+                    } catch (error){
+                        numFail = numFail + 1;
+                    }
                 
         }
         
