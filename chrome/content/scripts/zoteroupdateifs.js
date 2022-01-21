@@ -4,128 +4,33 @@ if (typeof Zotero === 'undefined') {
 Zotero.UpdateIFs = {};
 // ScholarCitations 改为 UpdateIFs
 
-Zotero.UpdateIFs.init = function() {
-    Zotero.UpdateIFs.resetState();
-
-    stringBundle = document.getElementById('zoteroUpdateIFs-bundle');
-    Zotero.UpdateIFs.captchaString = 'Please enter the correct ISSN of the journal or the journal is not SCI idexed.';
-    Zotero.UpdateIFs.citedPrefixString = ''
-        if (stringBundle != null) {
-            Zotero.UpdateIFs.captchaString = stringBundle.getString('captchaString');
-        }
-
-    // Register the callback in Zotero as an item observer
-    var notifierID = Zotero.Notifier.registerObserver(
-            Zotero.UpdateIFs.notifierCallback, ['item']);
-
-    // Unregister callback when the window closes (important to avoid a memory leak)
-    window.addEventListener('unload', function(e) {
-        Zotero.Notifier.unregisterObserver(notifierID);
-    }, false);
-};
-
-Zotero.UpdateIFs.notifierCallback = {
-    notify: function(event, type, ids, extraData) {
-        if (event == 'add') {
-            Zotero.UpdateIFs.updateItems(Zotero.Items.get(ids));
-        }
-    }
-};
-
-Zotero.UpdateIFs.resetState = function() {
-    Zotero.UpdateIFs.current = -1;
-    Zotero.UpdateIFs.toUpdate = 0;
-    Zotero.UpdateIFs.itemsToUpdate = null;
-    Zotero.UpdateIFs.numberOfUpdatedItems = 0;
-};
-
-Zotero.UpdateIFs.updateSelectedEntity = function(libraryId) {
-    if (!ZoteroPane.canEdit()) {
-        ZoteroPane.displayCannotEditLibraryMessage();
-        return;
-    }
-
+// 更新分类
+Zotero.UpdateIFs.updateSelectedColl = async function( ){
     var collection = ZoteroPane.getSelectedCollection();
-    var group = ZoteroPane.getSelectedGroup();
-
-    if (collection) {
-        var items = [];
-        collection.getChildItems(false).forEach(function (item) {
-            items.push(Zotero.Items.get(item.id));
-        });
-        Zotero.UpdateIFs.updateItems(items);
-    } else if (group) {
-        if (!group.editable) {
-            alert("This group is not editable!");
-            return;
-        }
-        var items = [];
-        group.getCollections().forEach(function(collection) {
-            collection.getChildItems(false).forEach(function(item) {
-                items.push(Zotero.Items.get(item.id));
-            })
-        });
-        Zotero.UpdateIFs.updateItems(items);
-    } else {
-        Zotero.UpdateIFs.updateAll();
-    }
+    var items = collection.getChildItems();
+    Zotero.UpdateIFs.updateSelectedItem(items); // 调用更新所选条目函数
+    await collection.saveTx();
 };
 
-Zotero.UpdateIFs.updateSelectedItems = function() {
-    Zotero.UpdateIFs.updateItems(ZoteroPane.getSelectedItems());
+// 得到所选条目
+Zotero.UpdateIFs.updateSelectedItems= async function( ){
+    var zoteroPane = Zotero.getActiveZoteroPane();
+    var items = zoteroPane.getSelectedItems();
+    Zotero.UpdateIFs.updateSelectedItem(items); // 调用更新所选条目函数
 };
 
-Zotero.UpdateIFs.updateAll = function() {
-    var items = [];
-    Zotero.Items.getAll().forEach(function (item) {
-        if (item.isRegularItem() && !item.isCollection()) {
-            var libraryId = item.getField('libraryID');
-            if (libraryId == null ||
-                    libraryId == '' ||
-                    Zotero.Libraries.isEditable(libraryId)) {
-                items.push(item);
-            }
-        }
-    });
-    Zotero.UpdateIFs.updateItems(items);
-};
 
-Zotero.UpdateIFs.updateItems = function(items) {
-    if (items.length == 0 ||
-            Zotero.UpdateIFs.numberOfUpdatedItems < Zotero.UpdateIFs.toUpdate) {
-        return;
-    }
 
-    Zotero.UpdateIFs.resetState();
-    Zotero.UpdateIFs.toUpdate = items.length;
-    Zotero.UpdateIFs.itemsToUpdate = items;
-    Zotero.UpdateIFs.updateNextItem();
-};
 
-Zotero.UpdateIFs.updateNextItem = function() {
-    Zotero.UpdateIFs.numberOfUpdatedItems++;
+// 更新条目
+Zotero.UpdateIFs.updateSelectedItem = async function(items) {
+    var numSuccess = 0;
+    var numFail = 0;
+    var lanUI = Zotero.Prefs.get('intl.locale.requested', true); // 得到当前Zotero界面语言
+    var whiteSpace = ' ';
+    if (lanUI == 'zh-CN') {whiteSpace = ''};
 
-    if (Zotero.UpdateIFs.current == Zotero.UpdateIFs.toUpdate - 1) {
-        Zotero.UpdateIFs.resetState();
-        return;
-    }
-
-    Zotero.UpdateIFs.current++;
-    Zotero.UpdateIFs.updateItem(
-            Zotero.UpdateIFs.itemsToUpdate[Zotero.UpdateIFs.current]);
-};
-
-Zotero.UpdateIFs.generateItemUrl = function(item) {  // 通过ISSN检索期刊
-    var baseUrl = 'http://sci.justscience.cn/?q='; // 唯问前半段
-    var url = baseUrl +
-        encodeURIComponent(item.getField('ISSN')) +  // 得到ISSN
-        '&sci=1'; // 唯问后半段
-        
-   return url;
-};
-
-Zotero.UpdateIFs.updateItem = async function(item) {
-        stringBundle = document.getElementById('zoteroUpdateIFs-bundle');
+    for (let item of items) { 
         var url = Zotero.UpdateIFs.generateItemUrl(item);
         var resp = await Zotero.HTTP.request("GET", url);
         var parser = new DOMParser();
@@ -178,16 +83,28 @@ Zotero.UpdateIFs.updateItem = async function(item) {
                    // item.setField('extra', ifsc + ifsc5 + '\n' + old);
                 }
                 item.save();
-                    
+                numSuccess = numSuccess + 1;    
                 } catch (error){
-                    //continue;
+                    numFail = numFail + 1;
                 }
-
+                
         }
-        Zotero.UpdateIFs.updateNextItem();
-
+        
+        
+        
+    }
+    alert (numSuccess + whiteSpace + Zotero.UpdateIFs.ZUIFGetString('success'));
 };
 
+// 得到url
+Zotero.UpdateIFs.generateItemUrl = function(item) {  // 通过ISSN检索期刊
+    var baseUrl = 'http://sci.justscience.cn/?q='; // 唯问前半段
+    var url = baseUrl +
+        encodeURIComponent(item.getField('ISSN')) +  // 得到ISSN
+        '&sci=1'; // 唯问后半段
+        
+   return url;
+};
 
 // Localization (borrowed from ZotFile sourcecode) 
 // 提示语言本地化函数 Zotero.UpdateIFs.updateItem = async function(item) {
@@ -215,10 +132,72 @@ Zotero.UpdateIFs.updateItem = async function(item) {
     };
 
 
-if (typeof window !== 'undefined') {
-    window.addEventListener('load', function(e) {
-        Zotero.UpdateIFs.init();
-    }, false);
-}
+// 是否显示菜单函数
+Zotero.UpdateIFs.displayMenuitem = function () { // 如果条目不符合，则禁用菜单
+    var pane = Services.wm.getMostRecentWindow("navigator:browser")
+        .ZoteroPane;
+    var collection = ZoteroPane.getSelectedCollection();
+    var items = pane.getSelectedItems();
+    if (collection) {var items_coll = collection.getChildItems();}
+    //Zotero.debug("**Jasminum selected item length: " + items.length);
+    var showMenuItem = items.some((item) => Zotero.UpdateIFs.checkItem(item));  // 检查条目
+    var showMenuColl = (collection == false); // 非正常文件夹，如我的出版物、重复条目、未分类条目、回收站，为false，此时返回值为true，隐藏菜单
+    if (collection) { // 如果是正常分类才显示
+        var showMenuColl = items_coll.some((item) => Zotero.UpdateIFs.checkItem(item));} else {
+            var showMenuColl = false;} // 检查分类条目是否适合
+    //   
+
+    pane.document.getElementById( // 分类/文件夹菜单是否可见 
+        "zotero-collectionmenu-updateifs"
+        ).hidden = !showMenuColl; // 分类条目上不符合则隐藏
+
+    // pane.document.getElementById( // 分类/文件夹分隔条是否可见 id-delcoll-separator
+    //     "id-delcoll-separator"
+    //     ).hidden = showMenuColl; //  分隔条
+
+    pane.document.getElementById( // 条目上是否禁用
+            "zotero-itemmenu-updateifs"
+            ).disabled = !showMenuItem; // 如不符合则禁用 
+                
+};
+
+// 检查条目是否符合
+Zotero.UpdateIFs.checkItem = function (item) { 
+    if (item && !item.isNote()) {
+        if (item.isRegularItem()) { // not an attachment already
+            issn = item.getField('ISSN')
+            
+            if (issn.search('-') != -1 && // 如果isn中有'-'
+                Zotero.ItemTypes.getName(item.itemTypeID) ==  'journalArticle' // 文献类型为期刊
+            ) {return true}
+
+        }  
+        
+    }      
+};
+
+
+
+    window.addEventListener(
+        "load",
+        function (e) {
+            if (window.ZoteroPane) {
+                var doc = window.ZoteroPane.document;
+                // add event listener for menu items
+                doc.getElementById("zotero-itemmenu").addEventListener(
+                    "popupshowing",
+                    Zotero.UpdateIFs.displayMenuitem,
+                    false
+                );
+                // add event listener for menu collections
+                doc.getElementById("zotero-collectionmenu").addEventListener(
+                    "popupshowing",
+                    Zotero.UpdateIFs.displayMenuitem,
+                    false
+                );
+            }
+        },
+        false
+    )
 
 module.exports = Zotero.UpdateIFs;

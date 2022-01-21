@@ -7,12 +7,12 @@
         RDF:about="urn:mozilla:install-manifest"
         em:id="zoteroupdateifs@redleafnew.me"
         em:name="Zotero Update IFs"
-        em:version="0.0.1"
+        em:version="0.0.2"
         em:type="2"
         em:creator="Minyi Han"
         em:description="Zotero plugin for update IF from http://sci.justscience.cn/"
-        em:homepageURL="http://sci.justscience.cn/"
-        em:updateURL= "https://raw.githubusercontent.com/redleafnew/delitemwithatt/master/update.rdf">
+        em:homepageURL="https://github.com/redleafnew/zotero-updateifs"
+        em:updateURL= "https://raw.githubusercontent.com/redleafnew/zotero-updateifs/main/install.rdf">
         <em:type>2</em:type>
         <em:targetApplication RDF:resource="rdf:#$x61SL3"/>
         <em:targetApplication>

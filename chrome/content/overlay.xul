@@ -16,19 +16,12 @@
             src="chrome://zoteroupdateifs/locale/zoteroupdateifs.properties"/>
     </stringbundleset>
 
-    <menupopup id="zotero-tb-actions-popup">
-        <menuitem
-            id="zoteroupdateifs-tb-actions-export-playground"
-            label="&zotero.updateifs.updateAll.label;"
-            insertbefore="zotero-tb-actions-utilities-separator"
-            oncommand="Zotero.UpdateIFs.updateAll();"/>
-    </menupopup>
 
     <popup id="zotero-collectionmenu">
         <menuitem
             id="zotero-collectionmenu-updateifs"
             label="&zotero.updateifs.update.label;"
-            oncommand="Zotero.UpdateIFs.updateSelectedEntity()"/>
+            oncommand="Zotero.UpdateIFs.updateSelectedColl()"/>
     </popup>
 
     <popup
