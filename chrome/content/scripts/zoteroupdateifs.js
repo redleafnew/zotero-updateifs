@@ -82,6 +82,10 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
  		            item.setField('extra', ifs + '\n' + old);
                    // item.setField('extra', ifsc + ifsc5 + '\n' + old);
                 }
+
+                var  detailURL = await Zotero.UpdateIFs.generateItemDetailUrl(url);
+                Zotero.UpdateIFs.setItemJCR(detailURL, item);  // 设置JCR及中科院分区
+
                 item.save();
                 numSuccess = numSuccess + 1;    
                 } catch (error){
@@ -91,8 +95,8 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
                 // 得到中文期刊信息 与前面英文相比后缀加CN
                 try {
                     var pubTitle = item.getField('publicationTitle');
-                    var urlCN = 'http://sci.justscience.cn/index.php?q=' + 
-                                encodeURIComponent(pubTitle) + '&sci=0'; // 中文期刊查询地址
+                    var urlCN = 'http://sci.justscience.cn/details.html?sci=0&q=' + 
+                                encodeURIComponent(pubTitle); // 中文期刊详情查询地址
                     var respCN = await Zotero.HTTP.request("GET", urlCN);
                     var parserCN = new DOMParser();
                     var htmlCN = parserCN.parseFromString(
@@ -100,20 +104,35 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
                         "text/html"
                     );
                     var regInfo ='\n\t(.+)\n\t(.+)\n\t(.+)\n\t(.+)\n\t(.+)\n\t(.+)\n\t(.+)\n'; // 匹配期刊具体信息
-                    var reg = pubTitle + regInfo
+                    //var reg = pubTitle + regInfo
                     var old = item.getField('extra');
-                    var xPathCN = '//div[2]/div[1]/table[2]/tbody';
+                    var xPathCN = '//div[2]/div[1]/table[2]/tbody/tr[2]/td['; // 收录情况2-4
+                    var xPathCNIF1 = '//div[2]/div[1]/table[3]/tbody/tr[5]/td[2]'; // 复合影响因子
+                    var xPathCNIF2 = '//div[2]/div[1]/table[3]/tbody/tr[6]/td[2]'; // 综合影响因子
                     var searchReg1 = /×/g; // 替换×
                     var searchReg2 = /√/g; // 替换√
-                    var jourCN = Zotero.Utilities.xpath(htmlCN, xPathCN)[0].innerText.
+                    var jourCNIF1 = Zotero.Utilities.xpath(htmlCN, xPathCNIF1)[0].innerText // 复合影响因子
+                    var jourCNIF2 = Zotero.Utilities.xpath(htmlCN, xPathCNIF2)[0].innerText // 综合影响因子
+                    var jourCN1 = Zotero.Utilities.xpath(htmlCN, xPathCN + '2]')[0].innerText. // CSCD
                                 replace(searchReg1, '否').
-                                replace(searchReg2, '是').
-                                match(reg);
+                                replace(searchReg2, '是');
+
+                    var jourCN2 = Zotero.Utilities.xpath(htmlCN, xPathCN + '3]')[0].innerText. // 北大核心
+                                replace(searchReg1, '否').
+                                replace(searchReg2, '是');
+
+                    var jourCN3 = Zotero.Utilities.xpath(htmlCN, xPathCN + '4]')[0].innerText. // 科技核心
+                                replace(searchReg1, '否').
+                                replace(searchReg2, '是');
+
+
                     
-                    var jourCNInfo = 'CSCD: ' +  jourCN[1] + ' ' + '北大核心: '  + jourCN[2] + ' ' +  '科技核心: ' + jourCN[3]  // 期刊信息组合
+                    var jourCNInfo = 'CSCD: ' +  jourCN1 + ' ' + '北大核心: '  + jourCN2 + ' ' +  '科技核心: ' + jourCN3 + '\n\n' + 
+                                    '复合影响因子: ' + jourCNIF1 + '\n' 
+                                    +'综合影响因子: ' + jourCNIF2 + '\n';  // 期刊信息组合
                     
                    
-                    var pattCN = /CSCD: (.+)北大核心: (.+)科技核心: (.+)/;   // 匹配以前影响因子的正则
+                    var pattCN = /CSCD: (.+)北大核心: (.+)科技核心: (.+)\n\n复合影响因子: (.*)\n综合影响因子: (.*)\n/g;   // 匹配以前影响因子的正则
     
                     if (old.length == 0 ) {   // 如果内容为空
                         item.setField('extra', jourCNInfo);
@@ -134,6 +153,7 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
                        // item.setField('extra', ifsc + ifsc5 + '\n' + old);
                     }
                     item.save();
+
                     numSuccess = numSuccess + 1;    
                     } catch (error){
                         numFail = numFail + 1;
@@ -157,6 +177,78 @@ Zotero.UpdateIFs.generateItemUrl = function(item) {  // 通过ISSN检索期刊
    return url;
 };
 
+// 得到期刊详细url
+Zotero.UpdateIFs.generateItemDetailUrl = async function(url) {
+    try {
+            var resp = await Zotero.HTTP.request("GET", url);
+            var parser = new DOMParser();
+            var html = parser.parseFromString(
+                resp.responseText,
+                "text/html"
+            );
+    
+        
+            var xPath4DetailURL = '//div[2]/div[1]/table[2]/tbody/tr[2]/td[2]/a/@href'; // 详情链接xPath
+            var detailURL = Zotero.Utilities.xpath(html, xPath4DetailURL)[0].value;  
+            return 'http://sci.justscience.cn/' + detailURL;
+            
+            
+        } catch (error){
+        //continue;
+        }
+    };
+
+// 设置JCR信息
+Zotero.UpdateIFs.setItemJCR = async function (detailURL, item) {
+    try {
+        var JCR = await Zotero.UpdateIFs.generateJCR (detailURL);  // 得到JCR
+        var JCRInfo = 'JCR: ' + JCR[0] + '\n' + '中科院大类分区: '+ JCR[1] + '\n' +
+                        '中科院小类分区: ' + JCR[2].replace(/区/g, '区 ') + '\n';
+        var pattJCR = /JCR:(.*)\n(.*)\n(.*)\n/;
+        var old = item.getField('extra');
+        if (old.length == 0 ) {   // 如果内容为空
+                            item.setField('extra', JCRInfo);
+            } else if (old.search(pattJCR) != -1) { // 如果以前有影响因子则替换
+                item.setField(
+                    'extra',
+                    old.replace(pattJCR, JCRInfo));
+                    
+            } else {   // 以前没有，且内容不为空
+                item.setField('extra', JCRInfo + '\n' + old);
+                        
+            }
+            item.save();
+    } catch (error){
+        //continue;
+        }
+
+};
+
+
+// 得到JCR分区
+    Zotero.UpdateIFs.generateJCR = async function(detailURL){
+        var JCR = [];
+        try {   
+          var resp = await Zotero.HTTP.request("GET", detailURL);
+          var parser = new DOMParser();
+          var html = parser.parseFromString(
+              resp.responseText,
+              "text/html"
+          );
+  
+     
+          var xPath = '//div[2]/div[1]/table[3]/tbody';
+          var pattJCR = /JCR分区\n\t(.*)\n(\s*)(.+\n\s*(.+\n)\s(.+)\n\s*)大类\n\s(.*)\n\s*小类\n\s(.*)\n/;
+          var jourJCR = Zotero.Utilities.xpath(html, xPath)[0].innerText;  
+          
+          var getJCR = jourJCR.match(pattJCR);  
+          JCR.push(getJCR[1], getJCR[6], getJCR[7]);
+          return JCR; 
+      } catch (error){
+      //continue;
+      }
+  };
+    
 // Localization (borrowed from ZotFile sourcecode) 
 // 提示语言本地化函数 Zotero.UpdateIFs.updateItem = async function(item) {
     
