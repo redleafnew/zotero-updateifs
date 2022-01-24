@@ -11,7 +11,7 @@
         em:type="2"
         em:creator="Minyi Han"
         em:description="Zotero plugin for update IF from http://sci.justscience.cn/"
-        em:homepageURL="http://sci.justscience.cn/"
+        em:homepageURL="https://github.com/redleafnew/zotero-updateifs"
         em:updateURL= "https://raw.githubusercontent.com/redleafnew/zotero-updateifs/main/update.rdf">
         <em:type>2</em:type>
         <em:targetApplication RDF:resource="rdf:#$x61SL3"/>
@@ -40,7 +40,9 @@
             <Description>
                 <em:locale>zh-CN</em:locale>
                 <em:name>Zotero更新影响因子</em:name>
+                <em:creator>Minyi Han</em:creator>
                 <em:description>从http://sci.justscience.cn/更新期刊影响因子</em:description>
+                <em:homepageURL>https://github.com/redleafnew/zotero-updateifs</em:homepageURL>
             </Description>
         </em:localized>
     </RDF:Description>
