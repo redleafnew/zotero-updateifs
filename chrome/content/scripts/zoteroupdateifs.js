@@ -44,22 +44,20 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
             );
         if (item.isRegularItem() && !item.isCollection()) {
             try {
+                // await Zotero.UpdateIFs.updateIF(item);
+
                 var old = item.getField('extra')
                 var xPath = '//div[2]/div[1]/table[2]/tbody/tr[2]/td[';
                 var jour = Zotero.Utilities.xpath(html, xPath + "2]")[0].innerText;  
                 var issnSearched = Zotero.Utilities.xpath(html, xPath +"4]")[0].innerText;
                 var if5Year = Zotero.Utilities.xpath(html, xPath +"6]")[0].innerText;  
                 var ifCurrent = Zotero.Utilities.xpath(html, xPath +"8]")[0].innerText; 
-                // return "Jour:" + jour + '5year:'+ 'if5Year' + 'current:' + ifCurrent;
                 
-                //var ifc = stringBundle.getString('ifc') + ' '; // 影响因子字符
-                
-                //var if5 = '\n' + stringBundle.getString('if5') + ' '; // 5年影响因子字符
                	var ifc ='影响因子: ';
 	            var if5 ='\n5年影响因子: ';
 
                 var dig = '(([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)';
-                //var patt = new RegExp(ifc);
+               
                 var patt1 = new RegExp(ifc + dig); // 影响因子正则
                 var patt2 = new RegExp(if5 + dig); // 5年影响因子正则
 
@@ -70,18 +68,12 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
 
                 if (old.length == 0 ) {   // 如果内容为空
                     item.setField('extra', ifs);
-                // } else if (old.search(/^\d{5} *\n/) != -1) {
-                //     item.setField(
-                //             'extra',
-                //             old.replace(/^\d{5} */, citations + ' '));
+            
                  } else if (old.search(patt) != -1) { // 如果以前有影响因子则替换
                     item.setField(
                         'extra',
                         old.replace(patt, ifs));
-                // } else if (old.search(patt2) != -1) { // 如果以前有5年影响因子则替换
-                    // item.setField(
-                   //          'extra',
-                   //          old.replace(patt2, ifs5));
+
                 } else {   // 以前没有，且内容不为空
  		            item.setField('extra', ifs + '\n' + old);
                    // item.setField('extra', ifsc + ifsc5 + '\n' + old);
@@ -108,7 +100,7 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
                         "text/html"
                     );
                     var regInfo ='\n\t(.+)\n\t(.+)\n\t(.+)\n\t(.+)\n\t(.+)\n\t(.+)\n\t(.+)\n'; // 匹配期刊具体信息
-                    //var reg = pubTitle + regInfo
+                    
                     var old = item.getField('extra');
                     var xPathCN = '//div[2]/div[1]/table[2]/tbody/tr[2]/td['; // 收录情况2-4
                     var xPathCNIF1 = '//div[2]/div[1]/table[3]/tbody/tr[5]/td[2]'; // 复合影响因子
@@ -140,18 +132,12 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
     
                     if (old.length == 0 ) {   // 如果内容为空
                         item.setField('extra', jourCNInfo);
-                    // } else if (old.search(/^\d{5} *\n/) != -1) {
-                    //     item.setField(
-                    //             'extra',
-                    //             old.replace(/^\d{5} */, citations + ' '));
+                   
                      } else if (old.search(pattCN) != -1) { // 如果以前有影响因子则替换
                         item.setField(
                             'extra',
                             old.replace(pattCN, jourCNInfo));
-                    // } else if (old.search(patt2) != -1) { // 如果以前有5年影响因子则替换
-                        // item.setField(
-                       //          'extra',
-                       //          old.replace(patt2, ifs5));
+                  
                     } else {   // 以前没有，且内容不为空
                          item.setField('extra', jourCNInfo + '\n' + old);
                        // item.setField('extra', ifsc + ifsc5 + '\n' + old);
@@ -219,41 +205,222 @@ Zotero.UpdateIFs.getISSN = async function (item){
     
    
           var issn = AllJour.match(patt)[2];  
-    //return AllJour;
-    return issn; // 返回issn 
-    } catch (e){
-    
-      }
+        //return AllJour;
+        return issn; // 返回issn 
+        } catch (e){
+        
+        }
 
-    try { // 期刊名字中有&的情况
-        var AllJour = Zotero.Utilities.xpath(html, xPath)[0].innerText;
-            var publicationTitle = item.getField('publicationTitle').
-            replace('&', 'and').
-            replace(' - ', '-'); 
-            var patt = new RegExp('\n\t' + publicationTitle + '\n\t(.*)\n\t(.*)', 'i'); // 
-            var issn = AllJour.match(patt)[2];  
-        
-        return issn; // 返回issn 
-    }
-    catch (e){
-    }
-    try { // 期刊更名情况
-        var AllJour = Zotero.Utilities.xpath(html, xPath)[0].innerText;
-            var publicationTitle = item.getField('publicationTitle').
-            replace('&', 'and'); 
-            var patt = new RegExp('\n\t' + publicationTitle +
-                            '(更名\/剔除)(.*)'+
-                            '\n\t(.*)\n\t(.*)', 'i'); // 
-            var issn = AllJour.match(patt)[4];  
-        
-        return issn; // 返回issn 
-    }  catch (e){
-    }
+        try { // 期刊名字中有&的情况
+            var AllJour = Zotero.Utilities.xpath(html, xPath)[0].innerText;
+                var publicationTitle = item.getField('publicationTitle').
+                replace('&', 'and').
+                replace(' - ', '-'); 
+                var patt = new RegExp('\n\t' + publicationTitle + '\n\t(.*)\n\t(.*)', 'i'); // 
+                var issn = AllJour.match(patt)[2];  
+            
+            return issn; // 返回issn 
+        }
+        catch (e){
+        }
+        try { // 期刊更名情况
+            var AllJour = Zotero.Utilities.xpath(html, xPath)[0].innerText;
+                var publicationTitle = item.getField('publicationTitle').
+                replace('&', 'and'); 
+                var patt = new RegExp('\n\t' + publicationTitle +
+                                '(更名\/剔除)(.*)'+
+                                '\n\t(.*)\n\t(.*)', 'i'); // 
+                var issn = AllJour.match(patt)[4];  
+            
+            return issn; // 返回issn 
+        }  catch (e){
+        }
 
  };
 
+
+// 重写得到影响因子函数 // 暂无用到
+Zotero.UpdateIFs.updateIF = async function (item){
+
+   try { 
+        var html = await Zotero.UpdateIFs.getHtml(item);
+     
+        var xPathJour ='//div[2]/div[1]/table[2]/tbody'; // 为得到期刊名称
+    
+        var AllJour = Zotero.Utilities.xpath(html, xPathJour)[0].innerText;
+        var publicationTitle = item.getField('publicationTitle'); 
+        var reg = '\n\t(.*)\n\t' + publicationTitle + // 分组1序号
+                                '\n\t(.*)\n\t(.*)'+ // 分组3 ISSN，分组4文章数
+                                '\n\t(.*)\n\t(.*)'+ //分组5 5年平均分， 分组6 非自引分
+                                '\n\t(.*)\n\t(.*)'; // 分组7 影响因子
+        var patt = new RegExp(reg, 'i'); // 
+        var jour = AllJour.match(patt);  
+
+        var if5Year = jour[5];  
+        var ifCurrent = jour[7];  
+        
+        var old = item.getField('extra')
+
+        var ifc ='影响因子: ';
+        var if5 ='\n5年影响因子: ';
+
+        var dig = '(([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)';
+        //var patt = new RegExp(ifc);
+        var patt1 = new RegExp(ifc + dig); // 影响因子正则
+        var patt2 = new RegExp(if5 + dig); // 5年影响因子正则
+
+        var ifsc = ifc + ifCurrent; // 新影响因子
+        var ifs5 = if5 + if5Year; // 新5年影响因子
+        var ifs = ifsc + ifs5;
+        var patt = /影响因子: (([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)\n5年影响因子: (([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)/;   // 匹配以前影响因子的正则
+
+        if (old.length == 0 ) {   // 如果内容为空
+            item.setField('extra', ifs);
+   
+         } else if (old.search(patt) != -1) { // 如果以前有影响因子则替换
+            item.setField(
+                'extra',
+                old.replace(patt, ifs));
+      
+        } else {   // 以前没有，且内容不为空
+             item.setField('extra', ifs + '\n' + old);
+          
+        }
+        var xPathUrl = '//div[2]/div[1]/table[2]/tbody//@href'; // 为得到详情URL
+        var index = jour[1]-1;
+        var detailURLPre = Zotero.Utilities.xpath(html, xPathUrl);  
+        var detailURL = 'http://sci.justscience.cn/' + detailURLPre[index].value;
+        Zotero.UpdateIFs.setItemJCR(detailURL, item);  // 设置JCR及中科院分区
+
+        item.save();
+        numSuccess = numSuccess + 1;    
+        } catch (error){
+            // numFail = numFail + 1;
+        }
+
+
+        try { // 期刊名字中有&的情况
+            var html = await Zotero.UpdateIFs.getHtml(item);
+         
+            var xPathJour ='//div[2]/div[1]/table[2]/tbody'; // 为得到期刊名称
+        
+            var AllJour = Zotero.Utilities.xpath(html, xPathJour)[0].innerText;
+            var publicationTitle = item.getField('publicationTitle').
+                        replace('&', 'and').
+                        replace(' - ', '-'); 
+            var reg = '\n\t(.*)\n\t' + publicationTitle + // 分组1序号
+                                    '\n\t(.*)\n\t(.*)'+ // 分组3 ISSN，分组4文章数
+                                    '\n\t(.*)\n\t(.*)'+ //分组5 5年平均分， 分组6 非自引分
+                                    '\n\t(.*)\n\t(.*)'; // 分组7 影响因子
+            var patt = new RegExp(reg, 'i'); // 
+            var jour = AllJour.match(patt);  
+    
+            var if5Year = jour[5];  
+            var ifCurrent = jour[7];  
+            
+            var old = item.getField('extra')
+    
+            var ifc ='影响因子: ';
+            var if5 ='\n5年影响因子: ';
+    
+            var dig = '(([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)';
+            //var patt = new RegExp(ifc);
+            var patt1 = new RegExp(ifc + dig); // 影响因子正则
+            var patt2 = new RegExp(if5 + dig); // 5年影响因子正则
+    
+            var ifsc = ifc + ifCurrent; // 新影响因子
+            var ifs5 = if5 + if5Year; // 新5年影响因子
+            var ifs = ifsc + ifs5;
+            var patt = /影响因子: (([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)\n5年影响因子: (([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)/;   // 匹配以前影响因子的正则
+    
+            if (old.length == 0 ) {   // 如果内容为空
+                item.setField('extra', ifs);
+       
+             } else if (old.search(patt) != -1) { // 如果以前有影响因子则替换
+                item.setField(
+                    'extra',
+                    old.replace(patt, ifs));
+          
+            } else {   // 以前没有，且内容不为空
+                 item.setField('extra', ifs + '\n' + old);
+              
+            }
+            var xPathUrl = '//div[2]/div[1]/table[2]/tbody//@href'; // 为得到详情URL
+            var index = jour[1]-1;
+            var detailURLPre = Zotero.Utilities.xpath(html, xPathUrl);  
+            var detailURL = 'http://sci.justscience.cn/' + detailURLPre[index].value;
+            Zotero.UpdateIFs.setItemJCR(detailURL, item);  // 设置JCR及中科院分区
+    
+            item.save();
+            numSuccess = numSuccess + 1;    
+            } catch (error){
+                // numFail = numFail + 1;
+            }
+            
+            try { // 更名或剔除情况
+                var html = await Zotero.UpdateIFs.getHtml(item);
+             
+                var xPathJour ='//div[2]/div[1]/table[2]/tbody'; // 为得到期刊名称
+            
+                var AllJour = Zotero.Utilities.xpath(html, xPathJour)[0].innerText;
+                var publicationTitle = item.getField('publicationTitle').
+                            replace('&', 'and').
+                            replace(' - ', '-'); 
+                var reg = '\n\t(.*)\n\t' + publicationTitle + '(更名\/剔除)(.*)'+ // 分组1序号
+                                        '\n\t(.*)\n\t(.*)'+ // 分组7 ISSN，分组8文章数
+                                        '\n\t(.*)\n\t(.*)'+ //分组7 5年平均分， 分组6 非自引分
+                                        '\n\t(.*)\n\t(.*)'; // 分组9 影响因子
+                var patt = new RegExp(reg, 'i'); // 
+                var jour = AllJour.match(patt);  
+        
+                var if5Year = jour[7];  
+                var ifCurrent = jour[9];  
+                
+                var old = item.getField('extra')
+        
+                var ifc ='影响因子: ';
+                var if5 ='\n5年影响因子: ';
+        
+                var dig = '(([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)';
+                //var patt = new RegExp(ifc);
+                var patt1 = new RegExp(ifc + dig); // 影响因子正则
+                var patt2 = new RegExp(if5 + dig); // 5年影响因子正则
+        
+                var ifsc = ifc + ifCurrent; // 新影响因子
+                var ifs5 = if5 + if5Year; // 新5年影响因子
+                var ifs = ifsc + ifs5;
+                var patt = /影响因子: (([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)\n5年影响因子: (([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)/;   // 匹配以前影响因子的正则
+        
+                if (old.length == 0 ) {   // 如果内容为空
+                    item.setField('extra', ifs);
+           
+                 } else if (old.search(patt) != -1) { // 如果以前有影响因子则替换
+                    item.setField(
+                        'extra',
+                        old.replace(patt, ifs));
+              
+                } else {   // 以前没有，且内容不为空
+                     item.setField('extra', ifs + '\n' + old);
+                  
+                }
+                var xPathUrl = '//div[2]/div[1]/table[2]/tbody//@href'; // 为得到详情URL
+                var index = jour[1]-1;
+                var detailURLPre = Zotero.Utilities.xpath(html, xPathUrl);  
+                var detailURL = 'http://sci.justscience.cn/' + detailURLPre[index].value;
+                Zotero.UpdateIFs.setItemJCR(detailURL, item);  // 设置JCR及中科院分区
+        
+                item.save();
+                numSuccess = numSuccess + 1;    
+                } catch (error){
+                    // numFail = numFail + 1;
+                }
+
+
+ };
+
+
  // 根据期刊名称，得到html，用于得到issn
-Zotero.UpdateIFs.getHtml = async function (item) {
+ Zotero.UpdateIFs.getHtml = async function (item) {
     try {
         var pubTitle = item.getField('publicationTitle');
         var url = 'http://sci.justscience.cn/index.php?q=' + 
@@ -274,7 +441,6 @@ Zotero.UpdateIFs.getHtml = async function (item) {
     
 
 };
-
 
 // 设置JCR信息
 Zotero.UpdateIFs.setItemJCR = async function (detailURL, item) {
