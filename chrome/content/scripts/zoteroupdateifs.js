@@ -33,7 +33,7 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
     for (let item of items) { 
         var issn = item.getField('ISSN');
         var issnPrint = await Zotero.UpdateIFs.getISSN(item); // 得到印刷版ISSN
-        if (issnPrint != 'undefined') {issn = issnPrint};
+        if (typeof issnPrint != 'undefined' ) {issn = issnPrint};
         var url = Zotero.UpdateIFs.generateItemUrl(issn);
 
         var resp = await Zotero.HTTP.request("GET", url);
@@ -214,7 +214,7 @@ Zotero.UpdateIFs.getISSN = async function (item){
       try { 
           var AllJour = Zotero.Utilities.xpath(html, xPath)[0].innerText;
           var publicationTitle =item.getField('publicationTitle');
-          var patt = new RegExp('\n\t' + publicationTitle + '\n\t(.*)\n\t(.*)'); // 期刊名称正则
+          var patt = new RegExp('\n\t' + publicationTitle + '\n\t(.*)\n\t(.*)', 'i'); // 期刊名称正则
     
     
    
@@ -230,7 +230,7 @@ Zotero.UpdateIFs.getISSN = async function (item){
             var publicationTitle = item.getField('publicationTitle').
             replace('&', 'and').
             replace(' - ', '-'); 
-            var patt = new RegExp('\n\t' + publicationTitle + '\n\t(.*)\n\t(.*)'); // 
+            var patt = new RegExp('\n\t' + publicationTitle + '\n\t(.*)\n\t(.*)', 'i'); // 
             var issn = AllJour.match(patt)[2];  
         
         return issn; // 返回issn 
@@ -243,7 +243,7 @@ Zotero.UpdateIFs.getISSN = async function (item){
             replace('&', 'and'); 
             var patt = new RegExp('\n\t' + publicationTitle +
                             '(更名\/剔除)(.*)'+
-                            '\n\t(.*)\n\t(.*)'); // 
+                            '\n\t(.*)\n\t(.*)', 'i'); // 
             var issn = AllJour.match(patt)[4];  
         
         return issn; // 返回issn 
