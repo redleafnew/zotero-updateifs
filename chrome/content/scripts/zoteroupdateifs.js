@@ -31,7 +31,11 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
     if (lanUI == 'zh-CN') {whiteSpace = ''};
 
     for (let item of items) { 
-        var url = Zotero.UpdateIFs.generateItemUrl(item);
+        var issn = item.getField('ISSN');
+        var issnPrint = await Zotero.UpdateIFs.getISSN(item); // 得到印刷版ISSN
+        if (issnPrint != 'undefined') {issn = issnPrint};
+        var url = Zotero.UpdateIFs.generateItemUrl(issn);
+
         var resp = await Zotero.HTTP.request("GET", url);
         var parser = new DOMParser();
         var html = parser.parseFromString(
@@ -168,10 +172,10 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
 };
 
 // 得到url
-Zotero.UpdateIFs.generateItemUrl = function(item) {  // 通过ISSN检索期刊
+Zotero.UpdateIFs.generateItemUrl = function(issn) {  // 通过ISSN检索期刊
     var baseUrl = 'http://sci.justscience.cn/?q='; // 唯问前半段
     var url = baseUrl +
-        encodeURIComponent(item.getField('ISSN')) +  // 得到ISSN
+        encodeURIComponent(issn) +  // 编码ISSN
         '&sci=1'; // 唯问后半段
         
    return url;
@@ -198,6 +202,80 @@ Zotero.UpdateIFs.generateItemDetailUrl = async function(url) {
         }
     };
 
+
+// 根据期刊名称印刷版ISSN 
+// 用于期刊有印刷版和在线版两个ISSN
+// 由于唯问只能用印刷版查询，用印刷版ISSN查询IF
+
+Zotero.UpdateIFs.getISSN = async function (item){
+    var html = await Zotero.UpdateIFs.getHtml(item);
+    var xPath = '//div[2]/div[1]/table[2]/tbody';
+    
+      try { 
+          var AllJour = Zotero.Utilities.xpath(html, xPath)[0].innerText;
+          var publicationTitle =item.getField('publicationTitle');
+          var patt = new RegExp('\n\t' + publicationTitle + '\n\t(.*)\n\t(.*)'); // 期刊名称正则
+    
+    
+   
+          var issn = AllJour.match(patt)[2];  
+    //return AllJour;
+    return issn; // 返回issn 
+    } catch (e){
+    
+      }
+
+    try { // 期刊名字中有&的情况
+        var AllJour = Zotero.Utilities.xpath(html, xPath)[0].innerText;
+            var publicationTitle = item.getField('publicationTitle').
+            replace('&', 'and').
+            replace(' - ', '-'); 
+            var patt = new RegExp('\n\t' + publicationTitle + '\n\t(.*)\n\t(.*)'); // 
+            var issn = AllJour.match(patt)[2];  
+        
+        return issn; // 返回issn 
+    }
+    catch (e){
+    }
+    try { // 期刊更名情况
+        var AllJour = Zotero.Utilities.xpath(html, xPath)[0].innerText;
+            var publicationTitle = item.getField('publicationTitle').
+            replace('&', 'and'); 
+            var patt = new RegExp('\n\t' + publicationTitle +
+                            '(更名\/剔除)(.*)'+
+                            '\n\t(.*)\n\t(.*)'); // 
+            var issn = AllJour.match(patt)[4];  
+        
+        return issn; // 返回issn 
+    }  catch (e){
+    }
+
+ };
+
+ // 根据期刊名称，得到html，用于得到issn
+Zotero.UpdateIFs.getHtml = async function (item) {
+    try {
+        var pubTitle = item.getField('publicationTitle');
+        var url = 'http://sci.justscience.cn/index.php?q=' + 
+                    encodeURIComponent(pubTitle) + '&sci=1'; 
+
+        var resp = await Zotero.HTTP.request("GET", url);
+        var parser = new DOMParser();
+        var html = parser.parseFromString(
+            resp.responseText,
+            "text/html"
+        );  
+        return html;
+    }
+
+    catch (error){
+
+    }
+    
+
+};
+
+
 // 设置JCR信息
 Zotero.UpdateIFs.setItemJCR = async function (detailURL, item) {
     try {
@@ -223,6 +301,7 @@ Zotero.UpdateIFs.setItemJCR = async function (detailURL, item) {
         }
 
 };
+
 
 
 // 得到JCR分区
