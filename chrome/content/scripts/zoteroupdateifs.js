@@ -242,7 +242,7 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
 //  };
 
 
-// 得到影响因子详细网址函数 
+// 得到影响因子及详细网址函数 
 Zotero.UpdateIFs.getIFs = async function (item){
     var ifs = [];
    try { 
@@ -402,11 +402,13 @@ Zotero.UpdateIFs.setItemJCR = async function (detailURL, item) {
   
      
           var xPath = '//div[2]/div[1]/table[3]/tbody';
-          var pattJCR = /JCR分区\n\t(.*)\n(\s*)(.+\n\s*(.+\n)\s(.+)\n\s*)大类\n\s(.*)\n\s*小类\n\s(.*)\n/;
+        //   var pattJCR = /JCR分区\n\t(.*)\n(\s*)(.+\n\s*(.+\n)\s(.+)\n\s*)大类\n\s(.*)\n\s*小类\n\s(.*)\n/;
+          var pattJCR = /JCR分区(.*)\n{3}\t.*\n{3}\t\n.\t\n.*\n.\n.*\n.*\n{3}.大类\n.(.*)\n{3}.小类\n.(.*)/; // 20220222 修改正则匹配
           var jourJCR = Zotero.Utilities.xpath(html, xPath)[0].innerText;  
           
           var getJCR = jourJCR.match(pattJCR);  
-          JCR.push(getJCR[1], getJCR[6], getJCR[7]);
+        //   JCR.push(getJCR[1], getJCR[6], getJCR[7]);
+        JCR.push(getJCR[1], getJCR[2], getJCR[3]);
           return JCR; 
       } catch (error){
       //continue;
