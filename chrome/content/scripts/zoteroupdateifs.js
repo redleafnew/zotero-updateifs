@@ -31,44 +31,30 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
     if (lanUI == 'zh-CN') {whiteSpace = ''};
 
     for (let item of items) { 
-        // var issn = item.getField('ISSN');
-        // var issnPrint = await Zotero.UpdateIFs.getISSN(item); // 得到印刷版ISSN
-        // if (typeof issnPrint != 'undefined' ) {issn = issnPrint};
-        // var url = Zotero.UpdateIFs.generateItemUrl(issn);
 
-        // var resp = await Zotero.HTTP.request("GET", url);
-        // var parser = new DOMParser();
-        // var html = parser.parseFromString(
-        //     resp.responseText,
-        //     "text/html"
-        //     );
         if (item.isRegularItem() && !item.isCollection()) {
             try {
                
                 var ifs = await Zotero.UpdateIFs.getIFs(item);
                 var if5Year = ifs[0];
                 var ifCurrent = ifs[1];
-                var  detailURL = ifs[2];
+                var detailURL = ifs[2];
+                var jourAbb = ifs[3];
                 var old = item.getField('extra')
-                // var xPath = '//div[2]/div[1]/table[2]/tbody/tr[2]/td[';
-                // var jour = Zotero.Utilities.xpath(html, xPath + "2]")[0].innerText;  
-                // var issnSearched = Zotero.Utilities.xpath(html, xPath +"4]")[0].innerText;
-                // var if5Year = Zotero.Utilities.xpath(html, xPath +"6]")[0].innerText;  
-                // var ifCurrent = Zotero.Utilities.xpath(html, xPath +"8]")[0].innerText; 
+
                 
                	var ifc ='影响因子: ';
 	            var if5 ='\n5年影响因子: ';
 
                 var dig = '(([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)';
                
-                var patt1 = new RegExp(ifc + dig); // 影响因子正则
-                var patt2 = new RegExp(if5 + dig); // 5年影响因子正则
 
                 var ifsc = ifc + ifCurrent; // 新影响因子
                 var ifs5 = if5 + if5Year; // 新5年影响因子
 	            var ifs = ifsc + ifs5;
                 var patt = /影响因子: (([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)\n5年影响因子: (([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)/;   // 匹配以前影响因子的正则
 
+                item.setField('journalAbbreviation', jourAbb); // 设置期刊缩写
                 if (old.length == 0 ) {   // 如果内容为空
                     item.setField('extra', ifs);
             
@@ -160,86 +146,7 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
     alert (numSuccess + whiteSpace + Zotero.UpdateIFs.ZUIFGetString('success'));
 };
 
-// 得到url
-// Zotero.UpdateIFs.generateItemUrl = function(issn) {  // 通过ISSN检索期刊
-//     var baseUrl = 'http://sci.justscience.cn/?q='; // 唯问前半段
-//     var url = baseUrl +
-//         encodeURIComponent(issn) +  // 编码ISSN
-//         '&sci=1'; // 唯问后半段
-        
-//    return url;
-// };
 
-// 得到期刊详细url
-// Zotero.UpdateIFs.generateItemDetailUrl = async function(url) {
-//     try {
-//             var resp = await Zotero.HTTP.request("GET", url);
-//             var parser = new DOMParser();
-//             var html = parser.parseFromString(
-//                 resp.responseText,
-//                 "text/html"
-//             );
-    
-        
-//             var xPath4DetailURL = '//div[2]/div[1]/table[2]/tbody/tr[2]/td[2]/a/@href'; // 详情链接xPath
-//             var detailURL = Zotero.Utilities.xpath(html, xPath4DetailURL)[0].value;  
-//             return 'http://sci.justscience.cn/' + detailURL;
-            
-            
-//         } catch (error){
-//         //continue;
-//         }
-//     };
-
-
-// 根据期刊名称印刷版ISSN 
-// 用于期刊有印刷版和在线版两个ISSN
-// 由于唯问只能用印刷版查询，用印刷版ISSN查询IF
-
-// Zotero.UpdateIFs.getISSN = async function (item){
-//     var html = await Zotero.UpdateIFs.getHtml(item);
-//     var xPath = '//div[2]/div[1]/table[2]/tbody';
-    
-//       try { 
-//           var AllJour = Zotero.Utilities.xpath(html, xPath)[0].innerText;
-//           var publicationTitle =item.getField('publicationTitle');
-//           var patt = new RegExp('\n\t' + publicationTitle + '\n\t(.*)\n\t(.*)', 'i'); // 期刊名称正则
-    
-    
-   
-//           var issn = AllJour.match(patt)[2];  
-//         //return AllJour;
-//         return issn; // 返回issn 
-//         } catch (e){
-        
-//         }
-
-//         try { // 期刊名字中有&的情况
-//             var AllJour = Zotero.Utilities.xpath(html, xPath)[0].innerText;
-//                 var publicationTitle = item.getField('publicationTitle').
-//                 replace('&', 'and').
-//                 replace(' - ', '-'); 
-//                 var patt = new RegExp('\n\t' + publicationTitle + '\n\t(.*)\n\t(.*)', 'i'); // 
-//                 var issn = AllJour.match(patt)[2];  
-            
-//             return issn; // 返回issn 
-//         }
-//         catch (e){
-//         }
-//         try { // 期刊更名情况
-//             var AllJour = Zotero.Utilities.xpath(html, xPath)[0].innerText;
-//                 var publicationTitle = item.getField('publicationTitle').
-//                 replace('&', 'and'); 
-//                 var patt = new RegExp('\n\t' + publicationTitle +
-//                                 '(更名\/剔除)(.*)'+
-//                                 '\n\t(.*)\n\t(.*)', 'i'); // 
-//                 var issn = AllJour.match(patt)[4];  
-            
-//             return issn; // 返回issn 
-//         }  catch (e){
-//         }
-
-//  };
 
 
 // 得到影响因子及详细网址函数 
@@ -248,7 +155,34 @@ Zotero.UpdateIFs.getIFs = async function (item){
    try { 
         var html = await Zotero.UpdateIFs.getHtml(item);
      
+        // 新函数开始
+        // var publicationTitle = item.getField('publicationTitle'); 
+               
+        // var xPathJour = '//td/a[contains(text(),' + 
+        //     '\'' +
+        //     publicationTitle + 
+        //     '\'' +
+        //     ')]/../..';
+
+        // // var xPathJour = xPath + '../..'
+        // // var xPathDetailURL = xPath + '@href'
+        // //  var all = xPathJour + ' | ' + xPathDetailURL;
+    
+        // var AllJour = Zotero.Utilities.xpath(html, xPathJour)[0].innerHTML
+
+        // pattTds = new RegExp('<td class="td1" height="30" align="center">', 'g');
+        // pattTde = new RegExp('</td>', 'g');
+        // var allInfo = AllJour.replace(pattTds,'').replace(pattTde,'');
+        // var jour = allInfo.match(/href=\"(.*)\"\s.*\n.(.*)\n.(.*)\n.*\n.(.*)\n.(.*)\n.(.*)/);  
+        // var detailURL = 'http://sci.justscience.cn/' + jour[1];
+        // var regAbbr = jour[2];
+        // var if5Year = jour[4]; 
+        // var ifCurrent = jour[6];  
+
+        //新函数结束
+
         var xPathJour ='//div[2]/div[1]/table[2]/tbody'; // 为得到期刊名称
+        // var xPathJour = '//td[contains(text(),'Annu')]/..'
     
         var AllJour = Zotero.Utilities.xpath(html, xPathJour)[0].innerText;
         var publicationTitle = item.getField('publicationTitle'); 
@@ -267,7 +201,10 @@ Zotero.UpdateIFs.getIFs = async function (item){
         var index = jour[1]-1;
         var detailURLPre = Zotero.Utilities.xpath(html, xPathUrl);  
         var detailURL = 'http://sci.justscience.cn/' + detailURLPre[index].value;
-        ifs.push(if5Year, ifCurrent, detailURL)        
+        var regAbbr = publicationTitle + '\n.(.*)';  // 用于得到期刊缩写
+        var abbr = AllJour.match(regAbbr)[1];  // 匹配得到期刊缩写
+
+        ifs.push(if5Year, ifCurrent, detailURL, abbr)        
         return ifs;
     } catch (error){
         // numFail = numFail + 1;
@@ -298,7 +235,11 @@ Zotero.UpdateIFs.getIFs = async function (item){
             var index = jour[1]-1;
             var detailURLPre = Zotero.Utilities.xpath(html, xPathUrl);  
             var detailURL = 'http://sci.justscience.cn/' + detailURLPre[index].value;
-            ifs.push(if5Year, ifCurrent, detailURL)        
+            var regAbbr = publicationTitle + '\n.(.*)';  // 用于得到期刊缩写
+            var abbr = AllJour.match(regAbbr)[1];  // 匹配得到期刊缩写
+
+            ifs.push(if5Year, ifCurrent, detailURL, abbr)  
+            // ifs.push(if5Year, ifCurrent, detailURL)        
             return ifs; 
             } catch (error){
                 // numFail = numFail + 1;
@@ -328,7 +269,11 @@ Zotero.UpdateIFs.getIFs = async function (item){
                 var index = jour[1]-1;
                 var detailURLPre = Zotero.Utilities.xpath(html, xPathUrl);  
                 var detailURL = 'http://sci.justscience.cn/' + detailURLPre[index].value;
-                ifs.push(if5Year, ifCurrent, detailURL)        
+                var regAbbr = publicationTitle + '(更名\/剔除)\n.(.*)';// 用于得到期刊缩写
+                //var regAbbr = /\t{2}\n.*\n.*\n.(.*)/;  
+                var abbr = AllJour.match(regAbbr)[2];  // 匹配得到期刊缩写
+
+                ifs.push(if5Year, ifCurrent, detailURL, abbr)        
                 return ifs;   
                 } catch (error){
                     // numFail = numFail + 1;
