@@ -201,7 +201,7 @@ Zotero.UpdateIFs.getIFs = async function (item){
         var index = jour[1]-1;
         var detailURLPre = Zotero.Utilities.xpath(html, xPathUrl);  
         var detailURL = 'http://sci.justscience.cn/' + detailURLPre[index].value;
-        var regAbbr = publicationTitle + '\n.(.*)';  // 用于得到期刊缩写
+        var regAbbr = '\n\t' + publicationTitle + '\n.(.*)';  // 用于得到期刊缩写
         var abbr = AllJour.match(regAbbr)[1];  // 匹配得到期刊缩写
 
         ifs.push(if5Year, ifCurrent, detailURL, abbr)        
@@ -211,7 +211,7 @@ Zotero.UpdateIFs.getIFs = async function (item){
     }
          
 
-        try { // 期刊名字中有&的情况
+    try { // 期刊名字中有&的情况
             var html = await Zotero.UpdateIFs.getHtml(item);
          
             var xPathJour ='//div[2]/div[1]/table[2]/tbody'; // 为得到期刊名称
@@ -235,7 +235,7 @@ Zotero.UpdateIFs.getIFs = async function (item){
             var index = jour[1]-1;
             var detailURLPre = Zotero.Utilities.xpath(html, xPathUrl);  
             var detailURL = 'http://sci.justscience.cn/' + detailURLPre[index].value;
-            var regAbbr = publicationTitle + '\n.(.*)';  // 用于得到期刊缩写
+            var regAbbr = '\n\t' + publicationTitle + '\n.(.*)';  // 用于得到期刊缩写
             var abbr = AllJour.match(regAbbr)[1];  // 匹配得到期刊缩写
 
             ifs.push(if5Year, ifCurrent, detailURL, abbr)  
@@ -245,7 +245,7 @@ Zotero.UpdateIFs.getIFs = async function (item){
                 // numFail = numFail + 1;
             }
             
-            try { // 更名或剔除情况
+        try { // 更名或剔除情况
                 var html = await Zotero.UpdateIFs.getHtml(item);
              
                 var xPathJour ='//div[2]/div[1]/table[2]/tbody'; // 为得到期刊名称
@@ -269,7 +269,7 @@ Zotero.UpdateIFs.getIFs = async function (item){
                 var index = jour[1]-1;
                 var detailURLPre = Zotero.Utilities.xpath(html, xPathUrl);  
                 var detailURL = 'http://sci.justscience.cn/' + detailURLPre[index].value;
-                var regAbbr = publicationTitle + '(更名\/剔除)\n.(.*)';// 用于得到期刊缩写
+                var regAbbr = '\n\t' +  publicationTitle + '(更名\/剔除)\n.(.*)';// 用于得到期刊缩写
                 //var regAbbr = /\t{2}\n.*\n.*\n.(.*)/;  
                 var abbr = AllJour.match(regAbbr)[2];  // 匹配得到期刊缩写
 
