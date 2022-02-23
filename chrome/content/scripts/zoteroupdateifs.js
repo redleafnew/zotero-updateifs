@@ -4,6 +4,32 @@ if (typeof Zotero === 'undefined') {
 Zotero.UpdateIFs = {};
 // ScholarCitations 改为 UpdateIFs
 
+// Startup - initialize plugin初始化
+
+Zotero.UpdateIFs.init = function() {
+    
+
+    // Register the callback in Zotero as an item observer
+    var notifierID = Zotero.Notifier.registerObserver(
+        Zotero.UpdateIFs.notifierCallback, ['item']);
+
+    // Unregister callback when the window closes (important to avoid a memory leak)
+    window.addEventListener('unload', function(e) {
+        Zotero.Notifier.unregisterObserver(notifierID);
+    }, false);
+
+};
+
+// 添加条目时自动添加影响因子及分区
+Zotero.UpdateIFs.notifierCallback = {
+    notify: function(event, type, ids, extraData) {
+        if (event == 'add') {
+            Zotero.UpdateIFs.updateSelectedItems();
+        }
+    }
+};
+
+
 // 更新分类
 Zotero.UpdateIFs.updateSelectedColl = async function( ){
     var collection = ZoteroPane.getSelectedCollection();
@@ -131,6 +157,7 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
                          item.setField('extra', jourCNInfo + '\n' + old);
                        // item.setField('extra', ifsc + ifsc5 + '\n' + old);
                     }
+                    item.setField('journalAbbreviation', pubTitle); 
                     item.save();
 
                     numSuccess = numSuccess + 1;    
@@ -143,7 +170,9 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
         
         
     }
-    alert (numSuccess + whiteSpace + Zotero.UpdateIFs.ZUIFGetString('success'));
+    var alertInfo = numSuccess + whiteSpace + Zotero.UpdateIFs.ZUIFGetString('success');
+    Zotero.UpdateIFs.showPopUP(alertInfo);
+   // alert (numSuccess + whiteSpace + Zotero.UpdateIFs.ZUIFGetString('success'));
 };
 
 
@@ -430,7 +459,21 @@ Zotero.UpdateIFs.checkItem = function (item) {
     }      
 };
 
+// 右下角弹出函数 
+Zotero.UpdateIFs.showPopUP = function (alertInfo) {  
 
+    var progressWindow = new Zotero.ProgressWindow({closeOnClick:true});
+    progressWindow.changeHeadline(Zotero.UpdateIFs.ZUIFGetString('finished'));
+    progressWindow.addDescription(alertInfo);
+    progressWindow.show();
+    progressWindow.startCloseTimer(4000);
+};
+
+if (typeof window !== 'undefined') {
+    window.addEventListener('load', function(e) {
+        Zotero.UpdateIFs.init();
+    }, false);
+}
 
     window.addEventListener(
         "load",
