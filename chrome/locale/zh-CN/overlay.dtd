@@ -1,2 +1,4 @@
 <!ENTITY zotero.updateifs.update.label "从唯问更新期刊信息">
 <!ENTITY zotero.updateifs.updateAll.label "从唯问更新所有影响因子">
+<!ENTITY updateifs-preferences-label "更新期刊信息设置...">
+<!ENTITY updateifs-clean-extra-label "清除其它内容...">

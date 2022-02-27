@@ -1,0 +1,9 @@
+<!ENTITY updateifs-name "DOI Manager">
+<!ENTITY updateifs-preferences "Update Journal Infomation Preferences">
+<!ENTITY update-abbr "Update and Abbreviation">
+<!ENTITY add-update "Update journal information when adding item">
+<!ENTITY en_abbr "Use full publication title to replace journal abbreviation for English item when the journal is not found">
+<!ENTITY ch_abbr "Use full publication title to replace journal abbreviation for Chinese item when the journal is not found">
+<!ENTITY search-pattern "Searching Pattern">
+<!ENTITY pubtitle-label "Search using publiction title">
+<!ENTITY issn-label "Search using publiction ISSN">

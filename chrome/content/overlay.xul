@@ -31,4 +31,9 @@
             label="&zotero.updateifs.update.label;"
             oncommand="Zotero.UpdateIFs.updateSelectedItems()"/>
     </popup>
+
+    <menupopup id="menu_ToolsPopup">
+        <menuitem id="menu_Tools-updateifs-preferences" label="&updateifs-preferences-label;" oncommand="Zotero.UpdateIFs.openPreferenceWindow();"/>
+        <menuitem id="menu_Tools-updateifs-clean-extra" label="&updateifs-clean-extra-label;" oncommand="Zotero.UpdateIFs.cleanExtra();"/>
+      </menupopup>
 </overlay>

@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://zotero-platform/content/preferences.css"?>
+
+<!DOCTYPE window SYSTEM "chrome://zoteroupdateifs/locale/options.dtd">
+
+<!-- onload="updatePreferenceWindow('all');" -->
+<prefwindow id="updateifs-pref" title="&updateifs-preferences;" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<stringbundleset id="stringbundleset">
+		<stringbundle id="updateifs-options" src="chrome://zotero-updateifs/locale/options.properties"/>
+	</stringbundleset>
+   <prefpane label="&updateifs-preferences;" id="updateifs-prefpane"> <!--onpaneload="Zotero.UpdateIFs.initPref();" -->
+    <preferences>
+      <preference id="pref-updateifs-add-update" name="extensions.updateifs.add-update" type="bool"/>
+      <preference id="pref-updateifs-en_abbr" name="extensions.updateifs.en-abbr" type="bool"/>
+      <preference id="pref-updateifs-ch_abbr" name="extensions.updateifs.ch-abbr" type="bool"/>
+      <!-- <preference id="pref-updateifs-pubtitle_issn" name="extensions.updateifs.pubtitle_issn" type="string"/> -->
+    </preferences>
+      
+    <groupbox>
+      <caption label="&update-abbr;"/>
+
+      <hbox style="margin: 0">
+        <checkbox id="id-updateifs-add-update" label="&add-update;" preference="pref-updateifs-add-update"/>
+     </hbox>
+     <hbox style="margin: 0">
+        <checkbox id="id-updateifs-en-abbr" label="&en_abbr;" preference="pref-updateifs-en_abbr"/>
+      </hbox>
+      <hbox style="margin: 0">
+        <checkbox id="id-updateifs-ch-abbr" label="&ch_abbr;" preference="pref-updateifs-ch_abbr"/>
+      </hbox>
+    </groupbox>
+
+    <!-- <groupbox>
+      <caption label="&search-pattern;"/>
+     
+      <radiogroup id="id-updateifs-pubtitle_issn" preference="pref-updateifs-pubtitle_issn">
+          <radio label="&pubtitle-label;" value='pubtitle'/>
+          <radio label="&issn-label;" value='issn'/>
+
+      </radiogroup>
+    </groupbox> -->
+  
+
+   
+  </prefpane>
+
+  <script src="options.js"/>
+  <script src="chrome://zotero/content/include.js"/>
+
+</prefwindow>

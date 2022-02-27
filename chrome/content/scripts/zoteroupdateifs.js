@@ -4,6 +4,38 @@ if (typeof Zotero === 'undefined') {
 Zotero.UpdateIFs = {};
 // ScholarCitations 改为 UpdateIFs
 
+// Preference managers
+
+Zotero.UpdateIFs.getPref =  function(pref) {
+    return Zotero.Prefs.get('extensions.updateifs.' + pref, true);
+};
+
+// Zotero.UpdateIFs.setPref = function(pref, value) {
+//     return Zotero.Prefs.set('extensions.updateifs.' + pref, value, true);
+// };
+
+
+
+
+// *********** Change the checkbox, topref
+// Zotero.UpdateIFs.changePref = function changePref(option) {
+//     Zotero.UpdateIFs.setPref("autoretrieve", option);
+// };
+
+// /**
+//  * Open UpdateIFs preference window
+//  */
+Zotero.UpdateIFs.openPreferenceWindow = function(paneID, action) {
+    var io = {pane: paneID, action: action};
+    window.openDialog('chrome://zoteroupdateifs/content/options.xul',
+        'updateifs-pref',
+        'chrome,titlebar,toolbar,centerscreen' + Zotero.Prefs.get('browser.preferences.instantApply', true) ? 'dialog=no' : 'modal', io
+    );
+};
+
+// Controls for Tools menu end
+
+
 // Startup - initialize plugin初始化
 
 Zotero.UpdateIFs.init = function() {
@@ -18,16 +50,68 @@ Zotero.UpdateIFs.init = function() {
         Zotero.Notifier.unregisterObserver(notifierID);
     }, false);
 
+    // Zotero.UpdateIFs.initPref();
+
 };
 
-// 添加条目时自动添加影响因子及分区
-Zotero.UpdateIFs.notifierCallback = {
-    notify: function(event, type, ids, extraData) {
-        if (event == 'add') {
-            Zotero.UpdateIFs.updateSelectedItems();
+// 初始化设置
+// Zotero.UpdateIFs.initPref = function() {
+//     if (Zotero.UpdateIFs.getPref('add-update') === undefined) {
+//         Zotero.UpdateIFs.setPref('add-update', false);
+//     }
+//     if (Zotero.UpdateIFs.getPref('ch-abbr') === undefined) {
+//         Zotero.UpdateIFs.setPref('ch-abbr', false);
+//     }
+//     if (Zotero.UpdateIFs.getPref('en-abbr') === undefined) {
+//         Zotero.UpdateIFs.setPref('en-abbr', false);
+//     }
+//     if (Zotero.UpdateIFs.getPref('pubtitle_issn') === undefined) {
+//         Zotero.UpdateIFs.setPref('pubtitle_issn', 'pubtitle');
+//     }
+    
+// };
+
+
+Zotero.UpdateIFs.cleanExtra = function() {
+    var items = Zotero.UpdateIFs.getSelectedItems();
+    if (items == ''){ // 如果没有选中条目
+        var alertInfo = Zotero.UpdateIFs.ZUIFGetString("clean.failed");
+        Zotero.UpdateIFs.showPopUP(alertInfo, 'failed');
+    } else {
+        var requireInfo = items.length > 1 ? "clean.extra.mul" : "clean.extra.sig";
+        var truthBeTold = window.confirm(Zotero.UpdateIFs.ZUIFGetString(requireInfo));
+        if (truthBeTold) {
+            for (let item of items) { 
+                
+                if (item.isRegularItem() && !item.isCollection()) {
+                    try {
+                        item.setField('extra', '');
+                        item.save();
+                        
+                        } catch (error){
+                        // numFail = numFail + 1;
+                    }
+                }
+            }
+            var alertInfo = Zotero.UpdateIFs.ZUIFGetString("clean.finished");
+            Zotero.UpdateIFs.showPopUP(alertInfo, 'finished');
         }
     }
 };
+// 添加条目时自动添加影响因子及分区
+Zotero.UpdateIFs.notifierCallback = {
+    notify: function(event, type, ids, extraData) {
+        var addedItems = Zotero.Items.get(ids);
+        var addUppdate = Zotero.Prefs.get('extensions.updateifs.add-update', true); // 是否在添加条目时更新
+        for (let item of addedItems) { 
+            if (event == 'add' && addUppdate && !item.isNote() && 
+            item.isRegularItem() && !item.isCollection()) {
+                    Zotero.UpdateIFs.updateSelectedItems();
+                }
+            }
+    }
+};
+
 
 
 // 更新分类
@@ -38,15 +122,19 @@ Zotero.UpdateIFs.updateSelectedColl = async function( ){
     await collection.saveTx();
 };
 
-// 得到所选条目
+// 更新所选条目
 Zotero.UpdateIFs.updateSelectedItems= async function( ){
-    var zoteroPane = Zotero.getActiveZoteroPane();
-    var items = zoteroPane.getSelectedItems();
+    var items = Zotero.UpdateIFs.getSelectedItems();
     Zotero.UpdateIFs.updateSelectedItem(items); // 调用更新所选条目函数
 };
 
 
-
+// 得到所选条目
+Zotero.UpdateIFs.getSelectedItems = function( ){
+    var zoteroPane = Zotero.getActiveZoteroPane();
+    var items = zoteroPane.getSelectedItems();
+    return items; // 
+};
 
 // 更新期刊影响因子
 Zotero.UpdateIFs.updateSelectedItem = async function(items) {
@@ -79,8 +167,10 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
                 var ifs5 = if5 + if5Year; // 新5年影响因子
 	            var ifs = ifsc + ifs5;
                 var patt = /影响因子: (([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)\n5年影响因子: (([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)/;   // 匹配以前影响因子的正则
-
-                item.setField('journalAbbreviation', jourAbb); // 设置期刊缩写
+                var enAbbr  = Zotero.Prefs.get('extensions.updateifs.en-abbr', true) // 设置中英文期刊缩写选项
+                if (enAbbr) { 
+                    item.setField('journalAbbreviation', jourAbb); // 设置期刊缩写
+                }
                 if (old.length == 0 ) {   // 如果内容为空
                     item.setField('extra', ifs);
             
@@ -98,9 +188,9 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
                 Zotero.UpdateIFs.setItemJCR(detailURL, item);  // 设置JCR及中科院分区
 
                 item.save();
-                numSuccess = numSuccess + 1;    
+                numSuccess ++;    
                 } catch (error){
-                    numFail = numFail + 1;
+                    numFail ++;
                 }
                 
                 // 得到中文期刊信息 与前面英文相比后缀加CN
@@ -157,21 +247,33 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
                          item.setField('extra', jourCNInfo + '\n' + old);
                        // item.setField('extra', ifsc + ifsc5 + '\n' + old);
                     }
-                    item.setField('journalAbbreviation', pubTitle); 
-                    item.save();
-
-                    numSuccess = numSuccess + 1;    
-                    } catch (error){
-                        numFail = numFail + 1;
+                    var chAbbr  = Zotero.Prefs.get('extensions.updateifs.ch-abbr', true) // 设置中中文期刊缩写选项
+                    if (chAbbr) { // 如果设置中中文期刊缩写为true时
+                        item.setField('journalAbbreviation', pubTitle); 
+                        
                     }
-                
+                    item.save();  
+
+                    numSuccess ++;    
+                    } catch (error){
+                        numFail ++;
+                    }
+                    var jourAbbrOrigin = item.getField('journalAbbreviation');  // 得到原期刊缩写
+                    var pubTitleOrin = item.getField('publicationTitle'); // 得到期刊名称
+                    var enAbbr  = Zotero.Prefs.get('extensions.updateifs.en-abbr', true) // 设置中英文期刊缩写选项
+                    if (jourAbbrOrigin == ''  &&  enAbbr) { // 如果原期刊缩写为空且缩写选择为true
+                       
+                        item.setField('journalAbbreviation', pubTitleOrin); //替换为期刊名称
+                        item.save();
+                    }   
         }
         
         
         
     }
-    var alertInfo = numSuccess + whiteSpace + Zotero.UpdateIFs.ZUIFGetString('success');
-    Zotero.UpdateIFs.showPopUP(alertInfo);
+    var successInfo = numSuccess > 1 ? 'success.mul' : 'success.sig';
+    var alertInfo = numSuccess + whiteSpace + Zotero.UpdateIFs.ZUIFGetString(successInfo);
+    Zotero.UpdateIFs.showPopUP(alertInfo, 'finished');
    // alert (numSuccess + whiteSpace + Zotero.UpdateIFs.ZUIFGetString('success'));
 };
 
@@ -302,7 +404,7 @@ Zotero.UpdateIFs.getIFs = async function (item){
                 //var regAbbr = /\t{2}\n.*\n.*\n.(.*)/;  
                 var abbr = AllJour.match(regAbbr)[2];  // 匹配得到期刊缩写
 
-                ifs.push(if5Year, ifCurrent, detailURL, abbr)        
+                ifs.push(if5Year, ifCurrent, detailURL, abbr);        
                 return ifs;   
                 } catch (error){
                     // numFail = numFail + 1;
@@ -460,10 +562,10 @@ Zotero.UpdateIFs.checkItem = function (item) {
 };
 
 // 右下角弹出函数 
-Zotero.UpdateIFs.showPopUP = function (alertInfo) {  
+Zotero.UpdateIFs.showPopUP = function (alertInfo, status) {  
 
     var progressWindow = new Zotero.ProgressWindow({closeOnClick:true});
-    progressWindow.changeHeadline(Zotero.UpdateIFs.ZUIFGetString('finished'));
+    progressWindow.changeHeadline(Zotero.UpdateIFs.ZUIFGetString(status));
     progressWindow.addDescription(alertInfo);
     progressWindow.show();
     progressWindow.startCloseTimer(4000);
