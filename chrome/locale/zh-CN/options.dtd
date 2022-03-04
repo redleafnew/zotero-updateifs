@@ -1,5 +1,5 @@
-<!ENTITY updateifs-name "DOI Manager">
 <!ENTITY updateifs-preferences "更新期刊信息设置">
+<!ENTITY update-journal-abbr "更新期刊和缩写设置">
 <!ENTITY update-abbr "更新和搜索">
 <!ENTITY add-update "添加条目时自动更新期刊信息">
 <!ENTITY en_abbr "如果英语条目查询不到, 期刊缩写使用期刊全称">
@@ -7,3 +7,29 @@
 <!ENTITY search-pattern "搜索方式">
 <!ENTITY pubtitle-label "使用期刊名称搜索">
 <!ENTITY issn-label "使用期刊ISSN搜索">
+
+<!ENTITY updateifs.journal.setting "期刊更新设置">
+<!ENTITY updateifs.author.setting "作者处理设置">
+<!ENTITY updateifs-utils "作者处理小工具">
+<!ENTITY author-process "作者处理">
+<!ENTITY updateifs-author-bold-desc "请根据您的需要勾选加粗或添加星号：">
+<!ENTITY author-bold "加粗">
+<!ENTITY author-regular "常规">
+<!ENTITY author-no-change "保持不变">
+<!ENTITY updateifs-author-star-desc "对作者添加或删除星号 (*)">
+<!ENTITY author-star-add "加星号">
+<!ENTITY author-star-remove "删除">
+<!ENTITY author-bold-star "给作者加粗或加星号">
+<!ENTITY updateifs-author-name "请输入作者姓名，姓前名后，中间加英文空格，如“张 无忌”: ">
+<!ENTITY author-bold "加粗">
+<!ENTITY author-star "加星号">
+<!ENTITY updateifs-author-name-desc "合并或拆分作者，中文作者请合并（否则姓名之前会有空格），英文作者都可以: ">
+<!ENTITY one-field "合并">
+<!ENTITY two-field "拆分">
+<!ENTITY process-author "处理作者">
+<!ENTITY updateifs.button.remove.bold.label "去除粗体"> 
+<!ENTITY updateifs.button.remove.boldInfo.label "点击去年作者的加粗标记">
+<!ENTITY updateifs.button.remove.star.label "去除星号">
+<!ENTITY updateifs.button.remove.starInfo.label "点击去除作者后面的星号">
+<!ENTITY updateifs.button.remove.boldStar.label "去除粗体和星号">
+<!ENTITY updateifs.button.remove.boldStarInfo.label "点击同时去除作者的粗体和星号">

@@ -33,6 +33,14 @@ Zotero.UpdateIFs.openPreferenceWindow = function(paneID, action) {
     );
 };
 
+Zotero.UpdateIFs.openUtilsWindow= function(paneID, action) {
+    var io = {pane: paneID, action: action};
+    window.openDialog('chrome://zoteroupdateifs/content/utils.xul',
+        'updateifs-utils',
+        'chrome,titlebar,toolbar,centerscreen' + Zotero.Prefs.get('browser.preferences.instantApply', true) ? 'dialog=no' : 'modal', io
+    );
+};
+
 // Controls for Tools menu end
 
 
@@ -40,6 +48,12 @@ Zotero.UpdateIFs.openPreferenceWindow = function(paneID, action) {
 
 Zotero.UpdateIFs.init = function() {
     
+    if (!Zotero.UpdateIFs) {
+        var fileLoader = Components.classes["@mozilla.org/moz/jssubscript-loader;1"]
+            .getService(Components.interfaces.mozIJSSubScriptLoader);
+        var scripts = ['zoteroupdateifs', 'options.js'];
+        scripts.forEach(s => fileLoader.loadSubScript('chrome://zoteroupdateifs/content/scripts/' + s + '.js', {}, "UTF-8"));
+    }
 
     // Register the callback in Zotero as an item observer
     var notifierID = Zotero.Notifier.registerObserver(
@@ -98,6 +112,266 @@ Zotero.UpdateIFs.cleanExtra = function() {
         }
     }
 };
+
+
+// 处理作者
+Zotero.UpdateIFs.addBoldStar = async function() {
+    
+var newName = Zotero.UpdateIFs.newNames();
+// //英文替换
+  var oldName = newName[0];
+  var newFirstName = newName[1];
+  var newLastName = newName[2];
+  var newFieldMode = newName[3]; // 0: two-field, 1: one-field (with empty first name)
+  var mergeedName = newName[4];
+  var mergeedNameNew = newName[5];
+
+var rn = 0; //计数替换条目个数
+//await Zotero.DB.executeTransaction(async function () {
+  
+    items = Zotero.UpdateIFs.getSelectedItems();
+        for (item of items) {
+        let creators = item.getCreators();
+        let newCreators = [];
+        for (let creator of creators) {
+        	if (`${creator.firstName} ${creator.lastName}`.trim() == oldName) {
+        		creator.firstName = newFirstName;
+        		creator.lastName = newLastName;
+        		creator.fieldMode = newFieldMode;
+                        rn ++;
+        	}
+
+            if (`${creator.lastName}`.trim() == mergeedName) { // 针对已经合并姓名的
+                creator.firstName = '';
+        		creator.lastName = mergeedNameNew;
+        		creator.fieldMode = newFieldMode;
+                        rn ++;
+            }
+        	newCreators.push(creator);
+
+        }
+        item.setCreators(newCreators);
+
+        await item.save();
+
+        }
+
+//}); 
+var lanUI = Zotero.Prefs.get('intl.locale.requested', true); // 得到当前Zotero界面语言
+var whiteSpace = ' ';
+if (lanUI == 'zh-CN') {whiteSpace = ''};
+var rnInfo = rn > 1 ? 'author.changed.mul' : 'author.changed.sig';
+var statusInfo = rn > 0 ? 'finished' : 'failed';
+var alertInfo = rn + whiteSpace + Zotero.UpdateIFs.ZUIFGetString(rnInfo);
+Zotero.UpdateIFs.showPopUP(alertInfo, statusInfo);
+// return rn + " item(s) updated";
+    
+};
+
+
+// 返回新的名字用以替换
+Zotero.UpdateIFs.newNames = function() {
+    var newName = [];
+    var splitName = '';
+    var oldName= '';
+    var newFirstName= '';
+    var newLastName= '';
+    var reg =/[一-龟]/; // 匹配所有汉字
+    var mergeedName ='';
+    var mergeedNameNew ='';
+    var alertInfo ='';
+    
+    var authorName = Zotero.Prefs.get('extensions.updateifs.author-name', true); // 得到设置的姓名
+  
+
+    if (authorName == ''){ // 如果作者为空时提示
+        alertInfo = Zotero.UpdateIFs.ZUIFGetString("author.empty");
+        Zotero.UpdateIFs.showPopUP(alertInfo, 'failed');
+    } else if (!/\s/.test(authorName) ) {  //检测输入的姓名中是否有空格,无空格提示
+        alertInfo = Zotero.UpdateIFs.ZUIFGetString("author.no.space");
+        Zotero.UpdateIFs.showPopUP(alertInfo, 'failed');
+    } else {  
+        
+        var splitName =  authorName.split(/\s/); // 用空格分为名和姓
+        var firstName = splitName[1];
+        var lastName = splitName[0];
+        oldName = firstName + ' ' + lastName;
+        // 检测姓名是否为中文
+        if (reg.test(authorName)) { // 为真时匹配到中文
+        var newFieldMode = 1;  // 1中文时为合并
+        mergeedName = authorName.replace(/\s/, ''); // 中文姓名删除空格得到合并的姓名
+        } else {
+            newFieldMode = 0; // 0为拆分姓名，英文
+            mergeedName = oldName; // 英文姓名与原姓名相同
+        };
+
+
+        var authorBold =  Zotero.Prefs.get('extensions.updateifs.bold', true); // 得到设置的姓名是否加粗
+        var authorStar =  Zotero.Prefs.get('extensions.updateifs.star', true); // 得到设置的姓名是否加星
+       
+        var boldStar = '';
+        if (authorBold && authorStar) {
+            boldStar = 'ba';  // bold and add star加粗加星
+            } else if (authorBold  && !authorStar) {
+                boldStar = 'b';  // 仅加粗
+            } else if (!authorBold && authorStar) {
+                boldStar = 's';  // 仅加星
+            } else if (!authorBold && !authorStar) {
+                //boldStar = 'n';  // 不加粗也不加星
+                var alertInfo = Zotero.UpdateIFs.ZUIFGetString("bold.or.star");
+                Zotero.UpdateIFs.showPopUP(alertInfo, 'failed');
+            }
+
+        switch (boldStar) {
+            case 'ba':  // 加粗加星
+                            
+                mergeedNameNew = '<b>' + mergeedName + '*</b>';
+                newFirstName = '<b>' + firstName + '*</b>';
+                newLastName = '<b>' + lastName  + '</b>';
+                if (reg.test(authorName)) { // 中文姓名
+                    newFirstName = "";
+                    newLastName = '<b>' + lastName + firstName +'*</b>';
+                };
+                break;
+            case 'b': // 仅加粗
+            mergeedNameNew = '<b>' + mergeedName + '</b>'; 
+                newFirstName = '<b>' + firstName + '</b>';
+                newLastName = '<b>' + lastName  + '</b>';
+                if (reg.test(authorName)) { // 中文姓名
+                    newFirstName = "";
+                    newLastName = '<b>' + lastName + firstName +'</b>';
+                };
+                break;
+            case 's':  // 加粗加星
+                mergeedNameNew = mergeedName + '*'; 
+                newFirstName =  firstName + '*';
+                newLastName = lastName;
+                if (reg.test(authorName)) { // 中文姓名
+                    newFirstName = "";
+                    newLastName = lastName + firstName +'*';
+                };
+                break;
+            case 'n':
+                //var alertInfo = Zotero.UpdateIFs.ZUIFGetString("bold.or.star");
+                //Zotero.UpdateIFs.showPopUP(alertInfo, 'failed');
+                break;
+         
+        }
+        newName.push(oldName, newFirstName, newLastName, newFieldMode, mergeedName, mergeedNameNew)
+        return  newName;
+
+    }
+
+};
+
+// 清除加粗
+Zotero.UpdateIFs.cleanBold = async function() {
+    var rn = 0;
+    var  items = Zotero.UpdateIFs.getSelectedItems();
+        for (item of items) {
+        let creators = item.getCreators();
+        let newCreators = [];
+       
+        for (creator of creators) {
+        	if (/<b>/.test(creator.firstName) || /<b>/.test(creator.lastName)) {  // 是否包含<b>
+        		
+        		creator.firstName = creator.firstName.replace(/<b>/g, '').replace(/<\/b>/g, '');
+        		creator.lastName = creator.lastName.replace(/<b>/g, '').replace(/<\/b>/g, '');
+        		creator.fieldMode = creator.fieldMode;
+                rn ++;
+        	 }
+        	newCreators.push(creator);
+
+             }
+        item.setCreators(newCreators);
+
+        await item.save();
+
+        }
+        var lanUI = Zotero.Prefs.get('intl.locale.requested', true); // 得到当前Zotero界面语言
+        var whiteSpace = ' ';
+        if (lanUI == 'zh-CN') {whiteSpace = ''};
+        var rnInfo = rn > 1 ? 'author.changed.mul' : 'author.changed.sig';
+        var statusInfo = rn > 0 ? 'finished' : 'failed';
+        var alertInfo = rn + whiteSpace + Zotero.UpdateIFs.ZUIFGetString(rnInfo);
+        Zotero.UpdateIFs.showPopUP(alertInfo, statusInfo);
+
+    };
+
+
+
+// 清除加星
+Zotero.UpdateIFs.cleanStar = async function() {
+    var rn = 0;
+    var  items = Zotero.UpdateIFs.getSelectedItems();
+        for (item of items) {
+        let creators = item.getCreators();
+        let newCreators = [];
+       
+        for (creator of creators) {
+        	if (/\*/.test(creator.firstName) || /\*/.test(creator.lastName)) {
+        		
+        		creator.firstName = creator.firstName.replace(/\*/g, '');
+        		creator.lastName = creator.lastName.replace(/\*/g, '');
+        		creator.fieldMode = creator.fieldMode;
+                        rn ++;
+        	 }
+        	newCreators.push(creator);
+
+             }
+        item.setCreators(newCreators);
+
+        await item.save();
+
+        }
+        var lanUI = Zotero.Prefs.get('intl.locale.requested', true); // 得到当前Zotero界面语言
+        var whiteSpace = ' ';
+        if (lanUI == 'zh-CN') {whiteSpace = ''};
+        var rnInfo = rn > 1 ? 'author.changed.mul' : 'author.changed.sig';
+        var statusInfo = rn > 0 ? 'finished' : 'failed';
+        var alertInfo = rn + whiteSpace + Zotero.UpdateIFs.ZUIFGetString(rnInfo);
+        Zotero.UpdateIFs.showPopUP(alertInfo, statusInfo);
+
+
+    };
+
+// 清除加粗加星
+Zotero.UpdateIFs.cleanBoldAndStar = async function() {
+    Zotero.UpdateIFs.cleanStar();
+    Zotero.UpdateIFs.cleanBold();
+
+
+};
+
+Zotero.UpdateIFs.getAuthorName = function() {
+
+    var auName = document.getElementById('id-updateifs-textb-author-name');
+    Zotero.Prefs.set('extensions.updateifs.author-name', auName, true);
+    
+
+};
+
+// 显示配置目录
+Zotero.UpdateIFs.showProfileDir= function() {
+    var profileDir = Zotero.Profile.dir;  // 配置目录
+    
+    var alertInfo = Zotero.UpdateIFs.ZUIFGetString('show.profile.dir') + ' ' + profileDir;
+    Zotero.UpdateIFs.showPopUP(alertInfo,'finished');
+
+    };
+
+
+// 显示数据目录
+Zotero.UpdateIFs.showDataDir= function() {
+    var dataDir = Zotero.DataDirectory.dir;// 数据目录
+    var alertInfo = Zotero.UpdateIFs.ZUIFGetString('show.data.dir') + ' ' + dataDir;
+    Zotero.UpdateIFs.showPopUP(alertInfo, 'finished');
+
+    };
+
+
+
+
 // 添加条目时自动添加影响因子及分区
 Zotero.UpdateIFs.notifierCallback = {
     notify: function(event, type, ids, extraData) {

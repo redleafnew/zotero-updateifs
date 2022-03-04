@@ -5,44 +5,94 @@
 <!DOCTYPE window SYSTEM "chrome://zoteroupdateifs/locale/options.dtd">
 
 <!-- onload="updatePreferenceWindow('all');" -->
-<prefwindow id="updateifs-pref" title="&updateifs-preferences;" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<prefwindow id="updateifs-pref" title="&updateifs-preferences;" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
 	<stringbundleset id="stringbundleset">
 		<stringbundle id="updateifs-options" src="chrome://zotero-updateifs/locale/options.properties"/>
 	</stringbundleset>
-   <prefpane label="&updateifs-preferences;" id="updateifs-prefpane"> <!--onpaneload="Zotero.UpdateIFs.initPref();" -->
+   <prefpane label="&updateifs-preferences;" id="updateifs-prefpane" > <!--onpaneload="Zotero.UpdateIFs.initPref();" -->
     <preferences>
       <preference id="pref-updateifs-add-update" name="extensions.updateifs.add-update" type="bool"/>
       <preference id="pref-updateifs-en_abbr" name="extensions.updateifs.en-abbr" type="bool"/>
       <preference id="pref-updateifs-ch_abbr" name="extensions.updateifs.ch-abbr" type="bool"/>
       <!-- <preference id="pref-updateifs-pubtitle_issn" name="extensions.updateifs.pubtitle_issn" type="string"/> -->
+      <preference id="pref-updateifs-author-name" name="extensions.updateifs.author-name" type="string"/>
+      <preference id="pref-updateifs-bold" name="extensions.updateifs.bold" type="bool"/>
+      <preference id="pref-updateifs-star" name="extensions.updateifs.star" type="bool"/>
+      <preference id="pref-updateifs-merg-split" name="extensions.updateifs.merge-split" type="string"/> 
     </preferences>
-      
-    <groupbox>
-      <caption label="&update-abbr;"/>
 
-      <hbox style="margin: 0">
-        <checkbox id="id-updateifs-add-update" label="&add-update;" preference="pref-updateifs-add-update"/>
-     </hbox>
-     <hbox style="margin: 0">
-        <checkbox id="id-updateifs-en-abbr" label="&en_abbr;" preference="pref-updateifs-en_abbr"/>
-      </hbox>
-      <hbox style="margin: 0">
-        <checkbox id="id-updateifs-ch-abbr" label="&ch_abbr;" preference="pref-updateifs-ch_abbr"/>
-      </hbox>
-    </groupbox>
+    <tabbox>
+      <tabs>
+         
+          <tab label="&updateifs.author.setting;"/>
+          <tab label="&updateifs.journal.setting;"/>
+        </tabs>
+       
+      <tabpanels id="zotero-prefpane-updateifs" orient="vertical" minheight="300">
+       
 
-    <!-- <groupbox>
-      <caption label="&search-pattern;"/>
+          <!-- 作者处理 -->
+          <tabpanel id="zotero-prefpane-author-tab" >
+           
+            <groupbox flex="1" >
+                <caption label="&author-process;"/>
+                <separator class='thin'/> 
+               <description  style="width: 420px">&author-bold-star;</description>
+                <separator class="thin"/>
+                  <hbox style="margin: 0">
+                    <label control="id-updateifs-author-name" value="&updateifs-author-name;"/>
+                    </hbox>
+                    <separator class="thin"/>
+                  <hbox style="margin: 0"> 
+                      <textbox style="margin: 5px 10px 10px 10px" id="id-updateifs-textb-author-name" preference="pref-updateifs-author-name" width="280" onchange="getAuthorName(); " />
+                  </hbox>  
+            
+                  <separator class='thin'/>    
+                  <separator class='thin'/> 
+                  <hbox style="margin: 0"> 
+                    <label control="id-updateifs-author-bold-desc" value="&updateifs-author-bold-desc;"/>
+                  </hbox> 
+                  <separator class='thin'/>   
+                  <hbox style="margin: 0">  
+                     <checkbox id="id-updateifs-author-bold" label="&author-bold;" preference="pref-updateifs-bold"/>
+                     <separator class='thin'/>   
+                     <separator class='thin'/>  
+                    <checkbox id="id-updateifs-author-star"  label="&author-star-add;" preference="pref-updateifs-star"/>
+                   </hbox>   
+                  <separator class='thin'/>   
+                  <separator class='thin'/>   
+                 <hbox style="margin: 0" width="300px">
+                  <button label="&updateifs.button.remove.bold.label;" tooltiptext="&updateifs.button.remove.boldInfo.label;" oncommand="Zotero.UpdateIFs.cleanBold();"/>
+                  <button label="&updateifs.button.remove.star.label;" tooltiptext="&updateifs.button.remove.starInfo.label;" oncommand="Zotero.UpdateIFs.cleanStar();"/>
+                  <button label="&updateifs.button.remove.boldStar.label;" tooltiptext="&updateifs.button.remove.boldStarInfo.label;" oncommand="Zotero.UpdateIFs.cleanBoldAndStar();"/>
+              </hbox>
+            </groupbox>
+        
+          </tabpanel>
+           <!-- 期刊及缩写设置 -->
+           <tabpanel id="zotero-prefpane-journal-tab"  >
+          
+            <groupbox  flex="1" >
+              <caption label="&update-abbr;"/>
+              <separator class='thin'/> 
+              <description style="width: 420px">&update-journal-abbr;</description>
+              <separator class='thin'/> 
+              <hbox style="margin: 0">
+                <checkbox id="id-updateifs-add-update" label="&add-update;" preference="pref-updateifs-add-update"/>
+              </hbox>
+              <separator class='thin'/> 
+              <hbox style="margin: 0">
+                <checkbox id="id-updateifs-en-abbr" label="&en_abbr;" preference="pref-updateifs-en_abbr"/>
+              </hbox>
+              <separator class='thin'/> 
+              <hbox style="margin: 0">
+                <checkbox id="id-updateifs-ch-abbr" label="&ch_abbr;" preference="pref-updateifs-ch_abbr"/>
+              </hbox>
+            </groupbox>
+        </tabpanel>
+        </tabpanels>
+      </tabbox>
      
-      <radiogroup id="id-updateifs-pubtitle_issn" preference="pref-updateifs-pubtitle_issn">
-          <radio label="&pubtitle-label;" value='pubtitle'/>
-          <radio label="&issn-label;" value='issn'/>
-
-      </radiogroup>
-    </groupbox> -->
-  
-
-   
   </prefpane>
 
   <script src="options.js"/>

@@ -2,3 +2,18 @@
 <!ENTITY zotero.updateifs.updateAll.label "从唯问更新所有影响因子">
 <!ENTITY updateifs-preferences-label "更新期刊信息设置...">
 <!ENTITY updateifs-clean-extra-label "清除其它内容...">
+
+<!ENTITY updateifs-author-label "工具箱">
+<!ENTITY updateifs-bold-star-label "作者加粗和/或加星">
+<!ENTITY updateifs-remove-bold-label "清除作者加粗">
+<!ENTITY updateifs-remove-star-label "清除作者星号">
+<!ENTITY updateifs-remove-bold-and-star-label "清除作者加粗和星号">
+<!ENTITY updateifs-bold-star-label-tip "使用请先在工具-更新期刊设置-作者处理设置中输入作者姓名，并勾选所需选项。">
+<!ENTITY updateifs-remove-bold-label-tip "仅清除作者加粗。">
+<!ENTITY updateifs-remove-star-label-tip "仅清除作者加星。">
+<!ENTITY updateifs-remove-bold-and-star-label-tip "同时清除作者加粗和星号">
+
+<!ENTITY updateifs-show-profile-dir-label "显示配置目录">
+<!ENTITY updateifs-show-profile-dir-label-tip "点击显示配置目录。">
+<!ENTITY updateifs-show-data-dir-label "显示数据目录">
+<!ENTITY updateifs-show-data-dir-label-tip "点击显示数据目录">

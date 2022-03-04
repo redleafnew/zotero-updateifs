@@ -2,3 +2,19 @@
 <!ENTITY zotero.updateifs.updateAll.label "Update all IFs from Justscience">
 <!ENTITY updateifs-preferences-label "Update IFs Preferences...">
 <!ENTITY updateifs-clean-extra-label "Clean Extra Field...">
+
+<!ENTITY updateifs-author-label "Toolbox">
+<!ENTITY updateifs-bold-star-label "Author Bold and/or Asterisk">
+<!ENTITY updateifs-remove-bold-label "Remove Author Bold">
+<!ENTITY updateifs-remove-star-label "Remove Author Asterisk">
+<!ENTITY updateifs-remove-bold-and-star-label "Remove Author Bold and Asterisk">
+<!ENTITY updateifs-bold-star-label-tip "Please input author name and check Bold and/or Asterisk using Tools-Update IFs Preferences-Author Process Setting before.">
+<!ENTITY updateifs-remove-bold-label-tip "Remove bold  for the author only.">
+<!ENTITY updateifs-remove-star-label-tip "Remove Asterisk for the author only.">
+<!ENTITY updateifs-remove-bold-and-star-label-tip "Remove bold and asterisk.">
+
+
+<!ENTITY updateifs-show-profile-dir-label "Show Porfile Directory">
+<!ENTITY updateifs-show-profile-dir-label-tip "Click show porfile directory.">
+<!ENTITY updateifs-show-data-dir-label "Show Data Directory">
+<!ENTITY updateifs-show-data-dir-label-tip "Click show data directory.">

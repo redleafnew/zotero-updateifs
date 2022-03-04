@@ -7,6 +7,8 @@
 
 3. 清除`其它`字段内容（`工具`-`清除其它内容...`）。
 
+4. 给作者加粗、加星、清除加粗、清除加星（使用请先在工具-更新期刊设置-作者处理设置中输入作者姓名，并勾选所需选项）；显示配置目录，显示数据目录等小工具（`工具`-`工具箱`）。
+
 # 安装方法
 
 从<https://github.com/redleafnew/zotero-updateifs/releases>下载xpi，然后在Zotero或JurisM中通过Tools-Addons-Install Add-on From File安装。
@@ -18,6 +20,8 @@
 2. Get journal abbreviation using name of the journal from `Justscience` (<http://sci.justscience.cn/>), set as `Journal Abbr` (Use `Tools`-`Update IFs Preferences...` to set the options).
 
 3. Remove `Extra` field content (`Tools`-`Clean Extra Field...`).
+
+4. Bold, asterisk, remove bold, remove asterisk for author name (Please input author name and check Bold and/or Asterisk using Tools-Update IFs Preferences-Author Process Setting before); show the profile and data directory (Use `Tools`-`Toolbox`)
 
 # Installation
 Download xpi from <https://github.com/redleafnew/zotero-updateifs/releases>, and click Tools-Addons-Install Add-on From File in Zotero or JurisM to install the extension. 

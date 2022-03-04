@@ -1,5 +1,6 @@
-<!ENTITY updateifs-name "DOI Manager">
+
 <!ENTITY updateifs-preferences "Update Journal Infomation Preferences">
+<!ENTITY update-journal-abbr "Udate journal and abbreviation settings">
 <!ENTITY update-abbr "Update and Abbreviation">
 <!ENTITY add-update "Update journal information when adding item">
 <!ENTITY en_abbr "Use full publication title to replace journal abbreviation for English item when the journal is not found">
@@ -7,3 +8,31 @@
 <!ENTITY search-pattern "Searching Pattern">
 <!ENTITY pubtitle-label "Search using publiction title">
 <!ENTITY issn-label "Search using publiction ISSN">
+
+
+
+<!ENTITY updateifs.journal.setting "Journal Update Settings">
+<!ENTITY updateifs.author.setting "Author Process Settings">
+<!ENTITY updateifs-utils "Author process utils">
+<!ENTITY author-process "Author Process">
+<!ENTITY updateifs-author-bold-desc "Check bold and asterisk accorind to your need:">
+<!ENTITY author-bold "Bold">
+<!ENTITY author-regular "Regular">
+<!ENTITY author-no-change "No change">
+<!ENTITY updateifs-author-star-desc "Add or remove star (*) for author">
+<!ENTITY author-star-add "Asterisk">
+<!ENTITY author-star-remove "Remove">
+<!ENTITY author-bold-star "Bold and star for author">
+<!ENTITY updateifs-author-name "Please input the author name as given name following family name, for example, 'Zhang Wuji': ">
+<!ENTITY author-bold "Bold">
+<!ENTITY author-star "Asterisk">
+<!ENTITY updateifs-author-name-desc "Merge or split name, merging for Chinese name (otherwise there will be a space between famliy and given name) and spliting for English name: ">
+<!ENTITY one-field "Merge">
+<!ENTITY two-field "Split">
+<!ENTITY process-author "Process Author">
+<!ENTITY updateifs.button.remove.bold.label "Remove Bold"> 
+<!ENTITY updateifs.button.remove.boldInfo.label "Remove bold tag around the author">
+<!ENTITY updateifs.button.remove.star.label "Remove Asterisk">
+<!ENTITY updateifs.button.remove.starInfo.label "Remove Asterisk after the author">
+<!ENTITY updateifs.button.remove.boldStar.label "Remove Bold and Asterisk">
+<!ENTITY updateifs.button.remove.boldStarInfo.label "Remove bold tag and asterisk for the author">

@@ -35,5 +35,44 @@
     <menupopup id="menu_ToolsPopup">
         <menuitem id="menu_Tools-updateifs-preferences" label="&updateifs-preferences-label;" oncommand="Zotero.UpdateIFs.openPreferenceWindow();"/>
         <menuitem id="menu_Tools-updateifs-clean-extra" label="&updateifs-clean-extra-label;" oncommand="Zotero.UpdateIFs.cleanExtra();"/>
-      </menupopup>
+   
+        <menu id="menu_Tools-updateifs-menu" label="&updateifs-author-label;"> 
+             <menupopup id="menu_Tools-updateifs-menu-popup">
+                <menuitem
+                    id="menu_Tools-updateifs-menu-popup-bold-star"
+                    tooltiptext="&updateifs-bold-star-label-tip;"
+                    label="&updateifs-bold-star-label;"
+                    oncommand="Zotero.UpdateIFs.addBoldStar();"/>
+                <menuitem
+                    id="menu_Tools-updateifs-menu-popup-remove-bold"
+                    tooltiptext="&updateifs-remove-bold-label-tip;"
+                    label="&updateifs-remove-bold-label;"
+                    oncommand="Zotero.UpdateIFs.cleanBold();"/>
+                <menuitem
+                    id="menu_Tools-updateifs-menu-popup-remove-star"
+                    tooltiptext="&updateifs-remove-star-label-tip;"
+                    label="&updateifs-remove-star-label;"
+                    oncommand="Zotero.UpdateIFs.cleanStar();"/> 
+                <menuitem
+                    id="menu_Tools-updateifs-menu-remove-bold-and-star"
+                    tooltiptext="&updateifs-remove-bold-and-star-label-tip;"
+                    label="&updateifs-remove-bold-and-star-label;"
+                    oncommand="Zotero.UpdateIFs.cleanBoldAndStar();"/> 
+                     
+                <menuseparator id="id-updateifs-separator"/>
+
+                <menuitem
+                    id="menu_Tools-updateifs-menu-show-profile-dir"
+                    tooltiptext="&updateifs-show-profile-dir-label-tip;"
+                    label="&updateifs-show-profile-dir-label;"
+                    oncommand="Zotero.UpdateIFs.showProfileDir();"/>  
+                <menuitem
+                    id="menu_Tools-updateifs-menu-show-data-dir"
+                    tooltiptext="&updateifs-show-data-dir-label-tip;"
+                    label="&updateifs-show-data-dir-label;"
+                    oncommand="Zotero.UpdateIFs.showDataDir();"/>  
+            </menupopup> 
+           </menu>
+    
+    </menupopup>
 </overlay>

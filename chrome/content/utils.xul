@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://zotero-platform/content/preferences.css"?>
+
+<!DOCTYPE window SYSTEM "chrome://zoteroupdateifs/locale/options.dtd">
+
+<!-- onload="updatePreferenceWindow('all');" -->
+<prefwindow id="updateifs-utils" title="&updateifs-utils;" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<stringbundleset id="stringbundleset">
+		<stringbundle id="updateifs-options" src="chrome://zotero-updateifs/locale/options.properties"/>
+	</stringbundleset>
+   <prefpane label="&updateifs-preferences;" id="updateifs-prefpane"> <!--onpaneload="Zotero.UpdateIFs.initPref();" -->
+   <preferences>
+      <preference id="pref-updateifs-author-name" name="extensions.updateifs.author-name" type="string"/>
+      <preference id="pref-updateifs-bold" name="extensions.updateifs.bold" type="bool"/>
+      <preference id="pref-updateifs-star" name="extensions.updateifs.star" type="bool"/>
+      <preference id="pref-updateifs-merg-split" name="extensions.updateifs.merge-split" type="string"/> 
+    </preferences>
+      
+    <groupbox>
+      <caption label="&author-process;"/>
+      <description style="width: 420px">&author-bold-star;</description>
+      <separator class="thin"/>
+        <hbox style="margin: 0">
+          <label control="id-updateifs-author-name" value="&updateifs-author-name;"/>
+          </hbox>
+          <separator class="thin"/>
+          <hbox style="margin: 0"> 
+          <textbox style="margin: 5px 10px 10px 10px" id="id-updateifs-textb-author-name" flex="1" onchange="Zotero.UpdateIFs.getAuNames(); " preference="pref-updateifs-author-name" width="40"/>
+          <checkbox id="id-updateifs-author-bold" label="&author-bold;" oncommand="Zotero.UpdateIFs.getAuBold(); " preference="pref-updateifs-bold"/>
+          <checkbox id="id-updateifs-author-star" label="&author-star;" oncommand="Zotero.UpdateIFs.getAuStar(); " preference="pref-updateifs-star"/>
+     </hbox>
+     <separator/>
+     <hbox style="margin: 0">
+        <radiogroup id="id-updateifs-author_field" preference="pref-updateifs-merg-split">
+          <label control="id-updateifs-author-name-desc" value="&updateifs-author-name-desc;"/>
+            <radio label="&one-field;" value='one-field' onchange="getOneField(); " />
+            <radio label="&two-field;" value='two-field' onchange="getTwoField(); " />
+        </radiogroup>
+       
+      </hbox>
+      <hbox style="margin: 0"> 
+         <button id="id-updateifs-process-author" label="&process-author;" oncommand="processAuthor()"/>
+    </hbox>
+    </groupbox>
+
+   
+  </prefpane>
+
+  <script src="options.js"/>
+  <script src="chrome://zotero/content/include.js"/>
+
+</prefwindow>
