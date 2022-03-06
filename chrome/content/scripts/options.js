@@ -32,7 +32,7 @@ showToolboxMenu = function() {
 
    
 };
-Zotero.UpdateIFs.showToolboxMenu();
+
 //从设置中读取复选框是否选中
 setCheckbox= function() {
 

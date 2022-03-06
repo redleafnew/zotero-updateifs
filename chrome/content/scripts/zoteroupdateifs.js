@@ -840,6 +840,30 @@ if (typeof window !== 'undefined') {
                     Zotero.UpdateIFs.displayMenuitem,
                     false
                 );
+                // add event listener for pop menu监听弹出菜单，执行隐藏函数
+                doc.getElementById("menu_ToolsPopup").addEventListener(
+                    "popupshowing",
+                    Zotero.UpdateIFs.showToolboxMenu,
+                    false
+                );
+                // // add event listener for pop menu
+                // doc.getElementById("menu_ToolsPopup").addEventListener(
+                //     "popupshowing",
+                //     Zotero.UpdateIFs.showToolboxMenu,
+                //     false
+                // );
+                //                 // add event listener for pop menu
+                // doc.getElementById("menu_Tools-updateifs-menu").addEventListener(
+                //     "popupshowing",
+                //     Zotero.UpdateIFs.showToolboxMenu,
+                //     false
+                // );
+                // // add event listener for pop menu
+                // doc.getElementById("menu_Tools-updateifs-menu-popup").addEventListener(
+                //                     "popupshowing",
+                //                     Zotero.UpdateIFs.showToolboxMenu,
+                //                     false
+                // );
             }
         },
         false
