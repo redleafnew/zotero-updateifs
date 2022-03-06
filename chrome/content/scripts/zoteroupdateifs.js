@@ -25,6 +25,46 @@ Zotero.UpdateIFs.getPref =  function(pref) {
 // /**
 //  * Open UpdateIFs preference window
 //  */
+
+
+Zotero.UpdateIFs.showToolboxMenu = function() {
+    
+    // 读取设置
+    var boldStar = Zotero.Prefs.get('pref-updateifs-menu-bold-star', true);
+    var boldStar = Zotero.Prefs.get('pref-updateifs-menu-bold-star', true);
+    var cleanBold = Zotero.Prefs.get('pref-updateifs-menu-clean-bold', true);
+    var cleanStar = Zotero.Prefs.get('pref-updateifs-menu-clean-star', true);
+    var cleanBoldAndStar = Zotero.Prefs.get('pref-updateifs-menu-clean-bold-star', true);
+    var auTitleCase = Zotero.Prefs.get('pref-updateifs-menu-au-title-case', true);
+    var swapAu = Zotero.Prefs.get('pref-updateifs-menu-swap-au', true);
+    var titleSenCase = Zotero.Prefs.get('pref-updateifs-menu-title-sen-case',  true);
+    var pubTitle = Zotero.Prefs.get('pref-updateifs-menu-pub-title', true);
+    var pubTitleCase = Zotero.Prefs.get('pref-updateifs-menu-pub-title-case', true);
+    var profileDir = Zotero.Prefs.get('pref-updateifs-menu-profile-dir',  true);
+    var dataDir = Zotero.Prefs.get('pref-updateifs-data-dir-star', true);
+    var sep1 = Zotero.Prefs.get('pref-updateifs-sep1', true);
+    var sep2 = Zotero.Prefs.get('pref-updateifs-sep2', true);
+
+    // 设置菜单隐藏
+    document.getElementById('menu_Tools-updateifs-menu-popup-bold-star').hidden = !boldStar;
+    document.getElementById('menu_Tools-updateifs-menu-popup-remove-bold').hidden = !cleanBold;
+    document.getElementById('menu_Tools-updateifs-menu-popup-remove-star').hidden = !cleanStar;
+    document.getElementById('menu_Tools-updateifs-menu-remove-bold-and-star').hidden = !cleanBoldAndStar;
+    document.getElementById('menu_Tools-updateifs-chang-author-case').hidden = !auTitleCase;
+    document.getElementById('menu_Tools-updateifs-swap-author').hidden = !swapAu;
+    document.getElementById('menu_Tools-updateifs-menu-chang-title-case').hidden = !titleSenCase;
+    document.getElementById('menu_Tools-updateifs-chang-pub-title').hidden = !pubTitle;
+    document.getElementById('id-menu-chang-pub-title-case').hidden = !pubTitleCase;
+    document.getElementById('menu_Tools-updateifs-menu-show-profile-dir').hidden = !profileDir;
+    document.getElementById('menu_Tools-updateifs-menu-show-data-dir').hidden = !dataDir;
+    document.getElementById('id-updateifs-separator-1').hidden = !sep1;
+    document.getElementById('id-updateifs-separator-2').hidden = !sep2;
+  
+
+};
+
+
+// 打开设置对话框
 Zotero.UpdateIFs.openPreferenceWindow = function(paneID, action) {
     var io = {pane: paneID, action: action};
     window.openDialog('chrome://zoteroupdateifs/content/options.xul',
@@ -33,11 +73,21 @@ Zotero.UpdateIFs.openPreferenceWindow = function(paneID, action) {
     );
 };
 
+// 打开更改期刊名称对话框
 Zotero.UpdateIFs.openUtilsWindow= function(paneID, action) {
     var io = {pane: paneID, action: action};
-    window.openDialog('chrome://zoteroupdateifs/content/utils.xul',
-        'updateifs-utils',
+    window.openDialog('chrome://zoteroupdateifs/content/change-publication-title.xul',
+        'updateifs-change-pub-title',
         'chrome,titlebar,toolbar,centerscreen' + Zotero.Prefs.get('browser.preferences.instantApply', true) ? 'dialog=no' : 'modal', io
+    );
+};
+
+// 打开作者加粗加星对话框
+Zotero.UpdateIFs.openAuthorProcess = function(paneID, action) {
+    var io = {pane: paneID, action: action};
+    window.openDialog('chrome://zoteroupdateifs/content/author-bold-star.xul',
+        'updateifs-change-pub-title',
+        'chrome,titlebar,toolbar,centerscreen', io
     );
 };
 
@@ -53,6 +103,7 @@ Zotero.UpdateIFs.init = function() {
             .getService(Components.interfaces.mozIJSSubScriptLoader);
         var scripts = ['zoteroupdateifs', 'options.js'];
         scripts.forEach(s => fileLoader.loadSubScript('chrome://zoteroupdateifs/content/scripts/' + s + '.js', {}, "UTF-8"));
+   Zotero.UpdateIFs.showToolboxMenu();
     }
 
     // Register the callback in Zotero as an item observer
@@ -64,7 +115,7 @@ Zotero.UpdateIFs.init = function() {
         Zotero.Notifier.unregisterObserver(notifierID);
     }, false);
 
-    // Zotero.UpdateIFs.initPref();
+    
 
 };
 
@@ -114,155 +165,7 @@ Zotero.UpdateIFs.cleanExtra = function() {
 };
 
 
-// 处理作者
-Zotero.UpdateIFs.addBoldStar = async function() {
-    
-var newName = Zotero.UpdateIFs.newNames();
-// //英文替换
-  var oldName = newName[0];
-  var newFirstName = newName[1];
-  var newLastName = newName[2];
-  var newFieldMode = newName[3]; // 0: two-field, 1: one-field (with empty first name)
-  var mergeedName = newName[4];
-  var mergeedNameNew = newName[5];
 
-var rn = 0; //计数替换条目个数
-//await Zotero.DB.executeTransaction(async function () {
-  
-    items = Zotero.UpdateIFs.getSelectedItems();
-        for (item of items) {
-        let creators = item.getCreators();
-        let newCreators = [];
-        for (let creator of creators) {
-        	if (`${creator.firstName} ${creator.lastName}`.trim() == oldName) {
-        		creator.firstName = newFirstName;
-        		creator.lastName = newLastName;
-        		creator.fieldMode = newFieldMode;
-                        rn ++;
-        	}
-
-            if (`${creator.lastName}`.trim() == mergeedName) { // 针对已经合并姓名的
-                creator.firstName = '';
-        		creator.lastName = mergeedNameNew;
-        		creator.fieldMode = newFieldMode;
-                        rn ++;
-            }
-        	newCreators.push(creator);
-
-        }
-        item.setCreators(newCreators);
-
-        await item.save();
-
-        }
-
-//}); 
-var lanUI = Zotero.Prefs.get('intl.locale.requested', true); // 得到当前Zotero界面语言
-var whiteSpace = ' ';
-if (lanUI == 'zh-CN') {whiteSpace = ''};
-var rnInfo = rn > 1 ? 'author.changed.mul' : 'author.changed.sig';
-var statusInfo = rn > 0 ? 'finished' : 'failed';
-var alertInfo = rn + whiteSpace + Zotero.UpdateIFs.ZUIFGetString(rnInfo);
-Zotero.UpdateIFs.showPopUP(alertInfo, statusInfo);
-// return rn + " item(s) updated";
-    
-};
-
-
-// 返回新的名字用以替换
-Zotero.UpdateIFs.newNames = function() {
-    var newName = [];
-    var splitName = '';
-    var oldName= '';
-    var newFirstName= '';
-    var newLastName= '';
-    var reg =/[一-龟]/; // 匹配所有汉字
-    var mergeedName ='';
-    var mergeedNameNew ='';
-    var alertInfo ='';
-    
-    var authorName = Zotero.Prefs.get('extensions.updateifs.author-name', true); // 得到设置的姓名
-  
-
-    if (authorName == ''){ // 如果作者为空时提示
-        alertInfo = Zotero.UpdateIFs.ZUIFGetString("author.empty");
-        Zotero.UpdateIFs.showPopUP(alertInfo, 'failed');
-    } else if (!/\s/.test(authorName) ) {  //检测输入的姓名中是否有空格,无空格提示
-        alertInfo = Zotero.UpdateIFs.ZUIFGetString("author.no.space");
-        Zotero.UpdateIFs.showPopUP(alertInfo, 'failed');
-    } else {  
-        
-        var splitName =  authorName.split(/\s/); // 用空格分为名和姓
-        var firstName = splitName[1];
-        var lastName = splitName[0];
-        oldName = firstName + ' ' + lastName;
-        // 检测姓名是否为中文
-        if (reg.test(authorName)) { // 为真时匹配到中文
-        var newFieldMode = 1;  // 1中文时为合并
-        mergeedName = authorName.replace(/\s/, ''); // 中文姓名删除空格得到合并的姓名
-        } else {
-            newFieldMode = 0; // 0为拆分姓名，英文
-            mergeedName = oldName; // 英文姓名与原姓名相同
-        };
-
-
-        var authorBold =  Zotero.Prefs.get('extensions.updateifs.bold', true); // 得到设置的姓名是否加粗
-        var authorStar =  Zotero.Prefs.get('extensions.updateifs.star', true); // 得到设置的姓名是否加星
-       
-        var boldStar = '';
-        if (authorBold && authorStar) {
-            boldStar = 'ba';  // bold and add star加粗加星
-            } else if (authorBold  && !authorStar) {
-                boldStar = 'b';  // 仅加粗
-            } else if (!authorBold && authorStar) {
-                boldStar = 's';  // 仅加星
-            } else if (!authorBold && !authorStar) {
-                //boldStar = 'n';  // 不加粗也不加星
-                var alertInfo = Zotero.UpdateIFs.ZUIFGetString("bold.or.star");
-                Zotero.UpdateIFs.showPopUP(alertInfo, 'failed');
-            }
-
-        switch (boldStar) {
-            case 'ba':  // 加粗加星
-                            
-                mergeedNameNew = '<b>' + mergeedName + '*</b>';
-                newFirstName = '<b>' + firstName + '*</b>';
-                newLastName = '<b>' + lastName  + '</b>';
-                if (reg.test(authorName)) { // 中文姓名
-                    newFirstName = "";
-                    newLastName = '<b>' + lastName + firstName +'*</b>';
-                };
-                break;
-            case 'b': // 仅加粗
-            mergeedNameNew = '<b>' + mergeedName + '</b>'; 
-                newFirstName = '<b>' + firstName + '</b>';
-                newLastName = '<b>' + lastName  + '</b>';
-                if (reg.test(authorName)) { // 中文姓名
-                    newFirstName = "";
-                    newLastName = '<b>' + lastName + firstName +'</b>';
-                };
-                break;
-            case 's':  // 加粗加星
-                mergeedNameNew = mergeedName + '*'; 
-                newFirstName =  firstName + '*';
-                newLastName = lastName;
-                if (reg.test(authorName)) { // 中文姓名
-                    newFirstName = "";
-                    newLastName = lastName + firstName +'*';
-                };
-                break;
-            case 'n':
-                //var alertInfo = Zotero.UpdateIFs.ZUIFGetString("bold.or.star");
-                //Zotero.UpdateIFs.showPopUP(alertInfo, 'failed');
-                break;
-         
-        }
-        newName.push(oldName, newFirstName, newLastName, newFieldMode, mergeedName, mergeedNameNew)
-        return  newName;
-
-    }
-
-};
 
 // 清除加粗
 Zotero.UpdateIFs.cleanBold = async function() {
@@ -350,6 +253,65 @@ Zotero.UpdateIFs.getAuthorName = function() {
     
 
 };
+
+// 将题目改为句首字母大写
+Zotero.UpdateIFs.changeTitleCase = async function() {
+    var  items = Zotero.UpdateIFs.getSelectedItems();
+    var alertInfo = '';
+    if (items.length == 0) {
+        alertInfo = Zotero.UpdateIFs.ZUIFGetString('zotero.item');
+        Zotero.UpdateIFs.showPopUP(alertInfo, 'failed');
+    } else {
+        var result = "";
+        for (item of items) {
+            var title = item.getField('title');
+            if (Zotero.UpdateIFs.detectUpCase(title)){//如果期刊名全部为大写，转换并提醒
+                title = Zotero.UpdateIFs.titleCase(title); // 转换为单词首字母大写
+                alertInfo = Zotero.UpdateIFs.ZUIFGetString('all.upcase');
+                Zotero.UpdateIFs.showPopUP(alertInfo, 'infomation');
+            }
+            result += " " + title + "\n";
+            var new_title = title.replace(/\b([A-Z][a-z0-9]+|A)\b/g, function (x) { return x.toLowerCase(); });
+            new_title = new_title.replace(/(^|\?\s*)[a-z]/, function (x) { return x.toUpperCase(); });
+            result += "-> " + new_title + "\n\n";
+            // // Do it at your own risk
+            item.setField('title', new_title);
+            await item.saveTx();
+        }
+        alertInfo = result;
+        Zotero.UpdateIFs.showPopUP(alertInfo, 'finished');
+    }
+    
+};
+
+// 将单词转为首字母大写
+ Zotero.UpdateIFs.titleCase = function (str) {   
+    var newStr = str.split(" ");    
+    for(var i = 0; i < newStr.length; i++) {
+       newStr[i] = newStr[i].slice(0,1).toUpperCase() + newStr[i].slice(1).toLowerCase();
+       }      
+    return newStr.join(" ");
+};
+
+// 检查句子是否为全部大小
+Zotero.UpdateIFs.detectUpCase = function (word) {
+    var arr_is_uppercase = [];
+    for (var char of word) {
+      if (char.charCodeAt() < 97) {
+        arr_is_uppercase.push(1);   // 是大写就加入 1
+      } else {
+        arr_is_uppercase.push(0);   // 是小写就加入 0
+      }
+    }
+    var uppercase_sum = arr_is_uppercase.reduce((x, y) => x + y);
+    if ( 
+        uppercase_sum === word.length   // 全部为大写
+        ) {  
+      return true;
+    } else {
+      return false;
+    }
+  };
 
 // 显示配置目录
 Zotero.UpdateIFs.showProfileDir= function() {
@@ -835,6 +797,14 @@ Zotero.UpdateIFs.checkItem = function (item) {
     }      
 };
 
+// 生成空格，如果是中文是无空格，英文为空格
+Zotero.UpdateIFs.whiteSpace = function (){
+    var lanUI = Zotero.Prefs.get('intl.locale.requested', true); // 得到当前Zotero界面语言
+    var whiteSpace = ' ';
+    if (lanUI == 'zh-CN') {whiteSpace = ''};
+    return whiteSpace;
+};
+
 // 右下角弹出函数 
 Zotero.UpdateIFs.showPopUP = function (alertInfo, status) {  
 
@@ -846,8 +816,10 @@ Zotero.UpdateIFs.showPopUP = function (alertInfo, status) {
 };
 
 if (typeof window !== 'undefined') {
+    
     window.addEventListener('load', function(e) {
         Zotero.UpdateIFs.init();
+        
     }, false);
 }
 

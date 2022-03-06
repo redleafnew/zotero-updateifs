@@ -1,4 +1,6 @@
 
+<!-- 期刊影响因子设置 -->
+<!ENTITY updateifs.journal.setting "Journal Update Settings">
 <!ENTITY updateifs-preferences "Update Journal Infomation Preferences">
 <!ENTITY update-journal-abbr "Udate journal and abbreviation settings">
 <!ENTITY update-abbr "Update and Abbreviation">
@@ -9,30 +11,62 @@
 <!ENTITY pubtitle-label "Search using publiction title">
 <!ENTITY issn-label "Search using publiction ISSN">
 
+<!-- 菜单显示隐藏设置 -->
 
+<!ENTITY updateifs.menu.setting "Toolbox Menu Show/Hide setting">
+<!ENTITY menu-setting "Show Hide Setting">
+<!ENTITY menu-setting-desc "You can set show or hide the toolbox submenus.">
+<!ENTITY menu-stting-label "Check the menus you want to show (the default show all): ">
+<!ENTITY updateifs-bold-star-label "Author Bold and/or Asterisk">
+<!ENTITY updateifs-remove-bold-label "Clean Author Bold">
+<!ENTITY updateifs-remove-star-label "Clean Author Asterisk">
+<!ENTITY updateifs-remove-bold-and-star-label "Clean Author Bold and Asterisk">
+<!ENTITY updateifs-chang-author-case-label "Change Author Name to Title Case">
+<!ENTITY updateifs-swap-author-label "Swap Author's First and Last Name">
+<!ENTITY updateifs-chang-pub-title-label "Change Publication Title">
+<!ENTITY updateifs-chang-pub-title-case-label "Change Publication Title Case">
+<!ENTITY updateifs-chang-title-label "Change Title to Sentense Case">
+<!ENTITY updateifs-show-profile-dir-label "Show Porfile Directory">
+<!ENTITY updateifs-show-data-dir-label "Show Data Directory">
+<!ENTITY menu-sep-1 "Separator 1">
+<!ENTITY menu-sep-2 "Separator 2">
 
-<!ENTITY updateifs.journal.setting "Journal Update Settings">
+<!-- 作者处理 -->
 <!ENTITY updateifs.author.setting "Author Process Settings">
 <!ENTITY updateifs-utils "Author process utils">
-<!ENTITY author-process "Author Process">
+<!ENTITY author-process-win "Author Name Process">
+<!ENTITY author-process "Bold and/or Asterisk for Author Name">
 <!ENTITY updateifs-author-bold-desc "Check bold and asterisk accorind to your need:">
-<!ENTITY author-bold "Bold">
+<!ENTITY author-bold-btn "Bold">
+<!ENTITY author-bold-btn.tip "Only add bold tag for author name">
+<!ENTITY author-star-add-btn " Asterisk (*) ">
+<!ENTITY author-star-add-btn.tip "Only add asterisk (*) tag for author name">
+<!ENTITY author-bold-star-add-btn "Bold and Asterisk (*)">
+<!ENTITY author-bold-star-add-btn-tip "Add bold and asterisk tags for author name">
 <!ENTITY author-regular "Regular">
 <!ENTITY author-no-change "No change">
 <!ENTITY updateifs-author-star-desc "Add or remove star (*) for author">
 <!ENTITY author-star-add "Asterisk">
 <!ENTITY author-star-remove "Remove">
 <!ENTITY author-bold-star "Bold and star for author">
-<!ENTITY updateifs-author-name "Please input the author name as given name following family name, for example, 'Zhang Wuji': ">
+<!ENTITY updateifs-author-name1 "Please input the author name as given name following family ">
+<!ENTITY updateifs-author-name2 "name, for example, 'Zhang Wuji': ">
 <!ENTITY author-bold "Bold">
 <!ENTITY author-star "Asterisk">
 <!ENTITY updateifs-author-name-desc "Merge or split name, merging for Chinese name (otherwise there will be a space between famliy and given name) and spliting for English name: ">
 <!ENTITY one-field "Merge">
 <!ENTITY two-field "Split">
 <!ENTITY process-author "Process Author">
-<!ENTITY updateifs.button.remove.bold.label "Remove Bold"> 
-<!ENTITY updateifs.button.remove.boldInfo.label "Remove bold tag around the author">
-<!ENTITY updateifs.button.remove.star.label "Remove Asterisk">
-<!ENTITY updateifs.button.remove.starInfo.label "Remove Asterisk after the author">
-<!ENTITY updateifs.button.remove.boldStar.label "Remove Bold and Asterisk">
+<!ENTITY updateifs.button.remove.bold.label "Clean Bold"> 
+<!ENTITY updateifs.button.remove.boldInfo.label "Clean bold tag around the author">
+<!ENTITY updateifs.button.remove.star.label "Clean Asterisk">
+<!ENTITY updateifs.button.remove.starInfo.label "Clean asterisk after the author">
+<!ENTITY updateifs.button.remove.boldStar.label "Clean Bold and Asterisk">
 <!ENTITY updateifs.button.remove.boldStarInfo.label "Remove bold tag and asterisk for the author">
+
+<!ENTITY updateifs-change-pub-title "Change publication title">
+<!ENTITY change-pub-title "Change publication title">
+<!ENTITY change-pub-title-desc "Change publication title, for example change LWT to LWT-Food Science and Technology.">
+<!ENTITY old-title "Please input the original publication title:">
+<!ENTITY new-title "Please input the new publication:">
+<!ENTITY change-title-bn "Change Publication Title">

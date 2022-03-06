@@ -38,11 +38,14 @@
    
         <menu id="menu_Tools-updateifs-menu" label="&updateifs-author-label;"> 
              <menupopup id="menu_Tools-updateifs-menu-popup">
+               <!--加粗加星-->
                 <menuitem
                     id="menu_Tools-updateifs-menu-popup-bold-star"
                     tooltiptext="&updateifs-bold-star-label-tip;"
                     label="&updateifs-bold-star-label;"
-                    oncommand="Zotero.UpdateIFs.addBoldStar();"/>
+                    
+
+                    oncommand="Zotero.UpdateIFs.openAuthorProcess();"/>
                 <menuitem
                     id="menu_Tools-updateifs-menu-popup-remove-bold"
                     tooltiptext="&updateifs-remove-bold-label-tip;"
@@ -53,14 +56,49 @@
                     tooltiptext="&updateifs-remove-star-label-tip;"
                     label="&updateifs-remove-star-label;"
                     oncommand="Zotero.UpdateIFs.cleanStar();"/> 
-                <menuitem
+                <menuitem 
                     id="menu_Tools-updateifs-menu-remove-bold-and-star"
                     tooltiptext="&updateifs-remove-bold-and-star-label-tip;"
                     label="&updateifs-remove-bold-and-star-label;"
-                    oncommand="Zotero.UpdateIFs.cleanBoldAndStar();"/> 
-                     
-                <menuseparator id="id-updateifs-separator"/>
+                    oncommand="cleanBoldAndStar()"/> 
+                <!--作者词首大写-->
+                <menuitem 
+                    id="menu_Tools-updateifs-chang-author-case"
+                    tooltiptext="&updateifs-chang-author-case-label-tip;"
+                    label="&updateifs-chang-author-case-label;"
+                    oncommand="changAuthorCase()"/> 
+                <!-- 交换作者姓和名 -->
+                <menuitem
+                    id="menu_Tools-updateifs-swap-author"
+                    tooltiptext="&updateifs-swap-author-label-tip;"
+                    label="&updateifs-swap-author-label;"
+                    oncommand="swapAuthorName()"/>     
+                <menuseparator id="id-updateifs-separator-1"/>
 
+
+             
+                <!-- 更改文献题目大小写 --> 
+                <menuitem
+                    id="menu_Tools-updateifs-menu-chang-title-case"
+                    tooltiptext="&updateifs-chang-title-label-tip;"
+                    label="&updateifs-chang-title-label;"
+                    oncommand="Zotero.UpdateIFs.changeTitleCase();"/>    
+              
+                <!-- 更改期刊名称 -->
+                <menuitem
+                id="menu_Tools-updateifs-chang-pub-title"
+                tooltiptext="&updateifs-chang-pub-title-label.tip;"
+                label="&updateifs-chang-pub-title-label;"
+                oncommand="Zotero.UpdateIFs.openUtilsWindow();"/>     
+                <!-- 更改期刊题目大小写 -->
+                <menuitem
+                    id="id-menu-chang-pub-title-case"
+                    tooltiptext="&updateifs-chang-pub-title-case-label-tip;"
+                    label="&updateifs-chang-pub-title-case-label;"
+                    oncommand="changPubTitleCase()"/>  
+
+                <menuseparator id="id-updateifs-separator-2"/>
+                <!-- 配置数据目录 -->
                 <menuitem
                     id="menu_Tools-updateifs-menu-show-profile-dir"
                     tooltiptext="&updateifs-show-profile-dir-label-tip;"
@@ -71,8 +109,21 @@
                     tooltiptext="&updateifs-show-data-dir-label-tip;"
                     label="&updateifs-show-data-dir-label;"
                     oncommand="Zotero.UpdateIFs.showDataDir();"/>  
+
+               
+
             </menupopup> 
            </menu>
     
     </menupopup>
+
+    
+<script
+    type="application/x-javascript"
+    src="chrome://zoteroupdateifs/content/scripts/options.js"/>
+<script
+    type="application/x-javascript"
+    src="chrome://zoteroupdateifs/content/scripts/zoteroupdateifs.js"/>
+  <script src="options.js"/>
+  <script src="chrome://zotero/content/include.js"/>
 </overlay>

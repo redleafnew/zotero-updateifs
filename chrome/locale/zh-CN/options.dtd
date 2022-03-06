@@ -8,19 +8,47 @@
 <!ENTITY pubtitle-label "使用期刊名称搜索">
 <!ENTITY issn-label "使用期刊ISSN搜索">
 
+<!-- 工具箱菜单隐藏显示 -->
+
+<!ENTITY updateifs.menu.setting "显示隐藏工具箱子菜单">
+<!ENTITY menu-setting "显示隐藏子菜单">
+<!ENTITY menu-setting-desc "你可以设置显示隐藏工具箱子菜单。">
+<!ENTITY menu-stting-label "勾选你想显示的子菜单（默认全部显示）: ">
+<!ENTITY updateifs-bold-star-label "作者加粗和/或加星">
+<!ENTITY updateifs-remove-bold-label "清除作者加粗">
+<!ENTITY updateifs-remove-star-label "清除作者星号">
+<!ENTITY updateifs-remove-bold-and-star-label "清除作者加粗和星号">
+<!ENTITY updateifs-chang-author-case-label "更改作者姓名词首字母大写">
+<!ENTITY updateifs-swap-author-label "交换作者姓和名">
+<!ENTITY updateifs-chang-title-label "文献题目句首字母大写">
+<!ENTITY updateifs-chang-pub-title-case-label "更改期刊名称词首字母大写">
+<!ENTITY updateifs-chang-pub-title-label "修改期刊名称">
+<!ENTITY updateifs-show-profile-dir-label "显示配置目录">
+<!ENTITY updateifs-show-data-dir-label "显示数据目录">
+<!ENTITY menu-sep-1 "分隔条 1">
+<!ENTITY menu-sep-2 "分隔条 2">
+
 <!ENTITY updateifs.journal.setting "期刊更新设置">
 <!ENTITY updateifs.author.setting "作者处理设置">
 <!ENTITY updateifs-utils "作者处理小工具">
-<!ENTITY author-process "作者处理">
+<!ENTITY author-process-win "作者姓名处理">
+<!ENTITY author-process "给作者姓名加粗和/或加星">
 <!ENTITY updateifs-author-bold-desc "请根据您的需要勾选加粗或添加星号：">
 <!ENTITY author-bold "加粗">
+<!ENTITY author-bold-btn "加粗">
+<!ENTITY author-bold-btn.tip "仅给作者名字加粗体标识">
+<!ENTITY author-star-add-btn "加星号*">
+<!ENTITY author-star-add-btn.tip "仅给作者名字后加星号(*)">
+<!ENTITY author-bold-star-add-btn "加粗和加星号">
+<!ENTITY author-bold-star-add-btn-tip "同时给作者名字加粗体和星号(*)">
 <!ENTITY author-regular "常规">
 <!ENTITY author-no-change "保持不变">
 <!ENTITY updateifs-author-star-desc "对作者添加或删除星号 (*)">
 <!ENTITY author-star-add "加星号">
 <!ENTITY author-star-remove "删除">
 <!ENTITY author-bold-star "给作者加粗或加星号">
-<!ENTITY updateifs-author-name "请输入作者姓名，姓前名后，中间加英文空格，如“张 无忌”: ">
+<!ENTITY updateifs-author-name1 "请输入加粗加星号作者姓名，姓前名后，中间加英文 ">
+<!ENTITY updateifs-author-name2 "空格，如“张 无忌”: ">
 <!ENTITY author-bold "加粗">
 <!ENTITY author-star "加星号">
 <!ENTITY updateifs-author-name-desc "合并或拆分作者，中文作者请合并（否则姓名之前会有空格），英文作者都可以: ">
@@ -33,3 +61,10 @@
 <!ENTITY updateifs.button.remove.starInfo.label "点击去除作者后面的星号">
 <!ENTITY updateifs.button.remove.boldStar.label "去除粗体和星号">
 <!ENTITY updateifs.button.remove.boldStarInfo.label "点击同时去除作者的粗体和星号">
+
+<!ENTITY updateifs-change-pub-title "修改期刊名称">
+<!ENTITY change-pub-title "将期刊名称替换为新名称">
+<!ENTITY change-pub-title-desc "修改期刊名称, 如将LWT修改为LWT-Food Science and Technology。">
+<!ENTITY old-title "请输入原期刊名称:">
+<!ENTITY new-title "请输入新期刊名称:">
+<!ENTITY change-title-bn "更改期刊名称">

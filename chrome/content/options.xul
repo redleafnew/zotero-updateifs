@@ -5,7 +5,7 @@
 <!DOCTYPE window SYSTEM "chrome://zoteroupdateifs/locale/options.dtd">
 
 <!-- onload="updatePreferenceWindow('all');" -->
-<prefwindow id="updateifs-pref" title="&updateifs-preferences;" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
+<prefwindow id="updateifs-pref" title="&updateifs-preferences;" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload="setCheckbox()">
 	<stringbundleset id="stringbundleset">
 		<stringbundle id="updateifs-options" src="chrome://zotero-updateifs/locale/options.properties"/>
 	</stringbundleset>
@@ -14,61 +14,35 @@
       <preference id="pref-updateifs-add-update" name="extensions.updateifs.add-update" type="bool"/>
       <preference id="pref-updateifs-en_abbr" name="extensions.updateifs.en-abbr" type="bool"/>
       <preference id="pref-updateifs-ch_abbr" name="extensions.updateifs.ch-abbr" type="bool"/>
-      <!-- <preference id="pref-updateifs-pubtitle_issn" name="extensions.updateifs.pubtitle_issn" type="string"/> -->
-      <preference id="pref-updateifs-author-name" name="extensions.updateifs.author-name" type="string"/>
-      <preference id="pref-updateifs-bold" name="extensions.updateifs.bold" type="bool"/>
-      <preference id="pref-updateifs-star" name="extensions.updateifs.star" type="bool"/>
-      <preference id="pref-updateifs-merg-split" name="extensions.updateifs.merge-split" type="string"/> 
+      <!-- 菜单隐藏 -->
+      <preference id='pref-menu-updateifs-menu-bold-star'  name='pref-updateifs-menu-bold-star' type="bool"/>;
+      <preference id='pref-menu-updateifs-menu-clean-bold' name='pref-updateifs-menu-clean-bold' type="bool"/>;
+      <preference id='pref-menu-updateifs-menu-clean-star' name='pref-updateifs-menu-clean-star' type="bool"/>;
+      <preference id='pref-menu-updateifs-menu-clean-bold-star' name='pref-updateifs-menu-clean-bold-star' type="bool"/>;
+      <preference id='pref-menu-updateifs-menu-au-title-case' name='pref-updateifs-menu-au-title-case' type="bool"/>;
+      <preference id='pref-menu-updateifs-menu-swap-au' name='pref-updateifs-menu-swap-au' type="bool"/>;
+      <preference id='pref-menu-updateifs-menu-pub-title' name='pref-updateifs-menu-pub-title' type="bool"/>;
+      <preference id='pref-menu-updateifs-menu-pub-title-case' name='pref-updateifs-menu-pub-title-case' type="bool"/>;
+      <preference id='pref-menu-updateifs-menu-title-sen-case' name='pref-updateifs-menu-title-sen-case'  type="bool"/>;
+      <preference id='pref-menu-updateifs-menu-profile-dir' name='pref-updateifs-menu-profile-dir'  type="bool"/>;
+      <preference id='pref-menu-updateifs-data-dir-star' name='pref-updateifs-data-dir-star' type="bool"/>;
+      <preference id='pref-menu-updateifs-sep1' name='pref-updateifs-sep1' type="bool"/>;
+      <preference id='pref-menu-updateifs-sep2' name='pref-updateifs-sep2' type="bool"/>;
+
     </preferences>
 
     <tabbox>
       <tabs>
-         
-          <tab label="&updateifs.author.setting;"/>
-          <tab label="&updateifs.journal.setting;"/>
+
+         <tab label="&updateifs.journal.setting;"/>
+          <tab label="&updateifs.menu.setting;"/> 
+          
         </tabs>
        
       <tabpanels id="zotero-prefpane-updateifs" orient="vertical" minheight="300">
        
 
-          <!-- 作者处理 -->
-          <tabpanel id="zotero-prefpane-author-tab" >
-           
-            <groupbox flex="1" >
-                <caption label="&author-process;"/>
-                <separator class='thin'/> 
-               <description  style="width: 420px">&author-bold-star;</description>
-                <separator class="thin"/>
-                  <hbox style="margin: 0">
-                    <label control="id-updateifs-author-name" value="&updateifs-author-name;"/>
-                    </hbox>
-                    <separator class="thin"/>
-                  <hbox style="margin: 0"> 
-                      <textbox style="margin: 5px 10px 10px 10px" id="id-updateifs-textb-author-name" preference="pref-updateifs-author-name" width="280" onchange="getAuthorName(); " />
-                  </hbox>  
-            
-                  <separator class='thin'/>    
-                  <separator class='thin'/> 
-                  <hbox style="margin: 0"> 
-                    <label control="id-updateifs-author-bold-desc" value="&updateifs-author-bold-desc;"/>
-                  </hbox> 
-                  <separator class='thin'/>   
-                  <hbox style="margin: 0">  
-                     <checkbox id="id-updateifs-author-bold" label="&author-bold;" preference="pref-updateifs-bold"/>
-                     <separator class='thin'/>   
-                     <separator class='thin'/>  
-                    <checkbox id="id-updateifs-author-star"  label="&author-star-add;" preference="pref-updateifs-star"/>
-                   </hbox>   
-                  <separator class='thin'/>   
-                  <separator class='thin'/>   
-                 <hbox style="margin: 0" width="300px">
-                  <button label="&updateifs.button.remove.bold.label;" tooltiptext="&updateifs.button.remove.boldInfo.label;" oncommand="Zotero.UpdateIFs.cleanBold();"/>
-                  <button label="&updateifs.button.remove.star.label;" tooltiptext="&updateifs.button.remove.starInfo.label;" oncommand="Zotero.UpdateIFs.cleanStar();"/>
-                  <button label="&updateifs.button.remove.boldStar.label;" tooltiptext="&updateifs.button.remove.boldStarInfo.label;" oncommand="Zotero.UpdateIFs.cleanBoldAndStar();"/>
-              </hbox>
-            </groupbox>
-        
-          </tabpanel>
+          
            <!-- 期刊及缩写设置 -->
            <tabpanel id="zotero-prefpane-journal-tab"  >
           
@@ -86,15 +60,71 @@
               </hbox>
               <separator class='thin'/> 
               <hbox style="margin: 0">
-                <checkbox id="id-updateifs-ch-abbr" label="&ch_abbr;" preference="pref-updateifs-ch_abbr"/>
+                <checkbox id="id-updateifs-ch-abbr" label="&ch_abbr;" preference="pref-updateifs-ch_abbr" />
               </hbox>
             </groupbox>
         </tabpanel>
+
+<!-- 菜单隐藏显示 -->
+          <tabpanel id="zotero-prefpane-meun-setting-tab" >
+           
+            <groupbox flex="1" >
+                <caption label="&menu-setting;"/>
+                <separator class='thin'/> 
+               <description  style="width: 400px">&menu-setting-desc;</description>
+                <separator class="thin"/>
+                  <hbox style="margin: 0" >
+                    <label control="id-updateifs-menu-setting" value="&menu-stting-label;"/>
+                  </hbox>
+                    <separator class="thin"/>
+                  <hbox style="margin: 0"> 
+                       <checkbox id="id-menu-bold-star-ckb" label="&updateifs-bold-star-label;" preference='pref-menu-updateifs-menu-bold-star' width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                       <checkbox id="id-menu-clean-bold-ckb" label="&updateifs-remove-bold-label;"  preference='pref-menu-updateifs-menu-clean-bold' width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                  </hbox>  
+                  <hbox style="margin: 0"> 
+                       <checkbox id="id-menu-clean-star-ckb" label="&updateifs-remove-star-label;"  preference='pref-menu-updateifs-menu-clean-star' width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                       <checkbox id="id-menu-clean-bold-star-ckb" label="&updateifs-remove-bold-and-star-label;" preference='pref-menu-updateifs-menu-clean-bold-star'  width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                  </hbox>                    
+                  <hbox style="margin: 0"> 
+                       <checkbox id="id-menu-chang-author-title-case-ckb" label="&updateifs-chang-author-case-label;"  preference='pref-menu-updateifs-menu-au-title-case' width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                       <checkbox id="id-menu-swap-author-name-ckb" label="&updateifs-swap-author-label;"   preference='pref-menu-updateifs-menu-swap-au' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                  </hbox>                    
+                  <hbox style="margin: 0"> 
+                       <checkbox id="id-menu-chang-pub-title-ckb" label="&updateifs-chang-pub-title-label;"  preference='pref-menu-updateifs-menu-pub-title' width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                       <checkbox id="id-menu-chang-pub-title-case-ckb" label="&updateifs-chang-pub-title-case-label;"  preference='pref-menu-updateifs-menu-pub-title-case' width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                       
+                  </hbox>                    
+                  <hbox style="margin: 0"> 
+                    <checkbox id="id-menu-title-sentence-case-ckb" label="&updateifs-chang-title-label;" preference='pref-menu-updateifs-menu-title-sen-case'  width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>  
+                    <checkbox id="id-menu-show-profile-dir-ckb" label="&updateifs-show-profile-dir-label;"  preference='pref-menu-updateifs-menu-profile-dir' width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                  </hbox>                    
+                  <hbox style="margin: 0"> 
+                    <checkbox id="id-meun-show-data-dir-ckb" label="&updateifs-show-data-dir-label;"  preference='pref-menu-updateifs-data-dir-star'  width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                  </hbox>   
+                    <separator class='thin'/>                     
+                  <hbox style="margin: 0"> 
+                       <checkbox id="id-menu-sep-1-ckb" label="&menu-sep-1;"  preference='pref-menu-updateifs-sep1'  width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                       <checkbox id="id-menu-sep-2-ckb" label="&menu-sep-2;"  preference='pref-menu-updateifs-sep2'  width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                  </hbox>  
+                
+                  <separator class='thin'/> 
+                 
+            </groupbox>
+        
+          </tabpanel>
+          
+
         </tabpanels>
+
       </tabbox>
      
   </prefpane>
-
+  <script
+    type="application/x-javascript"
+    src="chrome://zoteroupdateifs/content/scripts/options.js"/>
+  <script
+    type="application/x-javascript"
+    src="chrome://zoteroupdateifs/content/scripts/zoteroupdateifs.js"/>
   <script src="options.js"/>
   <script src="chrome://zotero/content/include.js"/>
 
