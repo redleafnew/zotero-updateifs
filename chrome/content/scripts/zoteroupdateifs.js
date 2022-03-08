@@ -270,7 +270,7 @@ Zotero.UpdateIFs.changeTitleCase = async function() {
                 alertInfo = Zotero.UpdateIFs.ZUIFGetString('all.upcase');
                 Zotero.UpdateIFs.showPopUP(alertInfo, 'infomation');
             }
-            result += " " + title + "\n";
+            result +=  " " + title + "\n" ;
             var new_title = title.replace(/\b([A-Z][a-z0-9]+|A)\b/g, function (x) { return x.toLowerCase(); });
             new_title = new_title.replace(/(^|\?\s*)[a-z]/, function (x) { return x.toUpperCase(); });
             result += "-> " + new_title + "\n\n";
@@ -280,6 +280,7 @@ Zotero.UpdateIFs.changeTitleCase = async function() {
         }
         alertInfo = result;
         Zotero.UpdateIFs.showPopUP(alertInfo, 'finished');
+   
     }
     
 };

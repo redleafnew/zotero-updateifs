@@ -36,7 +36,7 @@
         <menuitem id="menu_Tools-updateifs-preferences" label="&updateifs-preferences-label;" oncommand="Zotero.UpdateIFs.openPreferenceWindow();"/>
         <menuitem id="menu_Tools-updateifs-clean-extra" label="&updateifs-clean-extra-label;" oncommand="Zotero.UpdateIFs.cleanExtra();"/>
            <!--test-->
-        <menuitem id="menu_Tools-updateifs-test" label="&updateifs-test;" oncommand="test()"/>
+        <!-- <menuitem id="menu_Tools-updateifs-test" label="&updateifs-test;" oncommand="test()"/> -->
         
         <menu id="menu_Tools-updateifs-menu" label="&updateifs-author-label;"> 
              <menupopup id="menu_Tools-updateifs-menu-popup">
