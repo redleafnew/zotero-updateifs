@@ -56,11 +56,11 @@
               </hbox>
               <separator class='thin'/> 
               <hbox style="margin: 0">
-                <checkbox id="id-updateifs-en-abbr" label="&en_abbr;" preference="pref-updateifs-en_abbr"/>
+                <checkbox id="id-updateifs-en-abbr" label="&en_abbr;" width ='450' preference="pref-updateifs-en_abbr"/>
               </hbox>
               <separator class='thin'/> 
               <hbox style="margin: 0">
-                <checkbox id="id-updateifs-ch-abbr" label="&ch_abbr;" preference="pref-updateifs-ch_abbr" />
+                <checkbox id="id-updateifs-ch-abbr" label="&ch_abbr;" width ='450' preference="pref-updateifs-ch_abbr" />
               </hbox>
             </groupbox>
         </tabpanel>
@@ -78,33 +78,33 @@
                   </hbox>
                     <separator class="thin"/>
                   <hbox style="margin: 0"> 
-                       <checkbox id="id-menu-bold-star-ckb" label="&updateifs-bold-star-label;" preference='pref-menu-updateifs-menu-bold-star' width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
-                       <checkbox id="id-menu-clean-bold-ckb" label="&updateifs-remove-bold-label;"  preference='pref-menu-updateifs-menu-clean-bold' width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                       <checkbox id="id-menu-bold-star-ckb" label="&updateifs-bold-star-label;" preference='pref-menu-updateifs-menu-bold-star' width='225' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                       <checkbox id="id-menu-clean-bold-ckb" label="&updateifs-remove-bold-label;"  preference='pref-menu-updateifs-menu-clean-bold' width='225' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
                   </hbox>  
                   <hbox style="margin: 0"> 
-                       <checkbox id="id-menu-clean-star-ckb" label="&updateifs-remove-star-label;"  preference='pref-menu-updateifs-menu-clean-star' width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
-                       <checkbox id="id-menu-clean-bold-star-ckb" label="&updateifs-remove-bold-and-star-label;" preference='pref-menu-updateifs-menu-clean-bold-star'  width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                       <checkbox id="id-menu-clean-star-ckb" label="&updateifs-remove-star-label;"  preference='pref-menu-updateifs-menu-clean-star' width='225' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                       <checkbox id="id-menu-clean-bold-star-ckb" label="&updateifs-remove-bold-and-star-label;" preference='pref-menu-updateifs-menu-clean-bold-star'  width='225' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
                   </hbox>                    
                   <hbox style="margin: 0"> 
-                       <checkbox id="id-menu-chang-author-title-case-ckb" label="&updateifs-chang-author-case-label;"  preference='pref-menu-updateifs-menu-au-title-case' width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                       <checkbox id="id-menu-chang-author-title-case-ckb" label="&updateifs-chang-author-case-label;"  preference='pref-menu-updateifs-menu-au-title-case' width='225' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
                        <checkbox id="id-menu-swap-author-name-ckb" label="&updateifs-swap-author-label;"   preference='pref-menu-updateifs-menu-swap-au' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
                   </hbox>                    
                   <hbox style="margin: 0"> 
-                       <checkbox id="id-menu-chang-pub-title-ckb" label="&updateifs-chang-pub-title-label;"  preference='pref-menu-updateifs-menu-pub-title' width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
-                       <checkbox id="id-menu-chang-pub-title-case-ckb" label="&updateifs-chang-pub-title-case-label;"  preference='pref-menu-updateifs-menu-pub-title-case' width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                       <checkbox id="id-menu-chang-pub-title-ckb" label="&updateifs-chang-pub-title-label;"  preference='pref-menu-updateifs-menu-pub-title' width='225' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                       <checkbox id="id-menu-chang-pub-title-case-ckb" label="&updateifs-chang-pub-title-case-label;"  preference='pref-menu-updateifs-menu-pub-title-case' width='225' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
                        
                   </hbox>                    
                   <hbox style="margin: 0"> 
-                    <checkbox id="id-menu-title-sentence-case-ckb" label="&updateifs-chang-title-label;" preference='pref-menu-updateifs-menu-title-sen-case'  width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>  
-                    <checkbox id="id-menu-show-profile-dir-ckb" label="&updateifs-show-profile-dir-label;"  preference='pref-menu-updateifs-menu-profile-dir' width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                    <checkbox id="id-menu-title-sentence-case-ckb" label="&updateifs-chang-title-label;" preference='pref-menu-updateifs-menu-title-sen-case'  width='225' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>  
+                    <checkbox id="id-menu-show-profile-dir-ckb" label="&updateifs-show-profile-dir-label;"  preference='pref-menu-updateifs-menu-profile-dir' width='225' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
                   </hbox>                    
                   <hbox style="margin: 0"> 
-                    <checkbox id="id-meun-show-data-dir-ckb" label="&updateifs-show-data-dir-label;"  preference='pref-menu-updateifs-data-dir-star'  width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                    <checkbox id="id-meun-show-data-dir-ckb" label="&updateifs-show-data-dir-label;"  preference='pref-menu-updateifs-data-dir-star'  width='225' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
                   </hbox>   
                     <separator class='thin'/>                     
                   <hbox style="margin: 0"> 
-                       <checkbox id="id-menu-sep-1-ckb" label="&menu-sep-1;"  preference='pref-menu-updateifs-sep1'  width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
-                       <checkbox id="id-menu-sep-2-ckb" label="&menu-sep-2;"  preference='pref-menu-updateifs-sep2'  width='250' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                       <checkbox id="id-menu-sep-1-ckb" label="&menu-sep-1;"  preference='pref-menu-updateifs-sep1'  width='225' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                       <checkbox id="id-menu-sep-2-ckb" label="&menu-sep-2;"  preference='pref-menu-updateifs-sep2'  width='225' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
                   </hbox>  
                 
                   <separator class='thin'/> 

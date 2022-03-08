@@ -35,7 +35,9 @@
     <menupopup id="menu_ToolsPopup">
         <menuitem id="menu_Tools-updateifs-preferences" label="&updateifs-preferences-label;" oncommand="Zotero.UpdateIFs.openPreferenceWindow();"/>
         <menuitem id="menu_Tools-updateifs-clean-extra" label="&updateifs-clean-extra-label;" oncommand="Zotero.UpdateIFs.cleanExtra();"/>
-   
+           <!--test-->
+        <menuitem id="menu_Tools-updateifs-test" label="&updateifs-test;" oncommand="test()"/>
+        
         <menu id="menu_Tools-updateifs-menu" label="&updateifs-author-label;"> 
              <menupopup id="menu_Tools-updateifs-menu-popup">
                <!--加粗加星-->
@@ -43,8 +45,6 @@
                     id="menu_Tools-updateifs-menu-popup-bold-star"
                     tooltiptext="&updateifs-bold-star-label-tip;"
                     label="&updateifs-bold-star-label;"
-                    
-
                     oncommand="Zotero.UpdateIFs.openAuthorProcess();"/>
                 <menuitem
                     id="menu_Tools-updateifs-menu-popup-remove-bold"
@@ -121,9 +121,7 @@
 <script
     type="application/x-javascript"
     src="chrome://zoteroupdateifs/content/scripts/options.js"/>
-<script
-    type="application/x-javascript"
-    src="chrome://zoteroupdateifs/content/scripts/zoteroupdateifs.js"/>
-  <script src="options.js"/>
+
+<script src="options.js"/>
   <script src="chrome://zotero/content/include.js"/>
 </overlay>

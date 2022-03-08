@@ -1,4 +1,14 @@
 // 读取options.xul对话框值并写入配置，用于显示隐藏子菜单
+
+// test = function(paneID, action) {
+
+//     var io = {pane: paneID, action: action};
+//     window.openDialog('chrome://zoteroupdateifs/content/test.xul',
+//         'updateifs-test',
+//         'chrome,titlebar,toolbar,centerscreen', io
+//     );
+// };
+
 showToolboxMenu = function() {
     // var pane = Services.wm.getMostRecentWindow("navigator:browser")
     // .ZoteroPane;

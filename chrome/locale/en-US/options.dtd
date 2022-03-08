@@ -2,7 +2,7 @@
 <!-- 期刊影响因子设置 -->
 <!ENTITY updateifs.journal.setting "Journal Update Settings">
 <!ENTITY updateifs-preferences "Update Journal Infomation Preferences">
-<!ENTITY update-journal-abbr "Udate journal and abbreviation settings">
+<!ENTITY update-journal-abbr "Udate journal and abbreviation settings:">
 <!ENTITY update-abbr "Update and Abbreviation">
 <!ENTITY add-update "Update journal information when adding item">
 <!ENTITY en_abbr "Use full publication title to replace journal abbreviation for English item when the journal is not found">
