@@ -258,6 +258,14 @@ Zotero.UpdateIFs.getAuthorName = function() {
 Zotero.UpdateIFs.changeTitleCase = async function() {
     var  items = Zotero.UpdateIFs.getSelectedItems();
     var alertInfo = '';
+    // progresswindow   // 20220310   
+    progressWin = null; // 20220310
+    itemProgress = []; // 20220310
+    progressWin = new Zotero.ProgressWindow(); // 20220310
+    progressWin.changeHeadline(Zotero.UpdateIFs.ZUIFGetString('title.case')); // 20220310
+    var icon_1 = 'chrome://zoteroupdateifs/skin/pen.png'; // 20220310
+    var icon_2 = 'chrome://zoteroupdateifs/skin/greenarrow.png'; // 20220310
+
     if (items.length == 0) {
         alertInfo = Zotero.UpdateIFs.ZUIFGetString('zotero.item');
         Zotero.UpdateIFs.showPopUP(alertInfo, 'failed');
@@ -270,17 +278,23 @@ Zotero.UpdateIFs.changeTitleCase = async function() {
                 alertInfo = Zotero.UpdateIFs.ZUIFGetString('all.upcase');
                 Zotero.UpdateIFs.showPopUP(alertInfo, 'infomation');
             }
+           
             result +=  " " + title + "\n" ;
             var new_title = title.replace(/\b([A-Z][a-z0-9]+|A)\b/g, function (x) { return x.toLowerCase(); });
             new_title = new_title.replace(/(^|\?\s*)[a-z]/, function (x) { return x.toUpperCase(); });
-            result += "-> " + new_title + "\n\n";
+           // result += "-> " + new_title + "\n\n";
             // // Do it at your own risk
+            //pronew =  title + "\n" + "-> " + new_title + "\n\n" ; //// 20220310
+            itemProgress.push(new progressWin.ItemProgress(icon_1, title)); //// 20220310
+            itemProgress.push(new progressWin.ItemProgress(icon_2, new_title)); //// 20220310
+            itemProgress.push(new progressWin.ItemProgress('','' )); // 加空行 20220310
             item.setField('title', new_title);
             await item.saveTx();
         }
-        alertInfo = result;
-        Zotero.UpdateIFs.showPopUP(alertInfo, 'finished');
-   
+        // alertInfo = result;
+        // Zotero.UpdateIFs.showPopUP(alertInfo, 'finished');
+        progressWin.show(); //// 20220310
+        progressWin.startCloseTimer(4000); //// 20220310
     }
     
 };
