@@ -739,7 +739,7 @@ Zotero.UpdateIFs.setItemJCR = async function (detailURL, item) {
             var update21 = getJCR[2].match('大类\n\t(.*)\n\n\n\t小类\n\t(.*)');
             
             var firstCat = ifsType == 'updated' ? update21[1] : basic21[1]; // 大类：如果为升级版为updated，否则为基础版
-            var secCat = ifsType == 'updated' ? update21[2].replace(/区/g, '区; ') : basic21[2].replace(/区/g, '区; '); // 大类：如果为升级版为updated，否则为基础版，并且将区替换为区；，以美化
+            var secCat = ifsType == 'updated' ? update21[2].replace(/区/g, '区 ') : basic21[2].replace(/区/g, '区 '); // 大类：如果为升级版为updated，否则为基础版，并且将区替换为区；，以美化
             JCR.push(qu, firstCat, secCat);
             return JCR; 
         
