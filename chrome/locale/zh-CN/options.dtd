@@ -4,9 +4,16 @@
 <!ENTITY add-update "添加条目时自动更新期刊信息">
 <!ENTITY en_abbr "如果英语条目查询不到, 期刊缩写使用期刊全称">
 <!ENTITY ch_abbr "如果中文条目查询不到, 期刊缩写使用期刊全称">
-<!ENTITY search-pattern "搜索方式">
+<!-- 分区类型设置 -->
+<!ENTITY ifs-type "分区类型设置">
+<!ENTITY ifs-type-desc "你可以选择显示哪个中科院分区版本：">
+<!ENTITY updateifs-ifs-type-label "分区类型设置">
+<!ENTITY basic "基础版">
+<!ENTITY updated "升级版">
+
+<!-- <!ENTITY search-pattern "搜索方式">
 <!ENTITY pubtitle-label "使用期刊名称搜索">
-<!ENTITY issn-label "使用期刊ISSN搜索">
+<!ENTITY issn-label "使用期刊ISSN搜索"> -->
 
 <!-- 工具箱菜单隐藏显示 -->
 
@@ -41,8 +48,8 @@
 <!ENTITY author-star-add-btn.tip "仅给作者名字后加星号(*)">
 <!ENTITY author-bold-star-add-btn "加粗和加星号">
 <!ENTITY author-bold-star-add-btn-tip "同时给作者名字加粗体和星号(*)">
-<!ENTITY author-regular "常规">
-<!ENTITY author-no-change "保持不变">
+<!-- <!ENTITY author-regular "常规">
+<!ENTITY author-no-change "保持不变"> -->
 <!ENTITY updateifs-author-star-desc "对作者添加或删除星号 (*)">
 <!ENTITY author-star-add "加星号">
 <!ENTITY author-star-remove "删除">
@@ -52,8 +59,8 @@
 <!ENTITY author-bold "加粗">
 <!ENTITY author-star "加星号">
 <!ENTITY updateifs-author-name-desc "合并或拆分作者，中文作者请合并（否则姓名之前会有空格），英文作者都可以: ">
-<!ENTITY one-field "合并">
-<!ENTITY two-field "拆分">
+<!-- <!ENTITY one-field "合并">
+<!ENTITY two-field "拆分"> -->
 <!ENTITY process-author "处理作者">
 <!ENTITY updateifs.button.remove.bold.label "去除粗体"> 
 <!ENTITY updateifs.button.remove.boldInfo.label "点击去年作者的加粗标记">

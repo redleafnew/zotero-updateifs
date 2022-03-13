@@ -1,6 +1,7 @@
  pref("extensions.updateifs.add_update", false);
  pref("extensions.updateifs.en_abbr", false);
  pref("extensions.updateifs.ch_abbr", false);
+ pref("extensions.updateifs.ifs-type", 'updated');
 
 //  子菜单默认设置;
 pref('pref-updateifs-menu-bold-star', true);

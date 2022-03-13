@@ -522,9 +522,10 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
         
         
     }
+    var statusInfo = numSuccess > 0 ? 'finished' : 'failed';
     var successInfo = numSuccess > 1 ? 'success.mul' : 'success.sig';
     var alertInfo = numSuccess + whiteSpace + Zotero.UpdateIFs.ZUIFGetString(successInfo);
-    Zotero.UpdateIFs.showPopUP(alertInfo, 'finished');
+    Zotero.UpdateIFs.showPopUP(alertInfo, statusInfo);
    // alert (numSuccess + whiteSpace + Zotero.UpdateIFs.ZUIFGetString('success'));
 };
 
@@ -719,24 +720,38 @@ Zotero.UpdateIFs.setItemJCR = async function (detailURL, item) {
 // 得到JCR分区
     Zotero.UpdateIFs.generateJCR = async function(detailURL){
         var JCR = [];
+        var ifsType = Zotero.Prefs.get('extensions.updateifs.ifs-type', true);
         try {   
-          var resp = await Zotero.HTTP.request("GET", detailURL);
-          var parser = new DOMParser();
-          var html = parser.parseFromString(
-              resp.responseText,
-              "text/html"
-          );
-  
-     
-          var xPath = '//div[2]/div[1]/table[3]/tbody';
-        //   var pattJCR = /JCR分区\n\t(.*)\n(\s*)(.+\n\s*(.+\n)\s(.+)\n\s*)大类\n\s(.*)\n\s*小类\n\s(.*)\n/;
-          var pattJCR = /JCR分区(.*)\n{3}\t.*\n{3}\t\n.\t\n.*\n.\n.*\n.*\n{3}.大类\n.(.*)\n{3}.小类\n.(.*)/; // 20220222 修改正则匹配
-          var jourJCR = Zotero.Utilities.xpath(html, xPath)[0].innerText;  
+            var resp = await Zotero.HTTP.request("GET", detailURL);
+            var parser = new DOMParser();
+            var html = parser.parseFromString(
+                resp.responseText,
+                "text/html"
+            );
+    
+        
+            var xPath2 = '//table[3]';
+            var pattJCR2 = /JCR分区(.*)|大类\n.(.*)\n{3}.小类\n.(.*)/g
+            var jourJCR = Zotero.Utilities.xpath(html, xPath2)[0].innerText;
+            var getJCR = jourJCR.match(pattJCR2);  
+            var qu = getJCR[0].match('JCR分区(.*)')[1];
+            var basic21 = getJCR[1].match('大类\n\t(.*)\n\n\n\t小类\n\t(.*)');
+            var update21 = getJCR[2].match('大类\n\t(.*)\n\n\n\t小类\n\t(.*)');
+            
+            var firstCat = ifsType == 'updated' ? update21[1] : basic21[1]; // 大类：如果为升级版为updated，否则为基础版
+            var secCat = ifsType == 'updated' ? update21[2].replace(/区/g, '区; ') : basic21[2].replace(/区/g, '区; '); // 大类：如果为升级版为updated，否则为基础版，并且将区替换为区；，以美化
+            JCR.push(qu, firstCat, secCat);
+            return JCR; 
+        
+        //   var xPath = '//div[2]/div[1]/table[3]/tbody';
+        // //   var pattJCR = /JCR分区\n\t(.*)\n(\s*)(.+\n\s*(.+\n)\s(.+)\n\s*)大类\n\s(.*)\n\s*小类\n\s(.*)\n/;
+        //   var pattJCR = /JCR分区(.*)\n{3}\t.*\n{3}\t\n.\t\n.*\n.\n.*\n.*\n{3}.大类\n.(.*)\n{3}.小类\n.(.*)/; // 20220222 修改正则匹配
+        //   var jourJCR = Zotero.Utilities.xpath(html, xPath)[0].innerText;  
           
-          var getJCR = jourJCR.match(pattJCR);  
-        //   JCR.push(getJCR[1], getJCR[6], getJCR[7]);
-        JCR.push(getJCR[1], getJCR[2], getJCR[3]);
-          return JCR; 
+        //   var getJCR = jourJCR.match(pattJCR);  
+        // //   JCR.push(getJCR[1], getJCR[6], getJCR[7]);
+        // JCR.push(getJCR[1], getJCR[2], getJCR[3]);
+        //   return JCR; 
       } catch (error){
       //continue;
       }

@@ -7,9 +7,16 @@
 <!ENTITY add-update "Update journal information when adding item">
 <!ENTITY en_abbr "Use full publication title to replace journal abbreviation for English item when the journal is not found">
 <!ENTITY ch_abbr "Use full publication title to replace journal abbreviation for Chinese item when the journal is not found">
-<!ENTITY search-pattern "Searching Pattern">
+<!-- 分区类型设置 -->
+<!ENTITY ifs-type "Quartile in Category Setting">
+<!ENTITY ifs-type-desc "You could choose which version of quartile in category to show here: ">
+<!ENTITY updateifs-ifs-type-label "Type of quartile in category">
+<!ENTITY basic "Basic verison">
+<!ENTITY updated "Updated version">
+
+<!-- <!ENTITY search-pattern "Searching Pattern">
 <!ENTITY pubtitle-label "Search using publiction title">
-<!ENTITY issn-label "Search using publiction ISSN">
+<!ENTITY issn-label "Search using publiction ISSN"> -->
 
 <!-- 菜单显示隐藏设置 -->
 
@@ -43,8 +50,8 @@
 <!ENTITY author-star-add-btn.tip "Only add asterisk (*) tag for author name">
 <!ENTITY author-bold-star-add-btn "Bold and Asterisk (*)">
 <!ENTITY author-bold-star-add-btn-tip "Add bold and asterisk tags for author name">
-<!ENTITY author-regular "Regular">
-<!ENTITY author-no-change "No change">
+<!-- <!ENTITY author-regular "Regular">
+<!ENTITY author-no-change "No change"> -->
 <!ENTITY updateifs-author-star-desc "Add or remove star (*) for author">
 <!ENTITY author-star-add "Asterisk">
 <!ENTITY author-star-remove "Remove">
@@ -54,8 +61,8 @@
 <!ENTITY author-bold "Bold">
 <!ENTITY author-star "Asterisk">
 <!ENTITY updateifs-author-name-desc "Merge or split name, merging for Chinese name (otherwise there will be a space between famliy and given name) and spliting for English name: ">
-<!ENTITY one-field "Merge">
-<!ENTITY two-field "Split">
+<!-- <!ENTITY one-field "Merge">
+<!ENTITY two-field "Split"> -->
 <!ENTITY process-author "Process Author">
 <!ENTITY updateifs.button.remove.bold.label "Clean Bold"> 
 <!ENTITY updateifs.button.remove.boldInfo.label "Clean bold tag around the author">

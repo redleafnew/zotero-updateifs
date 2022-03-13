@@ -14,6 +14,7 @@
       <preference id="pref-updateifs-add-update" name="extensions.updateifs.add-update" type="bool"/>
       <preference id="pref-updateifs-en_abbr" name="extensions.updateifs.en-abbr" type="bool"/>
       <preference id="pref-updateifs-ch_abbr" name="extensions.updateifs.ch-abbr" type="bool"/>
+      <preference id="pref-updateifs-ifs-type" name="extensions.updateifs.ifs-type"  type="string"/>
       <!-- 菜单隐藏 -->
       <preference id='pref-menu-updateifs-menu-bold-star'  name='pref-updateifs-menu-bold-star' type="bool"/>;
       <preference id='pref-menu-updateifs-menu-clean-bold' name='pref-updateifs-menu-clean-bold' type="bool"/>;
@@ -36,33 +37,51 @@
 
          <tab label="&updateifs.journal.setting;"/>
           <tab label="&updateifs.menu.setting;"/> 
-          
         </tabs>
        
-      <tabpanels id="zotero-prefpane-updateifs" orient="vertical" minheight="300">
-       
-
-          
-           <!-- 期刊及缩写设置 -->
+      <tabpanels id="zotero-prefpane-updateifs" >
+                 
+           <!-- 期刊、影响因子及缩写设置 -->
            <tabpanel id="zotero-prefpane-journal-tab"  >
-          
-            <groupbox  flex="1" >
+            <vbox >
+           <!-- 期刊及缩写设置 -->
+            <groupbox >
               <caption label="&update-abbr;"/>
-              <separator class='thin'/> 
+              <!-- <separator class='thin'/>  -->
               <description style="width: 420px">&update-journal-abbr;</description>
-              <separator class='thin'/> 
+              <!-- <separator class='thin'/>  -->
               <hbox style="margin: 0">
                 <checkbox id="id-updateifs-add-update" label="&add-update;" preference="pref-updateifs-add-update"/>
               </hbox>
-              <separator class='thin'/> 
+              <!-- <separator class='thin'/>  -->
               <hbox style="margin: 0">
                 <checkbox id="id-updateifs-en-abbr" label="&en_abbr;" width ='450' preference="pref-updateifs-en_abbr"/>
               </hbox>
-              <separator class='thin'/> 
+              <!-- <separator class='thin'/>  -->
               <hbox style="margin: 0">
                 <checkbox id="id-updateifs-ch-abbr" label="&ch_abbr;" width ='450' preference="pref-updateifs-ch_abbr" />
               </hbox>
             </groupbox>
+
+           <!-- 影响因子设置 -->
+           <separator class='thin'/> 
+           <!-- <separator class='thin'/>  -->
+            <groupbox >
+              <caption label="&ifs-type;"/>
+              <!-- <separator class='thin'/>  -->
+              <!-- <description style="width: 420px">&ifs-type-desc;</description> -->
+              <!-- <separator class='thin'/>  -->
+              <vbox style="margin: 0">
+                <radiogroup id="id-updateifs-ifs-type" preference="pref-updateifs-ifs-type">
+                  <label control="id-updateifs-ifs-type" value="&updateifs-ifs-type-label;"/>
+                    <radio label="&basic;" value='basic'/>
+                    <radio label="&updated;" value='updated' />
+                </radiogroup>
+       
+               </vbox>
+            </groupbox>
+
+          </vbox>
         </tabpanel>
 
 <!-- 菜单隐藏显示 -->
