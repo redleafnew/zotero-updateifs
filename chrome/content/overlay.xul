@@ -10,6 +10,14 @@
         type="application/x-javascript"
         src="chrome://zoteroupdateifs/content/scripts/zoteroupdateifs.js"/>
 
+    <keyset>
+        <key id="key-updateifs-clean-extra" modifiers="accel" key="E" oncommand="Zotero.UpdateIFs.cleanExtra()"/> <!--清除其它写快捷键 Ctr + E-->
+        <key id="key-updateifs-bold-star" modifiers="accel" key="B" oncommand="Zotero.UpdateIFs.openAuthorProcess()"/> <!--作者加星加粗快捷键 Ctr + B-->
+        <key id="key-updateifs-chang-title-case" modifiers="accel" key="T" oncommand="Zotero.UpdateIFs.changeTitleCase()"/> <!--更改文献题目大小写快捷键 Ctr + T-->
+        <key id="key-updateifs-show-profile-dir" modifiers="accel" key="P" oncommand="Zotero.UpdateIFs.showProfileDir()"/> <!--显示配置目录快捷键 Ctr + P-->
+        <key id="key-updateifs-show-data-dir" modifiers="accel" key="D" oncommand="Zotero.UpdateIFs.showDataDir()"/> <!--更改文献题目大小写快捷键 Ctr + D-->
+    </keyset>   
+
     <stringbundleset id="stringbundleset">
         <stringbundle
             id="zoteroupdateifs-bundle"
@@ -31,6 +39,10 @@
             label="&zotero.updateifs.update.label;"
             oncommand="Zotero.UpdateIFs.updateSelectedItems()"/>
     </popup>
+
+
+  
+    
 
     <menupopup id="menu_ToolsPopup">
         <menuitem id="menu_Tools-updateifs-preferences" label="&updateifs-preferences-label;" oncommand="Zotero.UpdateIFs.openPreferenceWindow();"/>
@@ -65,7 +77,7 @@
                 <menuitem 
                     id="menu_Tools-updateifs-chang-author-case"
                     tooltiptext="&updateifs-chang-author-case-label-tip;"
-                    label="&updateifs-chang-author-case-label;"
+                    label="&updateifs-chang-author-case-label;" 
                     oncommand="changAuthorCase()"/> 
                 <!-- 交换作者姓和名 -->
                 <menuitem
@@ -82,7 +94,11 @@
                     id="menu_Tools-updateifs-menu-chang-title-case"
                     tooltiptext="&updateifs-chang-title-label-tip;"
                     label="&updateifs-chang-title-label;"
-                    oncommand="Zotero.UpdateIFs.changeTitleCase();"/>    
+                  
+                    oncommand="Zotero.UpdateIFs.changeTitleCase();"/>   
+                
+                
+           
               
                 <!-- 更改期刊名称 -->
                 <menuitem
