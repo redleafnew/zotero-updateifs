@@ -67,7 +67,7 @@
     type="application/x-javascript"
     src="chrome://zoteroupdateifs/content/scripts/options.js"/>
 
-  <script src="chrome://zotero/content/include.js"/>
+
 
 <!-- </prefwindow> -->
 </window>

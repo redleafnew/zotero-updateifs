@@ -3,11 +3,70 @@
 // test = function(paneID, action) {
 
 //     var io = {pane: paneID, action: action};
-//     window.openDialog('chrome://zoteroupdateifs/content/test.xul',
-//         'updateifs-test',
+//     window.openDialog('chrome://zoteroupdateifs/content/title-search-replace.xul',
+//         'updateifs-title-search-replace',
 //         'chrome,titlebar,toolbar,centerscreen', io
 //     );
 // };
+
+openTitleFindRelace = function(paneID, action) {
+
+    var io = {pane: paneID, action: action};
+    window.openDialog('chrome://zoteroupdateifs/content/title-search-replace.xul',
+        'updateifs-title-search-replace',
+        'chrome,titlebar,toolbar,centerscreen', io
+    );
+};
+
+titleFindReplace = async function() {
+    var lanUI = Zotero.Prefs.get('intl.locale.requested', true); // 得到当前Zotero界面语言
+    var whiteSpace = ' ';
+    if (lanUI == 'zh-CN') {whiteSpace = ''};
+    var alertInfo = '';
+    var oldTitle = document.getElementById('id-updateifs-textb-old-name').value.trim(); // 被替换的部分单词或整个题目
+    var newTitle = document.getElementById('id-updateifs-textb-new-name').value.trim(); // 新的部分单词或整个题目
+    // 如果新或老题目为空则提示
+    if (oldTitle == '' || newTitle =='') {
+
+        alertInfo = Zotero.UpdateIFs.ZUIFGetString('title.empty');
+        Zotero.UpdateIFs.showPopUP(alertInfo, 'failed');
+
+    } else if ( oldTitle == newTitle) { 
+        alertInfo = Zotero.UpdateIFs.ZUIFGetString('find.replace.same');
+        Zotero.UpdateIFs.showPopUP(alertInfo, 'failed');
+    } else {
+        // alertInfo = oldTitle;
+        // Zotero.UpdateIFs.showPopUP(alertInfo, 'failed');
+     var items = Zotero.UpdateIFs.getSelectedItems();
+     var n = 0;
+     var itemOldTitle = ''; // 原题目
+     var replaced_title = ''; // 新题目
+     if (items.length == 0) {
+         alertInfo = Zotero.UpdateIFs.ZUIFGetString('zotero.item');
+         Zotero.UpdateIFs.showPopUP(alertInfo, 'failed');
+         } else {
+             for (item of items) {
+                     itemOldTitle = item.getField('title').trim(); //原题目
+                     if (itemOldTitle.indexOf(oldTitle) != -1) { //如果包含原字符
+                     replaced_title = itemOldTitle.replace(oldTitle, newTitle);
+                     item.setField('title', replaced_title);
+                     await item.saveTx();
+                     n ++;
+                    }
+                  }
+
+                 
+             }
+             var statusInfo = n == 0 ? 'failed' : 'finished';
+             var itemNo = n > 1 ? 'success.mul' : 'success.sig';
+            alertInfo = n + whiteSpace + Zotero.UpdateIFs.ZUIFGetString(itemNo);
+            Zotero.UpdateIFs.showPopUP(alertInfo, statusInfo);  
+         }
+     //}
+      
+    
+};
+
 
 showToolboxMenu = function() {
     // var pane = Services.wm.getMostRecentWindow("navigator:browser")

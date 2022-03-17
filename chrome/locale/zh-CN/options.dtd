@@ -75,3 +75,14 @@
 <!ENTITY old-title "请输入原期刊名称:">
 <!ENTITY new-title "请输入新期刊名称:">
 <!ENTITY change-title-bn "更改期刊名称">
+
+<!-- 题目查找替换 -->
+<!ENTITY title-search-replace-win "文献题目查找替换">
+<!ENTITY title-search-replace "题目查找替换">
+<!ENTITY updateifs-title-search-replace-label "你可以输入部分或整个需要替换的题目, 查找替换大小写敏感。">
+<!ENTITY updateifs-title-search-replace-old-label "查找: ">
+<!ENTITY updateifs-title-search-replace-new-label "替换为: ">
+
+<!ENTITY updateifs-title-case-ckb-label "Case sentative">
+<!ENTITY updateifs-title-search-replace-btn "替换">
+<!ENTITY updateifs-title-search-replace-btn.tip "点击替换题目中的部分或全部内容。">

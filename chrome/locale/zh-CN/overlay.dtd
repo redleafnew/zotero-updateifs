@@ -23,6 +23,8 @@
 <!ENTITY updateifs-chang-pub-title-case-label "更改期刊名称词首字母大写">
 <!ENTITY updateifs-chang-pub-title-label "修改期刊名称">
 <!ENTITY updateifs-chang-title-label-tip "将文献题目改为句首字母大写。">
+<!ENTITY updateifs-item-title-find-replace-label "文献题目查找替换">
+<!ENTITY updateifs-item-title-find-replace-tip "查找替换文献题目部分或全部内容">
 <!ENTITY updateifs-chang-pub-title-case-label-tip "更改期刊名称为词首字母大写。">
 <!ENTITY updateifs-chang-pub-title-label.tip "修改期刊名称">
 
@@ -34,4 +36,4 @@
 <!ENTITY menu-sep-1 "分隔条 1">
 <!ENTITY menu-sep-2 "分隔条 2">
 
-<!-- <!ENTITY updateifs-test "Test"> -->
+<!ENTITY updateifs-test "Test">

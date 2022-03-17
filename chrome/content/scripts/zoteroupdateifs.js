@@ -308,7 +308,7 @@ Zotero.UpdateIFs.changeTitleCase = async function() {
     return newStr.join(" ");
 };
 
-// 检查句子是否为全部大小
+// 检查句子是否为全部大写
 Zotero.UpdateIFs.detectUpCase = function (word) {
     var arr_is_uppercase = [];
     for (var char of word) {

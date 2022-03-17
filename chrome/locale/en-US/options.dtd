@@ -77,3 +77,13 @@
 <!ENTITY old-title "Please input the original publication title:">
 <!ENTITY new-title "Please input the new publication:">
 <!ENTITY change-title-bn "Change Publication Title">
+
+<!-- 题目查找替换 -->
+<!ENTITY title-search-replace-win "Item Title Find and Replace">
+<!ENTITY title-search-replace "Title Find and Replace">
+<!ENTITY updateifs-title-search-replace-label "You can input part or whole item title to be replaced, the find and replace case sensitive.">
+<!ENTITY updateifs-title-search-replace-old-label "Find: ">
+<!ENTITY updateifs-title-search-replace-new-label "Replace: ">
+<!ENTITY updateifs-title-case-ckb-label "Case sentative">
+<!ENTITY updateifs-title-search-replace-btn "Replace">
+<!ENTITY updateifs-title-search-replace-btn.tip "Click to replace part or whole item title.">

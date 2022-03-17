@@ -11,11 +11,11 @@
         src="chrome://zoteroupdateifs/content/scripts/zoteroupdateifs.js"/>
 
     <keyset>
-        <key id="key-updateifs-clean-extra" modifiers="accel" key="E" oncommand="Zotero.UpdateIFs.cleanExtra()"/> <!--清除其它写快捷键 Ctr + E-->
+        <key id="key-updateifs-clean-extra" modifiers="accel" key="E" oncommand="Zotero.UpdateIFs.cleanExtra()"/> <!--清除其它快捷键 Ctr + E-->
         <key id="key-updateifs-bold-star" modifiers="accel" key="B" oncommand="Zotero.UpdateIFs.openAuthorProcess()"/> <!--作者加星加粗快捷键 Ctr + B-->
         <key id="key-updateifs-chang-title-case" modifiers="accel" key="T" oncommand="Zotero.UpdateIFs.changeTitleCase()"/> <!--更改文献题目大小写快捷键 Ctr + T-->
         <key id="key-updateifs-show-profile-dir" modifiers="accel" key="P" oncommand="Zotero.UpdateIFs.showProfileDir()"/> <!--显示配置目录快捷键 Ctr + P-->
-        <key id="key-updateifs-show-data-dir" modifiers="accel" key="D" oncommand="Zotero.UpdateIFs.showDataDir()"/> <!--更改文献题目大小写快捷键 Ctr + D-->
+        <key id="key-updateifs-show-data-dir" modifiers="accel" key="D" oncommand="Zotero.UpdateIFs.showDataDir()"/> <!--显示数据目录快捷键 Ctr + D-->
     </keyset>   
 
     <stringbundleset id="stringbundleset">
@@ -97,7 +97,12 @@
                   
                     oncommand="Zotero.UpdateIFs.changeTitleCase();"/>   
                 
-                
+                <!-- 文献题目查找替换 --> 
+                <menuitem
+                    id="menu_Tools-updateifs-menu-item-title-find-replace"
+                    tooltiptext="&updateifs-item-title-find-replace-tip;"
+                    label="&updateifs-item-title-find-replace-label;"
+                    oncommand="openTitleFindRelace();"/>                   
            
               
                 <!-- 更改期刊名称 -->

@@ -19,10 +19,13 @@
 <!ENTITY updateifs-chang-author-case-label-tip "Change the author's name to title case.">
 <!ENTITY updateifs-swap-author-label-tip "Swap the author's first and last name.">
 
+<!-- 期刊题目文献题目 -->
 <!ENTITY updateifs-chang-pub-title-label "Change Publication Title">
 <!ENTITY updateifs-chang-pub-title-case-label "Change Publication Title Case">
 <!ENTITY updateifs-chang-title-label "Change Title to Sentense Case">
 <!ENTITY updateifs-chang-title-label-tip "Change the item title to sentense case.">
+<!ENTITY updateifs-item-title-find-replace-label "Item Title Find and Replace">
+<!ENTITY updateifs-item-title-find-replace-tip "Find and replace in item title.">
 <!ENTITY updateifs-chang-pub-title-case-label-tip "Change publication title to title Case.">
 <!ENTITY updateifs-chang-pub-title-label.tip "Change Publication Name">
 
