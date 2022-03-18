@@ -75,7 +75,7 @@
 <!ENTITY change-pub-title-desc "修改期刊名称, 如将LWT修改为LWT-Food Science and Technology。">
 <!ENTITY old-title "请输入原期刊名称:">
 <!ENTITY new-title "请输入新期刊名称:">
-<!ENTITY change-title-bn "更改期刊名称">
+<!ENTITY change-title-bn "修改期刊名称">
 
 <!-- 题目查找替换 -->
 <!ENTITY title-search-replace-win "文献题目查找替换">

@@ -5,16 +5,17 @@
 <!DOCTYPE window SYSTEM "chrome://zoteroupdateifs/locale/options.dtd">
 
 <!--修改期刊名称-->
-<prefwindow id="updateifs-change-pub-title" title="&updateifs-change-pub-title;" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
+<window id="updateifs-change-pub-title" title="&updateifs-change-pub-title;" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" >
 	<stringbundleset id="stringbundleset">
 		<stringbundle id="updateifs-options" src="chrome://zotero-updateifs/locale/options.properties"/>
 	</stringbundleset>
-   <prefpane label="&updateifs-preferences;" id="updateifs-prefpane"> 
+   <!-- <prefpane label="&updateifs-preferences;" id="updateifs-prefpane">  -->
 
       
     <groupbox minheight="240">
       <caption label="&change-pub-title;"/>
-      <description style="width: 420px">&change-pub-title-desc;</description>
+      <description style="width: 300px">&change-pub-title-desc;</description>
+
       <separator class="thin"/>
         <hbox style="margin: 0">
           <label control="id-updateifs-change-pub-title-old" value="&old-title;"/>
@@ -35,12 +36,12 @@
         
         <separator class="thin"/>
       <hbox style="margin: 0"> 
-         <button id="id-updateifs-change-pub-title" label="&change-title-bn;" oncommand="changeTitle()"/>
+         <button id="id-updateifs-change-pub-title" style="margin: 0px 10px 10px 80px" label="&change-title-bn;" oncommand="changeTitle()"/>
     </hbox>
     </groupbox>
 
    
-  </prefpane>
+  <!-- </prefpane> -->
 
  
  <script
@@ -50,4 +51,4 @@
  <script src="options.js"/>
   <script src="chrome://zotero/content/include.js"/>
 
-</prefwindow>
+</window>
