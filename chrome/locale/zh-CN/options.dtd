@@ -30,6 +30,7 @@
 <!ENTITY updateifs-chang-title-label "文献题目句首字母大写">
 <!ENTITY updateifs-chang-pub-title-case-label "更改期刊名称词首字母大写">
 <!ENTITY updateifs-chang-pub-title-label "修改期刊名称">
+<!ENTITY updateifs-item-title-find-replace-label "文献题目查找替换">
 <!ENTITY updateifs-show-profile-dir-label "显示配置目录">
 <!ENTITY updateifs-show-data-dir-label "显示数据目录">
 <!ENTITY menu-sep-1 "分隔条 1">

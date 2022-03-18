@@ -38,6 +38,7 @@ Zotero.UpdateIFs.showToolboxMenu = function() {
     var auTitleCase = Zotero.Prefs.get('pref-updateifs-menu-au-title-case', true);
     var swapAu = Zotero.Prefs.get('pref-updateifs-menu-swap-au', true);
     var titleSenCase = Zotero.Prefs.get('pref-updateifs-menu-title-sen-case',  true);
+    var titleFindReplace = Zotero.Prefs.get('pref-updateifs-menu-find-replace-item-title',  true); // 题目查找替换
     var pubTitle = Zotero.Prefs.get('pref-updateifs-menu-pub-title', true);
     var pubTitleCase = Zotero.Prefs.get('pref-updateifs-menu-pub-title-case', true);
     var profileDir = Zotero.Prefs.get('pref-updateifs-menu-profile-dir',  true);
@@ -53,6 +54,7 @@ Zotero.UpdateIFs.showToolboxMenu = function() {
     document.getElementById('menu_Tools-updateifs-chang-author-case').hidden = !auTitleCase;
     document.getElementById('menu_Tools-updateifs-swap-author').hidden = !swapAu;
     document.getElementById('menu_Tools-updateifs-menu-chang-title-case').hidden = !titleSenCase;
+    document.getElementById('menu_Tools-updateifs-menu-item-title-find-replace').hidden = !titleFindReplace; // 题目查找替换
     document.getElementById('menu_Tools-updateifs-chang-pub-title').hidden = !pubTitle;
     document.getElementById('id-menu-chang-pub-title-case').hidden = !pubTitleCase;
     document.getElementById('menu_Tools-updateifs-menu-show-profile-dir').hidden = !profileDir;
@@ -281,7 +283,14 @@ Zotero.UpdateIFs.changeTitleCase = async function() {
            
             result +=  " " + title + "\n" ;
             var new_title = title.replace(/\b([A-Z][a-z0-9]+|A)\b/g, function (x) { return x.toLowerCase(); });
-            new_title = new_title.replace(/(^|\?\s*)[a-z]/, function (x) { return x.toUpperCase(); });
+            new_title = new_title.replace(/(^|\?\s*)[a-z]/, function (x) { return x.toUpperCase(); }).
+                                replace('china', 'China'). // 替换china  代码来源于fredericky123，感谢。
+                                replace('chinese', 'Chinese'). // 替换chinese
+                                replace('america', 'America'). // 替换america
+                                replace('english', 'English'). // 替换english
+                                replace('england', 'England'). // 替换england
+                                replace('india', 'India'); // 替换india
+
            // result += "-> " + new_title + "\n\n";
             // // Do it at your own risk
             //pronew =  title + "\n" + "-> " + new_title + "\n\n" ; //// 20220310

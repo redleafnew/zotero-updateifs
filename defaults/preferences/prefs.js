@@ -12,6 +12,7 @@ pref('pref-updateifs-menu-au-title-case', true);
 pref('pref-updateifs-menu-swap-au', true);
 pref('pref-updateifs-menu-pub-title', true);
 pref('pref-updateifs-menu-pub-title-case', true);
+pref('pref-updateifs-menu-find-replace-item-title', true);
 pref('pref-updateifs-menu-title-sen-case',  true);
 pref('pref-updateifs-menu-profile-dir',  true);
 pref('pref-updateifs-data-dir-star', true);

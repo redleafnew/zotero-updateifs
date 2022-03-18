@@ -30,9 +30,11 @@
 <!ENTITY updateifs-remove-bold-and-star-label "Clean Author Bold and Asterisk">
 <!ENTITY updateifs-chang-author-case-label "Change Author Name to Title Case">
 <!ENTITY updateifs-swap-author-label "Swap Author's First and Last Name">
+<!ENTITY updateifs-chang-title-label "Change Title to Sentense Case">
 <!ENTITY updateifs-chang-pub-title-label "Change Publication Title">
 <!ENTITY updateifs-chang-pub-title-case-label "Change Publication Title Case">
-<!ENTITY updateifs-chang-title-label "Change Title to Sentense Case">
+<!ENTITY updateifs-item-title-find-replace-tip "Find and replace in item title.">
+<!ENTITY updateifs-item-title-find-replace-label "Item Title Find and Replace">
 <!ENTITY updateifs-show-profile-dir-label "Show Porfile Directory">
 <!ENTITY updateifs-show-data-dir-label "Show Data Directory">
 <!ENTITY menu-sep-1 "Separator 1">

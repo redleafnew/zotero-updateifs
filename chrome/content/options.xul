@@ -4,6 +4,7 @@
 
 <!DOCTYPE window SYSTEM "chrome://zoteroupdateifs/locale/options.dtd">
 
+
 <!-- onload="updatePreferenceWindow('all');" -->
 <prefwindow id="updateifs-pref" title="&updateifs-preferences;" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload="setCheckbox()">
 	<stringbundleset id="stringbundleset">
@@ -24,6 +25,7 @@
       <preference id='pref-menu-updateifs-menu-swap-au' name='pref-updateifs-menu-swap-au' type="bool"/>;
       <preference id='pref-menu-updateifs-menu-pub-title' name='pref-updateifs-menu-pub-title' type="bool"/>;
       <preference id='pref-menu-updateifs-menu-pub-title-case' name='pref-updateifs-menu-pub-title-case' type="bool"/>;
+      <preference id='pref-menu-updateifs-menu-find-replace-item-title' name='pref-updateifs-menu-find-replace-item-title' type="bool"/>;
       <preference id='pref-menu-updateifs-menu-title-sen-case' name='pref-updateifs-menu-title-sen-case'  type="bool"/>;
       <preference id='pref-menu-updateifs-menu-profile-dir' name='pref-updateifs-menu-profile-dir'  type="bool"/>;
       <preference id='pref-menu-updateifs-data-dir-star' name='pref-updateifs-data-dir-star' type="bool"/>;
@@ -115,10 +117,11 @@
                   </hbox>                    
                   <hbox style="margin: 0"> 
                     <checkbox id="id-menu-title-sentence-case-ckb" label="&updateifs-chang-title-label;" preference='pref-menu-updateifs-menu-title-sen-case'  width='225' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>  
-                    <checkbox id="id-menu-show-profile-dir-ckb" label="&updateifs-show-profile-dir-label;"  preference='pref-menu-updateifs-menu-profile-dir' width='225' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                    <checkbox id="id-menu-find-replace-item-title-ckb" label="&updateifs-item-title-find-replace-label;" preference='pref-menu-updateifs-menu-find-replace-item-title'  width='225' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>  
                   </hbox>                    
                   <hbox style="margin: 0"> 
-                    <checkbox id="id-meun-show-data-dir-ckb" label="&updateifs-show-data-dir-label;"  preference='pref-menu-updateifs-data-dir-star'  width='225' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                     <checkbox id="id-menu-show-profile-dir-ckb" label="&updateifs-show-profile-dir-label;"  preference='pref-menu-updateifs-menu-profile-dir' width='225' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
+                     <checkbox id="id-meun-show-data-dir-ckb" label="&updateifs-show-data-dir-label;"  preference='pref-menu-updateifs-data-dir-star'  width='225' oncommand="showToolboxMenu();Zotero.UpdateIFs.showToolboxMenu()"/>
                   </hbox>   
                     <separator class='thin'/>                     
                   <hbox style="margin: 0"> 

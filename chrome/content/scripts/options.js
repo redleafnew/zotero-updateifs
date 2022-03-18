@@ -159,6 +159,8 @@ changPubTitleCase = async function() {
                                     replace('Plos', 'PLOS').
                                     replace('Msystems', 'mSystems').
                                     replace('Lwt', 'LWT').
+                                    replace('LWT-food', 'LWT-Food').
+                                    replace('LWT - food', 'LWT - Food').
                                     replace('Ieee', 'IEEE').
                                     replace('Gida', 'GIDA').
                                     replace('Pnas', 'PNAS').
