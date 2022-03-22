@@ -427,10 +427,10 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
                 var ifs5 = if5 + if5Year; // 新5年影响因子
 	            var ifs = ifsc + ifs5;
                 var patt = /影响因子: (([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)\n5年影响因子: (([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)/;   // 匹配以前影响因子的正则
-                var enAbbr  = Zotero.Prefs.get('extensions.updateifs.en-abbr', true) // 设置中英文期刊缩写选项
-                if (enAbbr) { 
+                var enAbbr  = Zotero.Prefs.get('extensions.updateifs.en-abbr', true) // 设置中 英文期刊缩写选项
+                // if (enAbbr) { 
                     item.setField('journalAbbreviation', jourAbb); // 设置期刊缩写
-                }
+                // }
                 if (old.length == 0 ) {   // 如果内容为空
                     item.setField('extra', ifs);
             
