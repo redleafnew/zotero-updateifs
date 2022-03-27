@@ -151,10 +151,10 @@ changPubTitleCase = async function() {
             for (item of items) {
                     oldPubTitle = item.getField("publicationTitle").trim();//原题目
                     newPubTitle =  titleCase(oldPubTitle). //转为词首字母大写
-                                    replace('And', 'and'). // 替换And
-                                    replace('For', 'for'). // 替换For
-                                    replace('In', 'in'). // 替换In
-                                    replace('Of', 'of'). // 替换Of
+                                    replace(' And ', ' and '). // 替换And
+                                    replace(' For ', ' for '). // 替换For
+                                    replace(' In ', ' in '). // 替换In
+                                    replace(' Of ', ' of '). // 替换Of
                                     replace('Plos One', 'PLOS ONE').
                                     replace('Plos', 'PLOS').
                                     replace('Msystems', 'mSystems').

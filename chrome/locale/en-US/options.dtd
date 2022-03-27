@@ -6,7 +6,7 @@
 <!ENTITY update-abbr "Update and Abbreviation">
 <!ENTITY add-update "Update journal information when adding item">
 <!ENTITY en_abbr "Use full publication title to replace journal abbreviation for English item when the journal is not found">
-<!ENTITY ch_abbr "Use full publication title to replace journal abbreviation for Chinese item when the journal is not found">
+<!ENTITY ch_abbr "Use full publication title to replace journal abbreviation for Chinese item">
 <!-- 分区类型设置 -->
 <!ENTITY ifs-type "Quartile in Category Setting">
 <!ENTITY ifs-type-desc "You could choose which version of quartile in category to show here: ">
@@ -14,13 +14,37 @@
 <!ENTITY basic "Basic verison">
 <!ENTITY updated "Updated version">
 
-<!-- <!ENTITY search-pattern "Searching Pattern">
+<!-- 影响因子设置 -->
+<!ENTITY updateifs.ifs.setting "Quartile and IF Settings">
+<!ENTITY sci-settings "SCI Journal IF Settings">
+<!ENTITY sci-settings-desc "You can set the IF show or hide for SCI journals (show all default):">
+<!ENTITY jcr-qu "Show JCR quartile in ">
+<!ENTITY cas-qu1 "Show CAS Quartile  in">
+<!ENTITY cas-qu2 "Show CAS Sub Quartile  in ">
+<!ENTITY sci-if "Show IF  in ">
+<!ENTITY sci-if5 "Show 5 Year IF  in ">
+<!ENTITY chj-settings "Chinese Journal IF Settings">
+<!ENTITY chj-settings-desc "You can set the IF show or hide for Chinese journals (show all default):">
+<!ENTITY chj-cscd "Show CSCD in ">
+<!ENTITY pku-core "Show PKU Core Journal in ">
+<!ENTITY sci-core "Show Sci &amp; Tech Core Journal in ">  <!-- https://www.ascii-code.com/表示&-->
+<!ENTITY com-if "Show Compound IF in ">
+<!ENTITY agg-if "Show Comprehensive IF in ">
+
+<!ENTITY sci-settings-archive "Archive">
+<!ENTITY sci-settings-archiveLocation "Loc. in Archive">
+<!ENTITY sci-settings-libraryCatalog "Library Catalog">
+<!ENTITY sci-settings-callNumber "Call Number">
+<!ENTITY sci-settings-rights "Rights">
+<!-- <!ENTITY sci-settings-field "field"> -->
+<!ENTITY sci-settings-field "field">
+<!--
 <!ENTITY pubtitle-label "Search using publiction title">
 <!ENTITY issn-label "Search using publiction ISSN"> -->
 
 <!-- 菜单显示隐藏设置 -->
 
-<!ENTITY updateifs.menu.setting "Toolbox Menu Show/Hide setting">
+<!ENTITY updateifs.menu.setting "Toolbox Menu Show/Hide settings">
 <!ENTITY menu-setting "Show Hide Setting">
 <!ENTITY menu-setting-desc "You can set show or hide the toolbox submenus.">
 <!ENTITY menu-stting-label "Check the menus you want to show (the default show all): ">

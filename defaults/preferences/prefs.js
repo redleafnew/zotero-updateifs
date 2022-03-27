@@ -3,6 +3,29 @@
  pref("extensions.updateifs.ch_abbr", false);
  pref("extensions.updateifs.ifs-type", 'updated');
 
+//  影响因子设置;
+pref('extensions.updateifs.jcr-qu', true);
+pref('extensions.updateifs.cas-qu1', true);
+pref('extensions.updateifs.cas-qu2', true);
+pref('extensions.updateifs.sci-if', true);
+pref('extensions.updateifs.sci-if5', true);
+pref('extensions.updateifs.chj-cscd', true);
+pref('extensions.updateifs.pku-core', true);
+pref('extensions.updateifs.sci-core', true);
+pref('extensions.updateifs.com-if', true);
+pref('extensions.updateifs.agg-if', true);
+
+pref('extensions.updateifs.jcr-qu-field' , "archive");
+pref('extensions.updateifs.cas-qu1-field' , "archiveLocation");
+pref('extensions.updateifs.cas-qu2-field' , "libraryCatalog");
+pref('extensions.updateifs.sci-if-field' , "callNumber");
+pref('extensions.updateifs.sci-if5-field' , "rights");
+pref('extensions.updateifs.chj-cscd-field' , "archive");
+pref('extensions.updateifschj-pku-field' ,"archiveLocation");
+pref('extensions.updateifs.chj-sci-field' ,"libraryCatalog");
+pref('extensions.updateifs.chj-com-field' ,"callNumber");
+pref('extensions.updateifs.agg-if-field' , "rights");
+
 //  子菜单默认设置;
 pref('pref-updateifs-menu-bold-star', true);
 pref('pref-updateifs-menu-clean-bold', true);

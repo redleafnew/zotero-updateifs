@@ -25,7 +25,12 @@ Zotero.UpdateIFs.getPref =  function(pref) {
 // /**
 //  * Open UpdateIFs preference window
 //  */
-
+Zotero.UpdateIFs.test = function() {
+    //var bd = document.getElementById('id-menu-bold-star-ckb').checked
+    //return bd;
+    alertInfo = 'bd';
+    Zotero.UpdateIFs.showPopUP(alertInfo, 'failed');
+    };
 
 Zotero.UpdateIFs.showToolboxMenu = function() {
     
@@ -121,22 +126,7 @@ Zotero.UpdateIFs.init = function() {
 
 };
 
-// 初始化设置
-// Zotero.UpdateIFs.initPref = function() {
-//     if (Zotero.UpdateIFs.getPref('add-update') === undefined) {
-//         Zotero.UpdateIFs.setPref('add-update', false);
-//     }
-//     if (Zotero.UpdateIFs.getPref('ch-abbr') === undefined) {
-//         Zotero.UpdateIFs.setPref('ch-abbr', false);
-//     }
-//     if (Zotero.UpdateIFs.getPref('en-abbr') === undefined) {
-//         Zotero.UpdateIFs.setPref('en-abbr', false);
-//     }
-//     if (Zotero.UpdateIFs.getPref('pubtitle_issn') === undefined) {
-//         Zotero.UpdateIFs.setPref('pubtitle_issn', 'pubtitle');
-//     }
-    
-// };
+
 
 
 Zotero.UpdateIFs.cleanExtra = function() {
@@ -396,8 +386,30 @@ Zotero.UpdateIFs.getSelectedItems = function( ){
     return items; // 
 };
 
+
+
+
 // 更新期刊影响因子
 Zotero.UpdateIFs.updateSelectedItem = async function(items) {
+
+    // 得到是否显示影响因子的设置
+
+    var sciIf = Zotero.Prefs.get('extensions.updateifs.sci-if', true);  // IF
+    var sciIf5 = Zotero.Prefs.get('extensions.updateifs.sci-if5', true); // 5年IF
+    var chjCscd = Zotero.Prefs.get('extensions.updateifs.chj-cscd', true); // CSCD
+    var pkuCore = Zotero.Prefs.get('extensions.updateifs.pku-core', true); // 北大核心
+    var sciCore = Zotero.Prefs.get('extensions.updateifs.sci-core', true); // 科技核心
+    var comIf = Zotero.Prefs.get('extensions.updateifs.com-if', true); // 复合影响因子
+    var aggIf = Zotero.Prefs.get('extensions.updateifs.agg-if', true); // 综合影响因子
+
+    var sciIfField = Zotero.Prefs.get('extensions.updateifs.sci-if-field' ,  true);  // IF字段
+    var sciIf5Field = Zotero.Prefs.get('extensions.updateifs.sci-if5-field' ,  true);// 5年IF字段
+    var cscdField = Zotero.Prefs.get('extensions.updateifs.chj-cscd-field' ,  true);// CSCD字段
+    var pkuField = Zotero.Prefs.get('extensions.updateifschj-pku-field' , true);// 北大核心字段
+    var chjSciField = Zotero.Prefs.get('extensions.updateifs.chj-sci-field' , true);// 科技核心字段
+    var chjCIfField = Zotero.Prefs.get('extensions.updateifs.chj-com-field' , true);//复合影响因子字段
+    var chjAIfField = Zotero.Prefs.get('extensions.updateifs.agg-if-field' ,  true);// 综合影响因子
+
     var numSuccess = 0;
     var numFail = 0;
     var lanUI = Zotero.Prefs.get('intl.locale.requested', true); // 得到当前Zotero界面语言
@@ -423,28 +435,38 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
                 var dig = '(([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)';
                
 
-                var ifsc = ifc + ifCurrent; // 新影响因子
-                var ifs5 = if5 + if5Year; // 新5年影响因子
+                var ifsc = ifc + ifCurrent; // 填充的影响因子字符串
+                var ifs5 = if5 + if5Year; // 填充的5年影响因子字符串
 	            var ifs = ifsc + ifs5;
                 var patt = /影响因子: (([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)\n5年影响因子: (([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)/;   // 匹配以前影响因子的正则
                 var enAbbr  = Zotero.Prefs.get('extensions.updateifs.en-abbr', true) // 设置中 英文期刊缩写选项
                 // if (enAbbr) { 
                     item.setField('journalAbbreviation', jourAbb); // 设置期刊缩写
                 // }
-                if (old.length == 0 ) {   // 如果内容为空
-                    item.setField('extra', ifs);
-            
-                 } else if (old.search(patt) != -1) { // 如果以前有影响因子则替换
-                    item.setField(
-                        'extra',
-                        old.replace(patt, ifs));
 
-                } else {   // 以前没有，且内容不为空
- 		            item.setField('extra', ifs + '\n' + old);
-                   // item.setField('extra', ifsc + ifsc5 + '\n' + old);
-                }
+                if (sciIf)  item.setField( // 设置影响因子
+                                sciIfField,
+                                ifCurrent);
+
+                if (sciIf5)  item.setField( // 设置5年影响因子
+                                sciIf5Field,
+                                if5Year);
+
+                // if (old.length == 0 ) {   // 如果内容为空
+                //     item.setField('extra', ifs);
+            
+                //  } else if (old.search(patt) != -1) { // 如果以前有影响因子则替换
+                //     item.setField(
+                //         'extra',
+                //         old.replace(patt, ifs));
+
+                // } else {   // 以前没有，且内容不为空
+ 		        //     item.setField('extra', ifs + '\n' + old);
+                //    // item.setField('extra', ifsc + ifsc5 + '\n' + old);
+                // }
 
                 // var  detailURL = await Zotero.UpdateIFs.generateItemDetailUrl(url);
+
                 Zotero.UpdateIFs.setItemJCR(detailURL, item);  // 设置JCR及中科院分区
 
                 item.save();
@@ -475,16 +497,16 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
                     var jourCNIF1 = Zotero.Utilities.xpath(htmlCN, xPathCNIF1)[0].innerText // 复合影响因子
                     var jourCNIF2 = Zotero.Utilities.xpath(htmlCN, xPathCNIF2)[0].innerText // 综合影响因子
                     var jourCN1 = Zotero.Utilities.xpath(htmlCN, xPathCN + '2]')[0].innerText. // CSCD
-                                replace(searchReg1, '否').
-                                replace(searchReg2, '是');
+                                replace(searchReg1, '').
+                                replace(searchReg2, 'CSCD');
 
                     var jourCN2 = Zotero.Utilities.xpath(htmlCN, xPathCN + '3]')[0].innerText. // 北大核心
-                                replace(searchReg1, '否').
-                                replace(searchReg2, '是');
+                                replace(searchReg1, '').
+                                replace(searchReg2, '北大核心');
 
                     var jourCN3 = Zotero.Utilities.xpath(htmlCN, xPathCN + '4]')[0].innerText. // 科技核心
-                                replace(searchReg1, '否').
-                                replace(searchReg2, '是');
+                                replace(searchReg1, '').
+                                replace(searchReg2, '科技核心');
 
 
                     
@@ -495,18 +517,38 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
                    
                     var pattCN = /CSCD: (.+)北大核心: (.+)科技核心: (.+)\n\n复合影响因子: (.*)\n综合影响因子: (.*)\n/g;   // 匹配以前影响因子的正则
     
-                    if (old.length == 0 ) {   // 如果内容为空
-                        item.setField('extra', jourCNInfo);
+                    if (chjCscd)  item.setField( // 设置CSCD
+                                        cscdField,
+                                        jourCN1);
+
+                    if (pkuCore)  item.setField( // 设置北大核心
+                                        pkuField,
+                                        jourCN2);
+
+                    if (sciCore)  item.setField( // 设置科技核心
+                                        chjSciField,
+                                        jourCN3);
+
+                    if (comIf)  item.setField( // 设置复合影响因子
+                                        chjCIfField,
+                                        jourCNIF1);
+
+                    if (aggIf)  item.setField( // 设置综合影响因子
+                                        chjAIfField,
+                                        jourCNIF2);
+                    
+                    // if (old.length == 0 ) {   // 如果内容为空
+                    //     item.setField('extra', jourCNInfo);
                    
-                     } else if (old.search(pattCN) != -1) { // 如果以前有影响因子则替换
-                        item.setField(
-                            'extra',
-                            old.replace(pattCN, jourCNInfo));
+                    //  } else if (old.search(pattCN) != -1) { // 如果以前有影响因子则替换
+                    //     item.setField(
+                    //         'extra',
+                    //         old.replace(pattCN, jourCNInfo));
                   
-                    } else {   // 以前没有，且内容不为空
-                         item.setField('extra', jourCNInfo + '\n' + old);
-                       // item.setField('extra', ifsc + ifsc5 + '\n' + old);
-                    }
+                    // } else {   // 以前没有，且内容不为空
+                    //      item.setField('extra', jourCNInfo + '\n' + old);
+                    //    // item.setField('extra', ifsc + ifsc5 + '\n' + old);
+                    // }
                     var chAbbr  = Zotero.Prefs.get('extensions.updateifs.ch-abbr', true) // 设置中中文期刊缩写选项
                     if (chAbbr) { // 如果设置中中文期刊缩写为true时
                         item.setField('journalAbbreviation', pubTitle); 
@@ -700,23 +742,74 @@ Zotero.UpdateIFs.getIFs = async function (item){
 
 // 设置JCR信息
 Zotero.UpdateIFs.setItemJCR = async function (detailURL, item) {
+
+        // 得到是否显示分区的设置
+        var jcrQu = Zotero.Prefs.get('extensions.updateifs.jcr-qu', true);
+        var casQu1 = Zotero.Prefs.get('extensions.updateifs.cas-qu1', true);
+        var casQu2 = Zotero.Prefs.get('extensions.updateifs.cas-qu2', true);
+
+        var jcrQuField = Zotero.Prefs.get('extensions.updateifs.jcr-qu-field' , true);
+        var casQu1Field = Zotero.Prefs.get('extensions.updateifs.cas-qu1-field' , true);
+        var casQu2Field = Zotero.Prefs.get('extensions.updateifs.cas-qu2-field' , true);
+
     try {
         var JCR = await Zotero.UpdateIFs.generateJCR (detailURL);  // 得到JCR
+        var newJcrQu = jcrQu == false ? '' : 'JCR: ' + JCR[0] + '\n';    // 新JCR分区，如果不显示, 则为空白
+        var newCasQu1 = casQu1 == false ? '' : '中科院大类分区: '+ JCR[1] + '\n' ;    // 新中科院大类分区，如果不显示, 则为空白
+        var newCasQu2 = casQu2 == false ? '' : '中科院小类分区: ' + JCR[2].replace(/区/g, '区 ') + '\n';    // 新中科院小类分区，如果不显示, 则为空白
+        var newJCRinfo = newJcrQu + newCasQu1 + newCasQu2;
+
         var JCRInfo = 'JCR: ' + JCR[0] + '\n' + '中科院大类分区: '+ JCR[1] + '\n' +
                         '中科院小类分区: ' + JCR[2].replace(/区/g, '区 ') + '\n';
         var pattJCR = /JCR:(.*)\n(.*)\n(.*)\n/;
-        var old = item.getField('extra');
-        if (old.length == 0 ) {   // 如果内容为空
-                            item.setField('extra', JCRInfo);
-            } else if (old.search(pattJCR) != -1) { // 如果以前有影响因子则替换
-                item.setField(
-                    'extra',
-                    old.replace(pattJCR, JCRInfo));
+        var pattNewJCR = /JCR:(.*)\n/; 
+        var pattNewCasQu1 = /中科院大类分区:(.*)\n/; 
+        var pattNewCasQu2 = /中科院小类分区:(.*)\n/; 
+
+        if (jcrQu)  item.setField( // 设置JCR
+                            jcrQuField,
+                            JCR[0]);
+
+        if (casQu1)  item.setField( //中科院大类分区
+                            casQu1Field,
+                            JCR[1]);
+
+        if (casQu2)  item.setField(//中科院小类分区
+                            casQu2Field,
+                            JCR[2]);
+
+
+        // var old = item.getField('extra');
+        // if (old.length == 0 ) {   // 如果内容为空
+        //         //item.setField('extra', JCRInfo);
+        //         item.setField('extra', newJCRinfo);
+        //     //} else if (old.search(pattJCR) != -1) { // 如果以前有影响因子则替换
+        //         // item.setField(
+        //         //     'extra',
+        //         //     old.replace(pattJCR, JCRInfo));
                     
-            } else {   // 以前没有，且内容不为空
-                item.setField('extra', JCRInfo + '\n' + old);
-                        
-            }
+        //     }  else if (old.search(pattNewJCR) != -1) { // 如果以前有JCR分区则替换
+        //         item.setField(
+        //             'extra',
+        //             old.replace(pattNewJCR, newJcrQu));
+
+
+        //     }  else if (old.search(pattNewCasQu1) != -1) { // 如果以前有中科院大类分区则替换
+        //         item.setField(
+        //             'extra',
+        //             old.replace(pattNewCasQu1, newCasQu1));
+
+
+        //     }  else if (old.search(pattNewCasQu2) != -1) { // 如果以前有中科院小类区则替换
+        //         item.setField(
+        //             'extra',
+        //             old.replace(pattNewCasQu2, newCasQu2));
+
+
+        //     }  else {   // 以前没有，且内容不为空
+        //         // item.setField('extra', JCRInfo + '\n' + old);
+        //         item.setField('extra', newJCRinfo + '\n' + old);       
+        //     }
             item.save();
     } catch (error){
         //continue;
@@ -765,6 +858,29 @@ Zotero.UpdateIFs.setItemJCR = async function (detailURL, item) {
       //continue;
       }
   };
+
+//   // CSSCI、EI 无法抓取 网页加密了
+//   Zotero.UpdateIFs.CSSCI_EI = async function(detailURL){
+//     try {
+//         var pubTitle = item.getField('publicationTitle');
+//         var url = 'https://s.wanfangdata.com.cn/magazine?q=' + 
+//                     encodeURIComponent(pubTitle); 
+//         var xPathJour = '//*[@class="title-area"]';
+//         var resp = await Zotero.HTTP.request("GET", url);
+//         var parser = new DOMParser();
+//         var html = parser.parseFromString(
+//             resp.responseText,
+//             "text/html"
+//         );  
+//        // return html;
+
+//         var AllJour = Zotero.Utilities.xpath(html, xPathJour)[0].innerText;
+//     }
+
+//     catch (error){
+
+//     }
+//   };
     
 // Localization (borrowed from ZotFile sourcecode) 
 // 提示语言本地化函数 Zotero.UpdateIFs.updateItem = async function(item) {
@@ -885,13 +1001,15 @@ if (typeof window !== 'undefined') {
                     Zotero.UpdateIFs.showToolboxMenu,
                     false
                 );
-                // // add event listener for pop menu
+
+                // add event listener for pop menu
                 // doc.getElementById("menu_ToolsPopup").addEventListener(
                 //     "popupshowing",
-                //     Zotero.UpdateIFs.showToolboxMenu,
+                //     Zotero.UpdateIFs.test,
                 //     false
                 // );
-                //                 // add event listener for pop menu
+
+                // // add event listener for pop menu
                 // doc.getElementById("menu_Tools-updateifs-menu").addEventListener(
                 //     "popupshowing",
                 //     Zotero.UpdateIFs.showToolboxMenu,
