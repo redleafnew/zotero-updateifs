@@ -24,7 +24,7 @@
 <!ENTITY chj-settings "中文期刊影响因子设置">
 <!ENTITY chj-settings-desc "设置SCI期刊影响因子是否显示（默认全部显示）：">
 <!ENTITY chj-cscd "显示CSCD于">
-<!ENTITY pku-core "显示北大核心于">
+<!ENTITY pku-core "显示北大/南大核心于">
 <!ENTITY sci-core "显示科技核心于">
 <!ENTITY com-if "显示复合影响因子于">
 <!ENTITY agg-if "显示综合影响因子于">

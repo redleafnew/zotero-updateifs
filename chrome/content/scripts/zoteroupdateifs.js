@@ -500,9 +500,16 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
                                 replace(searchReg1, '').
                                 replace(searchReg2, 'CSCD');
 
-                    var jourCN2 = Zotero.Utilities.xpath(htmlCN, xPathCN + '3]')[0].innerText. // 北大核心
-                                replace(searchReg1, '').
-                                replace(searchReg2, '北大核心');
+                    if (item.getField("url")) {
+                        
+                        var jourCN2 = await Zotero.UpdateIFs.CSSCI_PKU(item); //获致CSSI，北大
+                    } else {
+
+                        var jourCN2 = Zotero.Utilities.xpath(htmlCN, xPathCN + '3]')[0].innerText. // 北大核心
+                        replace(searchReg1, '').
+                        replace(searchReg2, '北大核心');
+                        };
+                    
 
                     var jourCN3 = Zotero.Utilities.xpath(htmlCN, xPathCN + '4]')[0].innerText. // 科技核心
                                 replace(searchReg1, '').
@@ -859,6 +866,25 @@ Zotero.UpdateIFs.setItemJCR = async function (detailURL, item) {
       }
   };
 
+  // CSSCI、北大核心
+  Zotero.UpdateIFs.CSSCI_PKU = async function(item){
+    let url = item.getField("url");
+    let resp = await Zotero.HTTP.request("GET", url);
+    // Use DOMParser to parse text to HTML.
+    // This DOMParser is from XPCOM.
+    var parser = Components.classes["@mozilla.org/xmlextras/domparser;1"]
+        .createInstance(Components.interfaces.nsIDOMParser);
+    let html =  parser.parseFromString(resp.responseText, "text/html");
+    var cssci = html.querySelectorAll("a.type");
+        if (cssci.length > 0) {
+           var njuCore = Array.prototype.map.call(cssci, ele => ele.innerText).join(", ");
+        } else {
+            var njuCore = '';
+        }
+    return njuCore;
+     
+
+   }; 
 //   // CSSCI、EI 无法抓取 网页加密了
 //   Zotero.UpdateIFs.CSSCI_EI = async function(detailURL){
 //     try {

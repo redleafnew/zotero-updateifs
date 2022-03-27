@@ -26,7 +26,7 @@
 <!ENTITY chj-settings "Chinese Journal IF Settings">
 <!ENTITY chj-settings-desc "You can set the IF show or hide for Chinese journals (show all default):">
 <!ENTITY chj-cscd "Show CSCD in ">
-<!ENTITY pku-core "Show PKU Core Journal in ">
+<!ENTITY pku-core "Show PKU/NJU Core Journal in ">
 <!ENTITY sci-core "Show Sci &amp; Tech Core Journal in ">  <!-- https://www.ascii-code.com/表示&-->
 <!ENTITY com-if "Show Compound IF in ">
 <!ENTITY agg-if "Show Comprehensive IF in ">
