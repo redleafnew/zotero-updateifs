@@ -21,6 +21,7 @@
 <!ENTITY cas-qu2 "显示中科院小类分区于">
 <!ENTITY sci-if "显示影响因子于">
 <!ENTITY sci-if5 "显示5年影响因子于">
+<!ENTITY sci-all-extra "将以上所有信息显示在其它字段中">
 <!ENTITY chj-settings "中文期刊影响因子设置">
 <!ENTITY chj-settings-desc "设置SCI期刊影响因子是否显示（默认全部显示）：">
 <!ENTITY chj-cscd "显示CSCD于">
@@ -28,6 +29,7 @@
 <!ENTITY sci-core "显示科技核心于">
 <!ENTITY com-if "显示复合影响因子于">
 <!ENTITY agg-if "显示综合影响因子于">
+<!ENTITY chj-all-extra "将以上所有信息显示在其它字段中">
 
 <!ENTITY sci-settings-archive "档案">
 <!ENTITY sci-settings-archiveLocation "存档位置">

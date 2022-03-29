@@ -14,6 +14,8 @@ pref('extensions.updateifs.pku-core', true);
 pref('extensions.updateifs.sci-core', true);
 pref('extensions.updateifs.com-if', true);
 pref('extensions.updateifs.agg-if', true);
+pref('extensions.updateifs.sci-all-extra', false);
+pref('extensions.updateifs.chj-all-extra', false);
 
 pref('extensions.updateifs.jcr-qu-field' , "archive");
 pref('extensions.updateifs.cas-qu1-field' , "archiveLocation");

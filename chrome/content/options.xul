@@ -27,6 +27,8 @@
       <preference id='pref-updateifs-sci-core'  name='extensions.updateifs.sci-core' type="bool"/>;
       <preference id='pref-updateifs-com-if'  name='extensions.updateifs.com-if' type="bool"/>;
       <preference id='pref-updateifs-agg-if'  name='extensions.updateifs.agg-if' type="bool"/>;
+      <preference id='pref-updateifs-sci-all-extra'  name='extensions.updateifs.sci-all-extra' type="bool"/>;
+      <preference id='pref-updateifs-chj-all-extra'  name='extensions.updateifs.chj-all-extra' type="bool"/>;
 
       <preference id='pref-updateifs-jcr-qu-field'  name='extensions.updateifs.jcr-qu-field' type="string"/>;
       <preference id='pref-updateifs-cas-qu1-field'  name='extensions.updateifs.cas-qu1-field' type="string"/>;
@@ -38,7 +40,7 @@
       <preference id='pref-updateifs-chj-sci-core-field'  name='extensions.updateifs.chj-sci-field' type="string"/>;
       <preference id='pref-updateifs-chj-com-if-field'  name='extensions.updateifs.chj-com-field' type="string"/>;
       <preference id='pref-updateifs-agg-if-field'  name='extensions.updateifs.agg-if-field' type="string"/>;
-    
+
       
       <!-- 菜单隐藏 -->
       <preference id='pref-menu-updateifs-menu-bold-star'  name='pref-updateifs-menu-bold-star' type="bool"/>;
@@ -186,6 +188,10 @@
                   </menulist>
                   <label value="&sci-settings-field;" control="id-sci-settings-field"/>
                 </hbox>
+                <!-- <hbox style="margin: 0">
+                  <checkbox id="id-updateifs-sci-all-extra" label="&sci-all-extra;"  preference="pref-updateifs-sci-all-extra"/>
+    
+                </hbox> -->
                </groupbox>
             <!-- </vbox> -->
             <!-- 中文期刊影响因子设置 -->
@@ -269,7 +275,10 @@
                   <label value="&sci-settings-field;" control="id-sci-settings-field"/>
                 </hbox>
               
-             
+                <!-- <hbox style="margin: 0">
+                  <checkbox id="id-updateifs-chj-all-extra" label="&chj-all-extra;"  preference="pref-updateifs-chj-all-extra"/>
+    
+                </hbox> -->
              </groupbox>
           </vbox>
            <!-- </vbox> -->

@@ -408,7 +408,10 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
     var pkuField = Zotero.Prefs.get('extensions.updateifschj-pku-field' , true);// 北大核心字段
     var chjSciField = Zotero.Prefs.get('extensions.updateifs.chj-sci-field' , true);// 科技核心字段
     var chjCIfField = Zotero.Prefs.get('extensions.updateifs.chj-com-field' , true);//复合影响因子字段
-    var chjAIfField = Zotero.Prefs.get('extensions.updateifs.agg-if-field' ,  true);// 综合影响因子
+    var chjAIfField = Zotero.Prefs.get('extensions.updateifs.agg-if-field' ,  true);// 综合影响因子字段
+
+    var sciAllExtra = Zotero.Prefs.get('extensions.updateifs.sci-all-extra',  true);// 显示所有英文期刊信息到其它
+    var chjAllExtra = Zotero.Prefs.get('extensions.updateifs.chj-all-extra',  true);// 显示所有中文期刊信息到其它
 
     var numSuccess = 0;
     var numFail = 0;
@@ -450,20 +453,22 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
 
                 if (sciIf5)  item.setField( // 设置5年影响因子
                                 sciIf5Field,
-                                if5Year);
+                                if5Year); 
 
-                // if (old.length == 0 ) {   // 如果内容为空
-                //     item.setField('extra', ifs);
-            
-                //  } else if (old.search(patt) != -1) { // 如果以前有影响因子则替换
-                //     item.setField(
-                //         'extra',
-                //         old.replace(patt, ifs));
+                if (sciAllExtra) { // 如果所有英文期刊信息到其它为真，则全部显示到其它字段
+                    if (old.length == 0 ) {   // 如果内容为空
+                        item.setField('extra', ifs);
+                
+                    } else if (old.search(patt) != -1) { // 如果以前有影响因子则替换
+                        item.setField(
+                            'extra',
+                            old.replace(patt, ifs));
 
-                // } else {   // 以前没有，且内容不为空
- 		        //     item.setField('extra', ifs + '\n' + old);
-                //    // item.setField('extra', ifsc + ifsc5 + '\n' + old);
-                // }
+                    } else {   // 以前没有，且内容不为空
+                        item.setField('extra', ifs + '\n' + old);
+                    // item.setField('extra', ifsc + ifsc5 + '\n' + old);
+                    }
+                };
 
                 // var  detailURL = await Zotero.UpdateIFs.generateItemDetailUrl(url);
 
@@ -496,28 +501,33 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
                     var searchReg2 = /√/g; // 替换√
                     var jourCNIF1 = Zotero.Utilities.xpath(htmlCN, xPathCNIF1)[0].innerText // 复合影响因子
                     var jourCNIF2 = Zotero.Utilities.xpath(htmlCN, xPathCNIF2)[0].innerText // 综合影响因子
-                    var jourCN1 = Zotero.Utilities.xpath(htmlCN, xPathCN + '2]')[0].innerText. // CSCD
-                                replace(searchReg1, '').
-                                replace(searchReg2, 'CSCD');
+                    var jourCN1 = Zotero.Utilities.xpath(htmlCN, xPathCN + '2]')[0].innerText // CSCD
 
-                    if (item.getField("url")) {
+                    var jourCN1Extra =  jourCN1.replace(searchReg1, '否').replace(searchReg2, '是'); // 放入Extra用 // CSCD
+                    var jourCN1New = jourCN1.replace(searchReg1, '').replace(searchReg2, 'CSCD');//放入字段中用  // CSCD
+                   
+
+                    var jourCN2New = item.getField("url") ? await Zotero.UpdateIFs.CSSCI_PKU(item) : '' ; //根据网址获致CSSCI，北大核心,  如无网址返回空白
+
+                    // if (item.getField("url")) {
                         
-                        var jourCN2 = await Zotero.UpdateIFs.CSSCI_PKU(item); //获致CSSI，北大
-                    } else {
+                    //     var jourCN2New = await Zotero.UpdateIFs.CSSCI_PKU(item); //根据网址获致CSSCI，北大核心
 
-                        var jourCN2 = Zotero.Utilities.xpath(htmlCN, xPathCN + '3]')[0].innerText. // 北大核心
-                        replace(searchReg1, '').
-                        replace(searchReg2, '北大核心');
-                        };
+                    // } 
+
+                    var jourCN2Extra = Zotero.Utilities.xpath(htmlCN, xPathCN + '3]')[0].innerText. // 北大核心
+                                                    replace(searchReg1, '否').replace(searchReg2, '是');//放入Extra用
+
+                    // var jourCN2New = jourCN2.replace(searchReg1, '').replace(searchReg2, '北大核心');
+                       
                     
 
-                    var jourCN3 = Zotero.Utilities.xpath(htmlCN, xPathCN + '4]')[0].innerText. // 科技核心
-                                replace(searchReg1, '').
-                                replace(searchReg2, '科技核心');
-
-
+                    var jourCN3 = Zotero.Utilities.xpath(htmlCN, xPathCN + '4]')[0].innerText // 科技核心
+                    var jourCN3Extra =  jourCN3.replace(searchReg1, '否').replace(searchReg2, '是'); //放入Extra用
+                    var jourCN3New = jourCN3.replace(searchReg1, '').replace(searchReg2, '科技核心');    //放入字段中用   
                     
-                    var jourCNInfo = 'CSCD: ' +  jourCN1 + ' ' + '北大核心: '  + jourCN2 + ' ' +  '科技核心: ' + jourCN3 + '\n\n' + 
+                    
+                    var jourCNInfo = 'CSCD: ' +  jourCN1Extra + ' ' + '北大核心: '  + jourCN2Extra + ' ' +  '科技核心: ' + jourCN3Extra + '\n\n' + 
                                     '复合影响因子: ' + jourCNIF1 + '\n' 
                                     +'综合影响因子: ' + jourCNIF2 + '\n';  // 期刊信息组合
                     
@@ -526,15 +536,15 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
     
                     if (chjCscd)  item.setField( // 设置CSCD
                                         cscdField,
-                                        jourCN1);
+                                        jourCN1New);
 
-                    if (pkuCore)  item.setField( // 设置北大核心
+                    if (pkuCore)  item.setField( // 设置北大核心，CSSCI，CSCD
                                         pkuField,
-                                        jourCN2);
+                                        jourCN2New);  // CSCD在这个字段中保留
 
                     if (sciCore)  item.setField( // 设置科技核心
                                         chjSciField,
-                                        jourCN3);
+                                        jourCN3New); // 
 
                     if (comIf)  item.setField( // 设置复合影响因子
                                         chjCIfField,
@@ -543,19 +553,24 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
                     if (aggIf)  item.setField( // 设置综合影响因子
                                         chjAIfField,
                                         jourCNIF2);
+
+                    if (chjAllExtra) { // 如果所有中文期刊信息到其它为真，则全部显示到其它字段
+                       
+
+                        if (old.length == 0 ) {   // 如果内容为空
+                            item.setField('extra', jourCNInfo);
                     
-                    // if (old.length == 0 ) {   // 如果内容为空
-                    //     item.setField('extra', jourCNInfo);
-                   
-                    //  } else if (old.search(pattCN) != -1) { // 如果以前有影响因子则替换
-                    //     item.setField(
-                    //         'extra',
-                    //         old.replace(pattCN, jourCNInfo));
-                  
-                    // } else {   // 以前没有，且内容不为空
-                    //      item.setField('extra', jourCNInfo + '\n' + old);
-                    //    // item.setField('extra', ifsc + ifsc5 + '\n' + old);
-                    // }
+                        } else if (old.search(pattCN) != -1) { // 如果以前有影响因子则替换
+                            item.setField(
+                                'extra',
+                                old.replace(pattCN, jourCNInfo));
+                    
+                        } else {   // 以前没有，且内容不为空
+                            item.setField('extra', jourCNInfo + '\n' + old);
+                        // item.setField('extra', ifsc + ifsc5 + '\n' + old);
+                        }
+                    };
+                    
                     var chAbbr  = Zotero.Prefs.get('extensions.updateifs.ch-abbr', true) // 设置中中文期刊缩写选项
                     if (chAbbr) { // 如果设置中中文期刊缩写为true时
                         item.setField('journalAbbreviation', pubTitle); 
@@ -759,6 +774,8 @@ Zotero.UpdateIFs.setItemJCR = async function (detailURL, item) {
         var casQu1Field = Zotero.Prefs.get('extensions.updateifs.cas-qu1-field' , true);
         var casQu2Field = Zotero.Prefs.get('extensions.updateifs.cas-qu2-field' , true);
 
+        var sciAllExtra = Zotero.Prefs.get('extensions.updateifs.sci-all-extra',  true);// 显示所有英文期刊信息到其它
+ 
     try {
         var JCR = await Zotero.UpdateIFs.generateJCR (detailURL);  // 得到JCR
         var newJcrQu = jcrQu == false ? '' : 'JCR: ' + JCR[0] + '\n';    // 新JCR分区，如果不显示, 则为空白
@@ -785,38 +802,39 @@ Zotero.UpdateIFs.setItemJCR = async function (detailURL, item) {
                             casQu2Field,
                             JCR[2]);
 
-
-        // var old = item.getField('extra');
-        // if (old.length == 0 ) {   // 如果内容为空
-        //         //item.setField('extra', JCRInfo);
-        //         item.setField('extra', newJCRinfo);
-        //     //} else if (old.search(pattJCR) != -1) { // 如果以前有影响因子则替换
-        //         // item.setField(
-        //         //     'extra',
-        //         //     old.replace(pattJCR, JCRInfo));
-                    
-        //     }  else if (old.search(pattNewJCR) != -1) { // 如果以前有JCR分区则替换
-        //         item.setField(
-        //             'extra',
-        //             old.replace(pattNewJCR, newJcrQu));
-
-
-        //     }  else if (old.search(pattNewCasQu1) != -1) { // 如果以前有中科院大类分区则替换
-        //         item.setField(
-        //             'extra',
-        //             old.replace(pattNewCasQu1, newCasQu1));
+    if (sciAllExtra) {
+            var old = item.getField('extra');
+            if (old.length == 0 ) {   // 如果内容为空
+                    //item.setField('extra', JCRInfo);
+                    item.setField('extra', newJCRinfo);
+                //} else if (old.search(pattJCR) != -1) { // 如果以前有影响因子则替换
+                    // item.setField(
+                    //     'extra',
+                    //     old.replace(pattJCR, JCRInfo));
+                        
+                }  else if (old.search(pattNewJCR) != -1) { // 如果以前有JCR分区则替换
+                    item.setField(
+                        'extra',
+                        old.replace(pattNewJCR, newJcrQu));
 
 
-        //     }  else if (old.search(pattNewCasQu2) != -1) { // 如果以前有中科院小类区则替换
-        //         item.setField(
-        //             'extra',
-        //             old.replace(pattNewCasQu2, newCasQu2));
+                }  else if (old.search(pattNewCasQu1) != -1) { // 如果以前有中科院大类分区则替换
+                    item.setField(
+                        'extra',
+                        old.replace(pattNewCasQu1, newCasQu1));
 
 
-        //     }  else {   // 以前没有，且内容不为空
-        //         // item.setField('extra', JCRInfo + '\n' + old);
-        //         item.setField('extra', newJCRinfo + '\n' + old);       
-        //     }
+                }  else if (old.search(pattNewCasQu2) != -1) { // 如果以前有中科院小类区则替换
+                    item.setField(
+                        'extra',
+                        old.replace(pattNewCasQu2, newCasQu2));
+
+
+                }  else {   // 以前没有，且内容不为空
+                    // item.setField('extra', JCRInfo + '\n' + old);
+                    item.setField('extra', newJCRinfo + '\n' + old);       
+                }
+        };
             item.save();
     } catch (error){
         //continue;

@@ -23,6 +23,7 @@
 <!ENTITY cas-qu2 "Show CAS Sub Quartile  in ">
 <!ENTITY sci-if "Show IF  in ">
 <!ENTITY sci-if5 "Show 5 Year IF  in ">
+<!ENTITY sci-all-extra "Show All Above Information in Extra Field">
 <!ENTITY chj-settings "Chinese Journal IF Settings">
 <!ENTITY chj-settings-desc "You can set the IF show or hide for Chinese journals (show all default):">
 <!ENTITY chj-cscd "Show CSCD in ">
@@ -30,6 +31,7 @@
 <!ENTITY sci-core "Show Sci &amp; Tech Core Journal in ">  <!-- https://www.ascii-code.com/表示&-->
 <!ENTITY com-if "Show Compound IF in ">
 <!ENTITY agg-if "Show Comprehensive IF in ">
+<!ENTITY chj-all-extra "Show All Above Information in Extra Field">
 
 <!ENTITY sci-settings-archive "Archive">
 <!ENTITY sci-settings-archiveLocation "Loc. in Archive">
@@ -37,7 +39,7 @@
 <!ENTITY sci-settings-callNumber "Call Number">
 <!ENTITY sci-settings-rights "Rights">
 <!-- <!ENTITY sci-settings-field "field"> -->
-<!ENTITY sci-settings-field "field">
+<!ENTITY sci-settings-field "Field">
 <!--
 <!ENTITY pubtitle-label "Search using publiction title">
 <!ENTITY issn-label "Search using publiction ISSN"> -->
