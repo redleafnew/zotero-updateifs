@@ -16,12 +16,19 @@
       <preference id="pref-updateifs-en_abbr" name="extensions.updateifs.en-abbr" type="bool"/>
       <preference id="pref-updateifs-ch_abbr" name="extensions.updateifs.ch-abbr" type="bool"/>
       <preference id="pref-updateifs-ifs-type" name="extensions.updateifs.ifs-type"  type="string"/>
+
+      <preference id='pref-updateifs-njau-core'  name='extensions.updateifs.njau-core' type="bool"/>;   <!-- 南农核心 -->
+      <preference id='pref-updateifs-njau-core-field'  name='extensions.updateifs.njau-core-field' type="string"/>;
+      <preference id='pref-updateifs-njau-high-quality'  name='extensions.updateifs.njau-high-quality' type="bool"/>;   <!-- 南农高质量 -->
+      <preference id='pref-updateifs-njau-high-quality-field'  name='extensions.updateifs.njau-high-quality-field' type="string"/>;
+
       <!-- 影响因子设置 -->
       <preference id='pref-updateifs-jcr-qu'  name='extensions.updateifs.jcr-qu' type="bool"/>;
       <preference id='pref-updateifs-cas-qu1'  name='extensions.updateifs.cas-qu1' type="bool"/>;
       <preference id='pref-updateifs-cas-qu2'  name='extensions.updateifs.cas-qu2' type="bool"/>;
       <preference id='pref-updateifs-sci-if'  name='extensions.updateifs.sci-if' type="bool"/>;
       <preference id='pref-updateifs-sci-if5'  name='extensions.updateifs.sci-if5' type="bool"/>;
+     
       <preference id='pref-updateifs-chj-cscd'  name='extensions.updateifs.chj-cscd' type="bool"/>;
       <preference id='pref-updateifs-pku-core'  name='extensions.updateifs.pku-core' type="bool"/>;
       <preference id='pref-updateifs-sci-core'  name='extensions.updateifs.sci-core' type="bool"/>;
@@ -34,7 +41,7 @@
       <preference id='pref-updateifs-cas-qu1-field'  name='extensions.updateifs.cas-qu1-field' type="string"/>;
       <preference id='pref-updateifs-cas-qu2-field'  name='extensions.updateifs.cas-qu2-field' type="string"/>;
       <preference id='pref-updateifs-sci-if-field'  name='extensions.updateifs.sci-if-field' type="string"/>;
-      <preference id='pref-updateifs-sci-if5-field'  name='extensions.updateifs.sci-if5-field' type="string"/>;
+
       <preference id='pref-updateifs-chj-cscd-field'  name='extensions.updateifs.chj-cscd-field' type="string"/>;
       <preference id='pref-updateifs-chj-pku-core-field'  name='extensions.updateifschj-pku-field' type="string"/>;
       <preference id='pref-updateifs-chj-sci-core-field'  name='extensions.updateifs.chj-sci-field' type="string"/>;
@@ -108,7 +115,52 @@
        
                </vbox>
             </groupbox>
+            <!-- 南农核心期刊高质量期刊设置 -->
+              <separator class='thin'/> 
+                <separator class='thin'/> 
+            <groupbox >
+              <caption label="&njau-core-high-quality;"/>
+              <!-- <separator class='thin'/>  -->
+              <!-- <description style="width: 420px">&ifs-type-desc;</description> -->
+              <!-- <separator class='thin'/>  -->
+              <vbox style="margin: 0">
+               
+                <hbox style="margin: 0"> <!-- 南农高质量期刊设置 -->
+                  <checkbox id="id-updateifs-njau-high-quality" label="&njau-high-quality;"  preference="pref-updateifs-njau-high-quality"/>
+              
+                  <menulist id="id-updateifs-njau-high-quality-field" preference="pref-updateifs-njau-high-quality-field">
+                    <menupopup>
+                      <menuitem label="&sci-settings-seriesTitle;" value="seriesTitle"/>
+                      <menuitem label="&sci-settings-seriesText;" value="seriesText"/>
+                      <menuitem label="&sci-settings-archive;" value="archive"/>
+                      <menuitem label="&sci-settings-archiveLocation;" value="archiveLocation"/>
+                      <menuitem label="&sci-settings-libraryCatalog;" value="libraryCatalog"/>
+                      <menuitem label="&sci-settings-callNumber;" value="callNumber"/>
+                      <menuitem label="&sci-settings-rights;" value="rights"/>
+                    </menupopup>
+                  </menulist>
+                  <label value="&sci-settings-field;" control="id-sci-settings-field"/>
+                  </hbox>
+                  <hbox style="margin: 0">  <!-- 南农核心期刊设置 -->
+                    <checkbox id="id-updateifs-njau-core" label="&njau-core;"  preference="pref-updateifs-njau-core"/>
+                
+                    <menulist id="id-updateifs-njau-core-field" preference="pref-updateifs-njau-core-field">
+                      <menupopup>
+                        <menuitem label="&sci-settings-seriesTitle;" value="seriesTitle"/>
+                        <menuitem label="&sci-settings-seriesText;" value="seriesText"/>
+                        <menuitem label="&sci-settings-archive;" value="archive"/>
+                        <menuitem label="&sci-settings-archiveLocation;" value="archiveLocation"/>
+                        <menuitem label="&sci-settings-libraryCatalog;" value="libraryCatalog"/>
+                        <menuitem label="&sci-settings-callNumber;" value="callNumber"/>
+                        <menuitem label="&sci-settings-rights;" value="rights"/>
+                      </menupopup>
+                    </menulist>
+                    <label value="&sci-settings-field;" control="id-sci-settings-field"/>
+                  </hbox>
 
+
+               </vbox>
+            </groupbox>
           </vbox>
         </tabpanel>
 
@@ -203,12 +255,28 @@
                <!-- <separator class='thin'/>  -->
                <!-- <description style="width: 420px">&chj-settings-desc;</description> -->
                <!-- <separator class='thin'/>  -->
-             
+               <!-- <hbox style="margin: 0">
+                <checkbox id="id-updateifs-njau-core" label="&njau-core;"  preference="pref-updateifs-njau-core"/>
+              
+                <menulist id="id-updateifs-njau-core-field" preference="pref-updateifs-njau-core-field">
+                  <menupopup>
+                    <menuitem label="&sci-settings-seriesText;" value="seriesText"/>
+                    <menuitem label="&sci-settings-archive;" value="archive"/>
+                    <menuitem label="&sci-settings-archiveLocation;" value="archiveLocation"/>
+                    <menuitem label="&sci-settings-libraryCatalog;" value="libraryCatalog"/>
+                    <menuitem label="&sci-settings-callNumber;" value="callNumber"/>
+                    <menuitem label="&sci-settings-rights;" value="rights"/>
+                  </menupopup>
+                </menulist>
+                <label value="&sci-settings-field;" control="id-sci-settings-field"/>
+              </hbox> -->
                 <hbox style="margin: 0">
                   <checkbox id="id-updateifs-chj-cscd" label="&chj-cscd;"  preference="pref-updateifs-chj-cscd"/>
                 
                   <menulist id="id-updateifs-chj-cscd-field" preference="pref-updateifs-chj-cscd-field">
                     <menupopup>
+                      <menuitem label="&sci-settings-seriesTitle;" value="seriesTitle"/>
+                      <menuitem label="&sci-settings-seriesText;" value="seriesText"/>
                       <menuitem label="&sci-settings-archive;" value="archive"/>
                       <menuitem label="&sci-settings-archiveLocation;" value="archiveLocation"/>
                       <menuitem label="&sci-settings-libraryCatalog;" value="libraryCatalog"/>
@@ -223,6 +291,8 @@
                 
                   <menulist id="id-updateifs-chj-pku-core-field" preference="pref-updateifs-chj-pku-core-field">
                     <menupopup>
+                      <menuitem label="&sci-settings-seriesTitle;" value="seriesTitle"/>
+                      <menuitem label="&sci-settings-seriesText;" value="seriesText"/>
                       <menuitem label="&sci-settings-archive;" value="archive"/>
                       <menuitem label="&sci-settings-archiveLocation;" value="archiveLocation"/>
                       <menuitem label="&sci-settings-libraryCatalog;" value="libraryCatalog"/>
@@ -237,6 +307,8 @@
              
                   <menulist id="id-updateifs-chj-sci-core-field" preference="pref-updateifs-chj-sci-core-field">
                     <menupopup>
+                      <menuitem label="&sci-settings-seriesTitle;" value="seriesTitle"/>
+                      <menuitem label="&sci-settings-seriesText;" value="seriesText"/>
                       <menuitem label="&sci-settings-archive;" value="archive"/>
                       <menuitem label="&sci-settings-archiveLocation;" value="archiveLocation"/>
                       <menuitem label="&sci-settings-libraryCatalog;" value="libraryCatalog"/>
@@ -251,6 +323,8 @@
         
                   <menulist id="id-updateifs-chj-com-if-field" preference="pref-updateifs-chj-com-if-field">
                     <menupopup>
+                      <menuitem label="&sci-settings-seriesTitle;" value="seriesTitle"/>
+                      <menuitem label="&sci-settings-seriesText;" value="seriesText"/>
                       <menuitem label="&sci-settings-archive;" value="archive"/>
                       <menuitem label="&sci-settings-archiveLocation;" value="archiveLocation"/>
                       <menuitem label="&sci-settings-libraryCatalog;" value="libraryCatalog"/>
@@ -265,6 +339,8 @@
     
                   <menulist id="id-updateifs-agg-if-field" preference="pref-updateifs-agg-if-field">
                     <menupopup>
+                      <menuitem label="&sci-settings-seriesTitle;" value="seriesTitle"/>
+                      <menuitem label="&sci-settings-seriesText;" value="seriesText"/>
                       <menuitem label="&sci-settings-archive;" value="archive"/>
                       <menuitem label="&sci-settings-archiveLocation;" value="archiveLocation"/>
                       <menuitem label="&sci-settings-libraryCatalog;" value="libraryCatalog"/>

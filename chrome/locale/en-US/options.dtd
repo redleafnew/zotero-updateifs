@@ -14,11 +14,17 @@
 <!ENTITY basic "Basic verison">
 <!ENTITY updated "Updated version">
 
+<!-- 南农核心期刊设置 -->
+<!ENTITY njau-core-high-quality "NJAU Core and Hight Quality Journal Settings (only for Food Science and Technology">
+<!ENTITY njau-core "Show NJAU Core Journal in ">
+<!ENTITY njau-high-quality "Show NJAU High Quality Journal in ">
+
+
 <!-- 影响因子设置 -->
 <!ENTITY updateifs.ifs.setting "Quartile and IF Settings">
 <!ENTITY sci-settings "SCI Journal IF Settings">
 <!ENTITY sci-settings-desc "You can set the IF show or hide for SCI journals (show all default):">
-<!ENTITY jcr-qu "Show JCR quartile in ">
+<!ENTITY jcr-qu "Show JCR Quartile in ">
 <!ENTITY cas-qu1 "Show CAS Quartile  in">
 <!ENTITY cas-qu2 "Show CAS Sub Quartile  in ">
 <!ENTITY sci-if "Show IF  in ">
@@ -26,6 +32,7 @@
 <!ENTITY sci-all-extra "Show All Above Information in Extra Field">
 <!ENTITY chj-settings "Chinese Journal IF Settings">
 <!ENTITY chj-settings-desc "You can set the IF show or hide for Chinese journals (show all default):">
+
 <!ENTITY chj-cscd "Show CSCD in ">
 <!ENTITY pku-core "Show PKU/NJU Core Journal in ">
 <!ENTITY sci-core "Show Sci &amp; Tech Core Journal in ">  <!-- https://www.ascii-code.com/表示&-->
@@ -33,6 +40,8 @@
 <!ENTITY agg-if "Show Comprehensive IF in ">
 <!ENTITY chj-all-extra "Show All Above Information in Extra Field">
 
+<!ENTITY sci-settings-seriesTitle "Series Title">
+<!ENTITY sci-settings-seriesText "Series Text">
 <!ENTITY sci-settings-archive "Archive">
 <!ENTITY sci-settings-archiveLocation "Loc. in Archive">
 <!ENTITY sci-settings-libraryCatalog "Library Catalog">

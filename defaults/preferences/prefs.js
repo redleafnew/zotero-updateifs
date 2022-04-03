@@ -3,12 +3,19 @@
  pref("extensions.updateifs.ch_abbr", false);
  pref("extensions.updateifs.ifs-type", 'updated');
 
+ //  南农核心设置;
+pref('extensions.updateifs.njau-core', true);
+pref('extensions.updateifs.njau-core-field' , "seriesText");
+pref('extensions.updateifs.njau-high-quality', true);
+pref('extensions.updateifs.njau-high-quality-field' , "seriesTitle");
+
 //  影响因子设置;
 pref('extensions.updateifs.jcr-qu', true);
 pref('extensions.updateifs.cas-qu1', true);
 pref('extensions.updateifs.cas-qu2', true);
 pref('extensions.updateifs.sci-if', true);
 pref('extensions.updateifs.sci-if5', true);
+
 pref('extensions.updateifs.chj-cscd', true);
 pref('extensions.updateifs.pku-core', true);
 pref('extensions.updateifs.sci-core', true);
@@ -22,6 +29,8 @@ pref('extensions.updateifs.cas-qu1-field' , "archiveLocation");
 pref('extensions.updateifs.cas-qu2-field' , "libraryCatalog");
 pref('extensions.updateifs.sci-if-field' , "callNumber");
 pref('extensions.updateifs.sci-if5-field' , "rights");
+
+
 pref('extensions.updateifs.chj-cscd-field' , "archive");
 pref('extensions.updateifschj-pku-field' ,"archiveLocation");
 pref('extensions.updateifs.chj-sci-field' ,"libraryCatalog");

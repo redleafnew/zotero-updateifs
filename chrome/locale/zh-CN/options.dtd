@@ -10,8 +10,10 @@
 <!ENTITY updateifs-ifs-type-label "分区类型设置">
 <!ENTITY basic "基础版">
 <!ENTITY updated "升级版">
-
-
+<!-- 南农核心期刊设置 -->
+<!ENTITY njau-core-high-quality "南农大核心期刊及高质量期刊设置（仅含食品科学与工程）">
+<!ENTITY njau-core "显示南农大核心期刊于">
+<!ENTITY njau-high-quality "显示南农大高质量期刊于">
 <!-- 影响因子设置 -->
 <!ENTITY updateifs.ifs.setting "分区和影响因子设置">
 <!ENTITY sci-settings "SCI期刊影响因子设置">
@@ -24,6 +26,7 @@
 <!ENTITY sci-all-extra "将以上所有信息显示在其它字段中">
 <!ENTITY chj-settings "中文期刊影响因子设置">
 <!ENTITY chj-settings-desc "设置SCI期刊影响因子是否显示（默认全部显示）：">
+
 <!ENTITY chj-cscd "显示CSCD于">
 <!ENTITY pku-core "显示北大/南大核心于">
 <!ENTITY sci-core "显示科技核心于">
@@ -31,6 +34,8 @@
 <!ENTITY agg-if "显示综合影响因子于">
 <!ENTITY chj-all-extra "将以上所有信息显示在其它字段中">
 
+<!ENTITY sci-settings-seriesTitle "系列标题">
+<!ENTITY sci-settings-seriesText "系列文本">
 <!ENTITY sci-settings-archive "档案">
 <!ENTITY sci-settings-archiveLocation "存档位置">
 <!ENTITY sci-settings-libraryCatalog "馆藏目录">
