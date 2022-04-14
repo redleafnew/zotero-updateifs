@@ -410,16 +410,16 @@ Zotero.UpdateIFs.updateSelectedItem = async function(items) {
     var comIf = Zotero.Prefs.get('extensions.updateifs.com-if', true); // 复合影响因子
     var aggIf = Zotero.Prefs.get('extensions.updateifs.agg-if', true); // 综合影响因子
 
-    var sciIfField = Zotero.Prefs.get('extensions.updateifs.sci-if-field' ,  true);  // IF字段
-    var sciIf5Field = Zotero.Prefs.get('extensions.updateifs.sci-if5-field' ,  true);// 5年IF字段
-    var cscdField = Zotero.Prefs.get('extensions.updateifs.chj-cscd-field' ,  true);// CSCD字段
-    var pkuField = Zotero.Prefs.get('extensions.updateifschj-pku-field' , true);// 北大核心字段
-    var chjSciField = Zotero.Prefs.get('extensions.updateifs.chj-sci-field' , true);// 科技核心字段
-    var chjCIfField = Zotero.Prefs.get('extensions.updateifs.chj-com-field' , true);//复合影响因子字段
-    var chjAIfField = Zotero.Prefs.get('extensions.updateifs.agg-if-field' ,  true);// 综合影响因子字段
+    var sciIfField = Zotero.Prefs.get('extensions.updateifs.sci-if-field',  true);  // IF字段
+    var sciIf5Field = Zotero.Prefs.get('extensions.updateifs.sci-if5-field',  true); // 5年IF字段
+    var cscdField = Zotero.Prefs.get('extensions.updateifs.chj-cscd-field',  true); // CSCD字段
+    var pkuField = Zotero.Prefs.get('extensions.updateifschj-pku-field', true);  // 北大核心字段
+    var chjSciField = Zotero.Prefs.get('extensions.updateifs.chj-sci-field', true);  // 科技核心字段
+    var chjCIfField = Zotero.Prefs.get('extensions.updateifs.chj-com-field', true);  //复合影响因子字段
+    var chjAIfField = Zotero.Prefs.get('extensions.updateifs.agg-if-field',  true);  // 综合影响因子字段
 
-    var sciAllExtra = Zotero.Prefs.get('extensions.updateifs.sci-all-extra',  true);// 显示所有英文期刊信息到其它
-    var chjAllExtra = Zotero.Prefs.get('extensions.updateifs.chj-all-extra',  true);// 显示所有中文期刊信息到其它
+    var sciAllExtra = Zotero.Prefs.get('extensions.updateifs.sci-all-extra',  true);  // 显示所有英文期刊信息到其它
+    var chjAllExtra = Zotero.Prefs.get('extensions.updateifs.chj-all-extra',  true);  // 显示所有中文期刊信息到其它
 
     var numSuccess = 0;
     var numFail = 0;
@@ -704,8 +704,10 @@ Zotero.UpdateIFs.getIFs = async function (item){
         
             var AllJour = Zotero.Utilities.xpath(html, xPathJour)[0].innerText;
             var publicationTitle = item.getField('publicationTitle').
-                        replace('&', 'and').
-                        replace(' - ', '-'); 
+                        replace('&', 'and').  // 替换&为and
+                        replace(' - ', '-').
+                        replace(',', '').    // 替换逗号（，）
+                        replace(': ', '-');  // 替换冒号空格（：）
             var reg = '\n\t(.*)\n\t' + publicationTitle + // 分组1序号
                                     '\n\t(.*)\n\t(.*)'+ // 分组3 ISSN，分组4文章数
                                     '\n\t(.*)\n\t(.*)'+ //分组5 5年平均分， 分组6 非自引分

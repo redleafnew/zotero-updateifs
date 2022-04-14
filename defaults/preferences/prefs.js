@@ -5,9 +5,9 @@
 
  //  南农核心设置;
 pref('extensions.updateifs.njau-core', true);
-pref('extensions.updateifs.njau-core-field' , "seriesText");
+pref('extensions.updateifs.njau-core-field', "seriesText");
 pref('extensions.updateifs.njau-high-quality', true);
-pref('extensions.updateifs.njau-high-quality-field' , "seriesTitle");
+pref('extensions.updateifs.njau-high-quality-field', "seriesTitle");
 
 //  影响因子设置;
 pref('extensions.updateifs.jcr-qu', true);
@@ -24,18 +24,18 @@ pref('extensions.updateifs.agg-if', true);
 pref('extensions.updateifs.sci-all-extra', false);
 pref('extensions.updateifs.chj-all-extra', false);
 
-pref('extensions.updateifs.jcr-qu-field' , "archive");
-pref('extensions.updateifs.cas-qu1-field' , "archiveLocation");
-pref('extensions.updateifs.cas-qu2-field' , "libraryCatalog");
-pref('extensions.updateifs.sci-if-field' , "callNumber");
-pref('extensions.updateifs.sci-if5-field' , "rights");
+pref('extensions.updateifs.jcr-qu-field', "archive");
+pref('extensions.updateifs.cas-qu1-field', "archiveLocation");
+pref('extensions.updateifs.cas-qu2-field', "libraryCatalog");
+pref('extensions.updateifs.sci-if-field', "callNumber");
+pref('extensions.updateifs.sci-if5-field', "rights");
 
 
-pref('extensions.updateifs.chj-cscd-field' , "archive");
-pref('extensions.updateifschj-pku-field' ,"archiveLocation");
-pref('extensions.updateifs.chj-sci-field' ,"libraryCatalog");
-pref('extensions.updateifs.chj-com-field' ,"callNumber");
-pref('extensions.updateifs.agg-if-field' , "rights");
+pref('extensions.updateifs.chj-cscd-field', "archive");
+pref('extensions.updateifschj-pku-field',"archiveLocation");
+pref('extensions.updateifs.chj-sci-field',"libraryCatalog");
+pref('extensions.updateifs.chj-com-field',"callNumber");
+pref('extensions.updateifs.agg-if-field', "rights");
 
 //  子菜单默认设置;
 pref('pref-updateifs-menu-bold-star', true);
