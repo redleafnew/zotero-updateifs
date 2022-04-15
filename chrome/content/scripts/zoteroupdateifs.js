@@ -704,10 +704,10 @@ Zotero.UpdateIFs.getIFs = async function (item){
         
             var AllJour = Zotero.Utilities.xpath(html, xPathJour)[0].innerText;
             var publicationTitle = item.getField('publicationTitle').
-                        replace('&', 'and').  // 替换&为and
-                        replace(' - ', '-').
-                        replace(',', '').    // 替换逗号（，）
-                        replace(': ', '-');  // 替换冒号空格（：）
+                        replace(/&/g, 'and').  // 替换&为and
+                        replace(/ - /g, '-').
+                        replace(/,/g, '').    // 替换逗号（，）
+                        replace(/: /g, '-');  // 替换冒号空格（：）  全局替换代码源于@crazyi
             var reg = '\n\t(.*)\n\t' + publicationTitle + // 分组1序号
                                     '\n\t(.*)\n\t(.*)'+ // 分组3 ISSN，分组4文章数
                                     '\n\t(.*)\n\t(.*)'+ //分组5 5年平均分， 分组6 非自引分
@@ -837,34 +837,34 @@ Zotero.UpdateIFs.setItemJCR = async function (detailURL, item) {
     if (sciAllExtra) {
             var old = item.getField('extra');
             if (old.length == 0 ) {   // 如果内容为空
-                    //item.setField('extra', JCRInfo);
-                    item.setField('extra', newJCRinfo);
-                //} else if (old.search(pattJCR) != -1) { // 如果以前有影响因子则替换
-                    // item.setField(
-                    //     'extra',
-                    //     old.replace(pattJCR, JCRInfo));
-                        
-                }  else if (old.search(pattNewJCR) != -1) { // 如果以前有JCR分区则替换
-                    item.setField(
-                        'extra',
-                        old.replace(pattNewJCR, newJcrQu));
+                    item.setField('extra', JCRInfo); // 20220415 恢复原Extra
+                    //item.setField('extra', newJCRinfo);
+                } else if (old.search(pattJCR) != -1) { // 如果以前有影响因子则替换 // 20220415 恢复原Extra
+                     item.setField(
+                         'extra',
+                         old.replace(pattJCR, JCRInfo));
+                       // 以下注释目的为20220415 恢复原Extra 
+                // }  else if (old.search(pattNewJCR) != -1) { // 如果以前有JCR分区则替换
+                //     item.setField(
+                //         'extra',
+                //         old.replace(pattNewJCR, newJcrQu));
 
 
-                }  else if (old.search(pattNewCasQu1) != -1) { // 如果以前有中科院大类分区则替换
-                    item.setField(
-                        'extra',
-                        old.replace(pattNewCasQu1, newCasQu1));
+                // }  else if (old.search(pattNewCasQu1) != -1) { // 如果以前有中科院大类分区则替换
+                //     item.setField(
+                //         'extra',
+                //         old.replace(pattNewCasQu1, newCasQu1));
 
 
-                }  else if (old.search(pattNewCasQu2) != -1) { // 如果以前有中科院小类区则替换
-                    item.setField(
-                        'extra',
-                        old.replace(pattNewCasQu2, newCasQu2));
+                // }  else if (old.search(pattNewCasQu2) != -1) { // 如果以前有中科院小类区则替换
+                //     item.setField(
+                //         'extra',
+                //         old.replace(pattNewCasQu2, newCasQu2));
 
 
                 }  else {   // 以前没有，且内容不为空
-                    // item.setField('extra', JCRInfo + '\n' + old);
-                    item.setField('extra', newJCRinfo + '\n' + old);       
+                     item.setField('extra', JCRInfo + '\n' + old); // 20220415 恢复原Extra
+                    //item.setField('extra', newJCRinfo + '\n' + old);       
                 }
         };
             item.save();
