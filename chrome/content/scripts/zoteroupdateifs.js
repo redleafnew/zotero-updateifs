@@ -279,11 +279,14 @@ Zotero.UpdateIFs.changeTitleCase = async function() {
                                 replace('america', 'America'). // 替换america
                                 replace('english', 'English'). // 替换english
                                 replace('england', 'England'). // 替换england
-                                replace('india', 'India'); // 替换india
+                                replace('india', 'India').// 替换india
+                                //20220510 增加冒号后面为大写字母   
+                               // https://stackoverflow.com/questions/72180052/regexp-match-and-replace-to-its-uppercase-in-javascript#72180194           
+                                replace(/：|:\s*\w/, fullMatch => fullMatch.toUpperCase()); //匹配冒号后面的空格及一个字母，并转为大写
 
-            //20220509 增加冒号后面为大写字母
-            colon_letter = new_title.match((/(：|:\s*\w)/))[0];  //匹配冒号后面的空格及一个字母
-            new_title = new_title.replace(colon_letter, colon_letter.toUpperCase()); //转为大写
+           //20220509 增加冒号后面为大写字母  
+            //colon_letter = new_title.match((/(：|:\s*\w)/))[0];  
+            //new_title = new_title.replace(colon_letter, colon_letter.toUpperCase()); //转为大写
 
            // result += "-> " + new_title + "\n\n";
             // // Do it at your own risk
