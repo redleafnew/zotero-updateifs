@@ -1,6 +1,8 @@
 
 # Zotero Update IFs
 
+使用[easyScholar](https://easyscholar.cc)数据接口版本可见：<https://github.com/redleafnew/zotero-updateifsE>。
+
 1. 使用期刊名称从`唯问`(<http://sci.justscience.cn/>)更新期刊英文期刊的`JCR分区`、`中科院分区`、`影响因子`和`5年影响因子`，对于中文期刊更新是否`CSCD收录`、`北大核心`、`科技核心`、`复合影响因子`、`综合影响因子`。插件主体来源于`Zotero Scholar Citations`(<https://github.com/beloglazov/zotero-scholar-citations>)，获取核心期刊信息部分代码来源于`茉莉花`（<https://github.com/l0o0/jasminum/>），在此表示感谢。插件安装后在分类及条目上右击会出现`从唯问更新期刊信息`，点击即可从`唯问`(<http://sci.justscience.cn/>)获取`JCR分区`、`中科院分区`、`影响因子`和`5年影响因子`及中文期刊更新是否南`南农大核心期刊`、`南农大高质量期刊（仅含食品科学与工程）`、`CSCD收录`、`北大/南大核心`、`科技核心`、`复合影响因子`、`综合影响因子`，并分别写入到`档案`、`存档位置`、`馆藏目录`、`索书号`、`版权`字段（可进行设置是否显示和存贮位置），如果没有获取到数据，请核实该期刊有无被`SCI`索引或直接访问`唯问`(<http://sci.justscience.cn/>)查看。
 
 2. 使用期刊名称从`唯问`(<http://sci.justscience.cn/>)更新期刊英文期刊的缩写，写入到`刊名缩写` （需要在`工具`-`更新期刊信息设置...`中进行相关选项设置）。
