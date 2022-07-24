@@ -126,9 +126,6 @@ Zotero.UpdateIFs.init = function () {
 
 };
 
-
-
-
 Zotero.UpdateIFs.cleanExtra = function () {
     var items = Zotero.UpdateIFs.getSelectedItems();
     if (items == '') { // 如果没有选中条目
@@ -156,6 +153,42 @@ Zotero.UpdateIFs.cleanExtra = function () {
     }
 };
 
+// 清除摘要、系列、系列文本、归档、归档位置、索引号、版权 20220722
+Zotero.UpdateIFs.cleanIfsFields = function () {
+    var items = Zotero.UpdateIFs.getSelectedItems();
+    if (items == '') { // 如果没有选中条目
+        var alertInfo = Zotero.UpdateIFs.ZUIFGetString("clean.failed");
+        Zotero.UpdateIFs.showPopUP(alertInfo, 'failed');
+    } else {
+        var requireInfo = items.length > 1 ? "clean.ifs.fields.sig" : "clean.ifs.fields.mul";
+        var truthBeTold = window.confirm(Zotero.UpdateIFs.ZUIFGetString(requireInfo));
+        if (truthBeTold) {
+            for (let item of items) {
+
+                if (item.isRegularItem() && !item.isCollection()) {
+                    try {
+                        item.setField('abstractNote', '');  //摘要
+                        item.setField('archive', ''); //归档
+                        item.setField('archiveLocation', '');  //归档位置
+                        item.setField('callNumber', '');  //索引号
+                        item.setField('rights', ''); //版权
+                        item.setField('series', '');  //系列
+                        item.setField('seriesText', '');  //系列文本
+                        item.setField('seriesTitle', '');  //系列标题
+                        item.setField('libraryCatalog', '');  //图书馆目录
+                        item.setField('extra', ''); //其它
+                        item.saveTx();
+
+                    } catch (error) {
+                        // numFail = numFail + 1;
+                    }
+                }
+            }
+            var alertInfo = Zotero.UpdateIFs.ZUIFGetString("clean.ifs.finished");
+            Zotero.UpdateIFs.showPopUP(alertInfo, 'finished');
+        }
+    }
+};
 
 
 
@@ -788,7 +821,8 @@ Zotero.UpdateIFs.getHtml = async function (item) {
         // var url = 'https://www.ablesci.com/journal/index?keywords=' +
         //     encodeURIComponent(pubTitle).replace(/%20/g, '+');
         var resp = await Zotero.HTTP.request("GET", url);
-        var parser = new DOMParser();
+        var parser = Components.classes["@mozilla.org/xmlextras/domparser;1"]
+            .createInstance(Components.interfaces.nsIDOMParser);
         var html = parser.parseFromString(
             resp.responseText,
             "text/html"
@@ -891,7 +925,8 @@ Zotero.UpdateIFs.generateJCR = async function (detailURL) {
     var ifsType = Zotero.Prefs.get('extensions.updateifs.ifs-type', true);
     try {
         var resp = await Zotero.HTTP.request("GET", detailURL);
-        var parser = new DOMParser();
+        var parser = Components.classes["@mozilla.org/xmlextras/domparser;1"]
+            .createInstance(Components.interfaces.nsIDOMParser);
         var html = parser.parseFromString(
             resp.responseText,
             "text/html"
@@ -902,7 +937,7 @@ Zotero.UpdateIFs.generateJCR = async function (detailURL) {
         var pattJCR2 = /JCR分区(.*)|大类\n.(.*)\n{3}.小类\n.(.*)/g
         var jourJCR = Zotero.Utilities.xpath(html, xPath2)[0].innerText;
         var getJCR = jourJCR.match(pattJCR2);
-        var qu = getJCR[0].match('JCR分区(.*)')[1];
+        var qu = getJCR[0].match('JCR分区(.*)')[1].replace(/\/以上面为准/g, '');
         var basic21 = getJCR[1].match('大类\n\t(.*)\n\n\n\t小类\n\t(.*)');
         var update21 = getJCR[2].match('大类\n\t(.*)\n\n\n\t小类\n\t(.*)');
 
