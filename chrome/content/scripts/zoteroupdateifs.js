@@ -551,28 +551,58 @@ Zotero.UpdateIFs.updateSelectedItem = async function (items) {
             // 得到中文期刊信息 与前面英文相比后缀加CN
             try {
                 var pubTitle = item.getField('publicationTitle');
-                var urlCN = 'http://sci.justscience.cn/details.html?sci=0&q=' +
-                    encodeURIComponent(pubTitle); // 中文期刊详情查询地址
-                var respCN = await Zotero.HTTP.request("GET", urlCN);
-                var parserCN = new DOMParser();
-                var htmlCN = parserCN.parseFromString(
-                    respCN.responseText,
-                    "text/html"
-                );
-                var regInfo = '\n\t(.+)\n\t(.+)\n\t(.+)\n\t(.+)\n\t(.+)\n\t(.+)\n\t(.+)\n'; // 匹配期刊具体信息
+                var urlCN = 'http://sci.justscience.cn/?q=' +
+                    encodeURIComponent(pubTitle) +
+                    '&sci=0';// 为中文期刊详情查询地址
+                //  使用函数获取html  
+                // var respCN = await Zotero.HTTP.request("GET", urlCN);
 
+                // var parserCN = Components.classes["@mozilla.org/xmlextras/domparser;1"]
+                //     .createInstance(Components.interfaces.nsIDOMParser);
+                // var htmlCN = parserCN.parseFromString(
+                //     respCN.responseText,
+                //     "text/html"
+                // );
+                var htmlCN = await Zotero.UpdateIFs.getHtmlCN(urlCN);
+                var xPathCN = "//table[@class='tb1']//a[contains(concat('  ', normalize-space(text()), '  '), '  " +
+                    pubTitle +
+                    "  ')]"; // 20221024 可用 小林的xPath，为得到详情URL;
+                var detailURLPreCN = Zotero.Utilities.xpath(htmlCN, xPathCN)[0].href;
+                var detailURLCN = 'http://sci.justscience.cn/' + detailURLPreCN; // 中文期刊详细地址20221025
                 var old = item.getField('extra');
-                var xPathCN = '//div[2]/div[1]/table[2]/tbody/tr[2]/td['; // 收录情况2-4
-                var xPathCNIF1 = '//div[2]/div[1]/table[3]/tbody/tr[5]/td[2]'; // 复合影响因子
-                var xPathCNIF2 = '//div[2]/div[1]/table[3]/tbody/tr[6]/td[2]'; // 综合影响因子
+                var detailURLHtmlCN = await Zotero.UpdateIFs.getHtmlCN(detailURLCN);
+                var xPathSL = "//table[@class='tb1'][1]"; // 收录情况2-4
+                var xPathCNIF = "//table[@class='tb1'][2]"; // 影响因子表格
+                var jourCNSL = Zotero.Utilities.xpath(detailURLHtmlCN, xPathSL)[0].textContent // 收录情况文本
+                var jourCNIF = Zotero.Utilities.xpath(detailURLHtmlCN, xPathCNIF)[0].textContent // 影响因子文本
+                
+
                 var searchReg1 = /×/g; // 替换×
                 var searchReg2 = /√/g; // 替换√
-                var jourCNIF1 = Zotero.Utilities.xpath(htmlCN, xPathCNIF1)[0].innerText // 复合影响因子
-                var jourCNIF2 = Zotero.Utilities.xpath(htmlCN, xPathCNIF2)[0].innerText // 综合影响因子
-                var jourCN1 = Zotero.Utilities.xpath(htmlCN, xPathCN + '2]')[0].innerText // CSCD
+                var shouLuReg = /最新版本(\s.+){6,10}\s+(.*)\s+(.*)\s+(.*)/; //期刊收录情况正则
+                var jourCNIFReg = /复合影响因子(.*)\s+综合影响因子(.*)/;
+                var shouLu = jourCNSL.replace(searchReg1, '否').replace(searchReg2, '是'). // 替换×√
+                    match(shouLuReg);
 
-                var jourCN1Extra = jourCN1.replace(searchReg1, '否').replace(searchReg2, '是'); // 放入Extra用 // CSCD
-                var jourCN1New = jourCN1.replace(searchReg1, '').replace(searchReg2, 'CSCD');//放入字段中用  // CSCD
+                var jourCN1Extra = shouLu[2]; // 放入Extra用 // CSCD
+                var jourCN1New = jourCN1Extra.replace(/否/, '').replace(/是/, 'CSCD'); //放入字段中用  // CSCD
+
+                var jourCN2Extra = shouLu[3]; // 北大核心 //放入Extra用 20221026
+
+                var jourCN3Extra = shouLu[4]; //科技核心 放入Extra用 20221026
+                var jourCN3New = jourCN3Extra.replace(/否/, '').replace(/是/, '科技核心');    //放入字段中用   
+
+                var CNIF = jourCNIF.match(jourCNIFReg);
+                var jourCNIF1 = CNIF[1]; // 复合影响因子
+                var jourCNIF2 = CNIF[2]; // 综合影响因子20221026
+
+                // var jourCNIF1 = Zotero.Utilities.xpath(htmlCN, xPathCNIF1)[0].innerText // 复合影响因子
+                // var jourCNIF2 = Zotero.Utilities.xpath(htmlCN, xPathCNIF2)[0].innerText // 综合影响因子
+
+                // var jourCN1 = Zotero.Utilities.xpath(htmlCN, xPathCN + '2]')[0].innerText // CSCD20221012
+
+                // var jourCN1Extra = jourCN1.replace(searchReg1, '否').replace(searchReg2, '是'); // 放入Extra用 // CSCD 20221026
+                // var jourCN1New = jourCN1.replace(searchReg1, '').replace(searchReg2, 'CSCD');//放入字段中用  // CSCD 20221026
 
 
                 var jourCN2New = item.getField("url") ? await Zotero.UpdateIFs.CSSCI_PKU(item) : ''; //根据网址获致CSSCI，北大核心,  如无网址返回空白
@@ -583,24 +613,24 @@ Zotero.UpdateIFs.updateSelectedItem = async function (items) {
 
                 // } 
 
-                var jourCN2Extra = Zotero.Utilities.xpath(htmlCN, xPathCN + '3]')[0].innerText. // 北大核心
-                    replace(searchReg1, '否').replace(searchReg2, '是');//放入Extra用
+                // var jourCN2Extra = Zotero.Utilities.xpath(htmlCN, xPathCN + '3]')[0].innerText. // 北大核心
+                //     replace(searchReg1, '否').replace(searchReg2, '是');//放入Extra用 20221026
 
                 // var jourCN2New = jourCN2.replace(searchReg1, '').replace(searchReg2, '北大核心');
 
 
 
-                var jourCN3 = Zotero.Utilities.xpath(htmlCN, xPathCN + '4]')[0].innerText // 科技核心
-                var jourCN3Extra = jourCN3.replace(searchReg1, '否').replace(searchReg2, '是'); //放入Extra用
-                var jourCN3New = jourCN3.replace(searchReg1, '').replace(searchReg2, '科技核心');    //放入字段中用   
+                // var jourCN3 = Zotero.Utilities.xpath(htmlCN, xPathCN + '4]')[0].innerText // 科技核心
+                // var jourCN3Extra = jourCN3.replace(searchReg1, '否').replace(searchReg2, '是'); //放入Extra用
+                // var jourCN3New = jourCN3.replace(searchReg1, '').replace(searchReg2, '科技核心');    //放入字段中用   
 
 
-                var jourCNInfo = 'CSCD: ' + jourCN1Extra + ' ' + '北大核心: ' + jourCN2Extra + ' ' + '科技核心: ' + jourCN3Extra + '\n\n' +
+                var jourCNInfo = 'CSCD: ' + jourCN1Extra + '\n' + '北大核心: ' + jourCN2Extra + '\n' + '科技核心: ' + jourCN3Extra + '\n\n' +
                     '复合影响因子: ' + jourCNIF1 + '\n'
                     + '综合影响因子: ' + jourCNIF2 + '\n';  // 期刊信息组合
 
 
-                var pattCN = /CSCD: (.+)北大核心: (.+)科技核心: (.+)\n\n复合影响因子: (.*)\n综合影响因子: (.*)\n/g;   // 匹配以前影响因子的正则
+                var pattCN = /CSCD: (.+)\n北大核心: (.+)\n科技核心: (.+)\n\n复合影响因子: (.*)\n综合影响因子: (.*)/g;   // 匹配以前影响因子的正则
 
 
 
@@ -671,7 +701,25 @@ Zotero.UpdateIFs.updateSelectedItem = async function (items) {
     Zotero.UpdateIFs.showPopUP(alertInfo, statusInfo);
     // alert (numSuccess + whiteSpace + Zotero.UpdateIFs.ZUIFGetString('success'));
 };
+// 根据中文期刊名称，得到htmlCN
+Zotero.UpdateIFs.getHtmlCN = async function (url) {
+    try {
+        var resp = await Zotero.HTTP.request("GET", url);
+        var parser = Components.classes["@mozilla.org/xmlextras/domparser;1"]
+            .createInstance(Components.interfaces.nsIDOMParser);
+        var html = parser.parseFromString(
+            resp.responseText,
+            "text/html"
+        );
+        return html;
+    }
 
+    catch (error) {
+
+    }
+
+
+};
 
 // 得到影响因子及详细网址函数 
 Zotero.UpdateIFs.getIFs = async function (item) {
@@ -961,7 +1009,7 @@ Zotero.UpdateIFs.generateJCR = async function (detailURL) {
         var jourJCR = Zotero.Utilities.xpath(html, xPath2)[0].innerText;
 
         // var pattJCR2 = /JCR分区(.*)|大类\n.(.*)\n{3}.小类\n.(.*)/g // 20221025
-         var pattJCR2 = /JCR分区(.*)|大类\n.(.*)\n\s*小类\n\s*(.*)/g // 20221025
+        var pattJCR2 = /JCR分区(.*)|大类\n.(.*)\n\s*小类\n\s*(.*)/g // 20221025
         var getJCR = jourJCR.match(pattJCR2);
         var qu = getJCR[0].match('JCR分区(.*)')[1].replace(/\/以上面为准/g, '');
         // var basic21 = getJCR[1].match('大类\n\t(.*)\n\n\n\t小类\n\t(.*)'); 
