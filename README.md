@@ -1,6 +1,8 @@
 **注意：唯问网站最近更新了，插件当前不可用了，后期排版还可能有变化，等网站稳定后再更新，现在可以用[easyScholar版](https://github.com/redleafnew/zotero-updateifsE)。**
-
-
+<font color='red'> text </font>
+　<font color=FF0000> text </font>
+　$\color{red}{红色字}$
+ $\color{FF0000}{红色字}$
 # Zotero Update IFs
 
 使用[easyScholar](https://easyscholar.cc)数据接口版本可见：<https://github.com/redleafnew/zotero-updateifsE>。
