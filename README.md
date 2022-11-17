@@ -1,4 +1,4 @@
-**注意：唯问网站最近更新了，插件当前不可用了，后期排版还可能有变化，等网站稳定后再更新，现在可以用[easyScholar](https://github.com/redleafnew/zotero-updateifsE版**
+**注意：唯问网站最近更新了，插件当前不可用了，后期排版还可能有变化，等网站稳定后再更新，现在可以用[easyScholar版](https://github.com/redleafnew/zotero-updateifsE)。**
 
 
 # Zotero Update IFs
