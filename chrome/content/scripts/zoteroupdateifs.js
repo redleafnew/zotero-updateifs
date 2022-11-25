@@ -551,9 +551,11 @@ Zotero.UpdateIFs.updateSelectedItem = async function (items) {
             // 得到中文期刊信息 与前面英文相比后缀加CN
             try {
                 var pubTitle = item.getField('publicationTitle');
-                var urlCN = 'http://sci.justscience.cn/?q=' +
-                    encodeURIComponent(pubTitle) +
-                    '&sci=0';// 为中文期刊详情查询地址
+                var urlCN = 'http://sci.justscience.cn/list?sci=0&q=' +
+                    encodeURIComponent(pubTitle); // 为中文期刊详情查询地址 20221124
+                // var urlCN = 'http://sci.justscience.cn/?q=' +
+                //    encodeURIComponent(pubTitle) +
+                //    '&sci=0';// 为中文期刊详情查询地址
                 //  使用函数获取html  
                 // var respCN = await Zotero.HTTP.request("GET", urlCN);
 
@@ -564,33 +566,48 @@ Zotero.UpdateIFs.updateSelectedItem = async function (items) {
                 //     "text/html"
                 // );
                 var htmlCN = await Zotero.UpdateIFs.getHtmlCN(urlCN);
-                var xPathCN = "//table[@class='tb1']//a[contains(concat('  ', normalize-space(text()), '  '), '  " +
+                // 收录情况
+                var xPathSL = "//table[@class='s-result-table']";
+                var jourCNSL = Zotero.Utilities.xpath(htmlCN, xPathSL)[0].textContent;
+                var searchReg1 = /×/g; // 替换×
+                var searchReg2 = /√/g; // 替换√
+
+                // var shouLuReg = /最新版本(\s.+){6,10}\s+(.*)\s+(.*)\s+(.*)/; //期刊收录情况正则 20221124
+                var shouLuReg = '\\s+' + pubTitle + '\\s+(.*)\\s+(.*)\\s+(.*)'; //期刊收录情况正则 20221124
+                var pattSL = new RegExp(shouLuReg, 'i'); // 
+                var shouLu = jourCNSL.replace(searchReg1, '否').replace(searchReg2, '是'). // 替换×√
+                    match(pattSL);
+                var jourCN1Extra = shouLu[1]; // 放入Extra用 // CSCD 20221124
+                var jourCN1New = jourCN1Extra.replace(/否/, '').replace(/是/, 'CSCD'); //放入字段中用  // CSCD
+
+                var jourCN2Extra = shouLu[2]; // 北大核心 //放入Extra用 20221026 20221124
+
+                var jourCN3Extra = shouLu[3]; //科技核心 放入Extra用 20221026 20221124
+                var jourCN3New = jourCN3Extra.replace(/否/, '').replace(/是/, '科技核心');    //放入字段中用 
+
+                // 综合影响因子，复合影响因子
+                var xPathCN = "//table[@class='s-result-table']//a[contains(concat('  ', normalize-space(text()), '  '), '  " + // 20221124
+
+                    // var xPathCN = "//table[@class='tb1']//a[contains(concat('  ', normalize-space(text()), '  '), '  " +
                     pubTitle +
                     "  ')]"; // 20221024 可用 小林的xPath，为得到详情URL;
                 var detailURLPreCN = Zotero.Utilities.xpath(htmlCN, xPathCN)[0].href;
                 var detailURLCN = 'http://sci.justscience.cn/' + detailURLPreCN; // 中文期刊详细地址20221025
                 var old = item.getField('extra');
                 var detailURLHtmlCN = await Zotero.UpdateIFs.getHtmlCN(detailURLCN);
-                var xPathSL = "//table[@class='tb1'][1]"; // 收录情况2-4
-                var xPathCNIF = "//table[@class='tb1'][2]"; // 影响因子表格
-                var jourCNSL = Zotero.Utilities.xpath(detailURLHtmlCN, xPathSL)[0].textContent // 收录情况文本
+                // var xPathSL = "//table[@class='tb1'][1]"; // 收录情况2-4
+                // var xPathCNIF = "//table[@class='tb1'][2]"; // 影响因子表格
+                // var xPathSL = "//table[@class='s-list-table']"; // 收录情况2-4 20221124
+                var xPathCNIF = "//table[@class='list_table_blue_y hover_table_tr box_mt20 font_16 blue_bj_light']"; // 影响因子表格20221124
+                //  var jourCNSL = Zotero.Utilities.xpath(detailURLHtmlCN, xPathSL)[0].textContent // 收录情况文本 20221124
                 var jourCNIF = Zotero.Utilities.xpath(detailURLHtmlCN, xPathCNIF)[0].textContent // 影响因子文本
-                
 
-                var searchReg1 = /×/g; // 替换×
-                var searchReg2 = /√/g; // 替换√
-                var shouLuReg = /最新版本(\s.+){6,10}\s+(.*)\s+(.*)\s+(.*)/; //期刊收录情况正则
-                var jourCNIFReg = /复合影响因子(.*)\s+综合影响因子(.*)/;
-                var shouLu = jourCNSL.replace(searchReg1, '否').replace(searchReg2, '是'). // 替换×√
-                    match(shouLuReg);
 
-                var jourCN1Extra = shouLu[2]; // 放入Extra用 // CSCD
-                var jourCN1New = jourCN1Extra.replace(/否/, '').replace(/是/, 'CSCD'); //放入字段中用  // CSCD
 
-                var jourCN2Extra = shouLu[3]; // 北大核心 //放入Extra用 20221026
+                // var jourCNIFReg = /复合影响因子(.*)\s+综合影响因子(.*)/;
+                var jourCNIFReg = /复合影响因子\n(.*)\s+综合影响因子\n(.*)/; //20221124
 
-                var jourCN3Extra = shouLu[4]; //科技核心 放入Extra用 20221026
-                var jourCN3New = jourCN3Extra.replace(/否/, '').replace(/是/, '科技核心');    //放入字段中用   
+
 
                 var CNIF = jourCNIF.match(jourCNIFReg);
                 var jourCNIF1 = CNIF[1]; // 复合影响因子
@@ -753,21 +770,22 @@ Zotero.UpdateIFs.getIFs = async function (item) {
 
         //新函数结束
         // var xPathJour = '//*[@id="app"]/div[1]/div/div[1]'; // 20221023为得到期刊名称
-        var xPathJour = "//table[@class='tb1']"; // 20221023为得到期刊名称 小林的xPath
+        // var xPathJour = "//table[@class='tb1']"; // 20221023为得到期刊名称 小林的xPath
 
         // var xPathJour = '//div[2]/div[1]/table[2]/tbody'; // 为得到期刊名称
         // var xPathJour = '//td[contains(text(),'Annu')]/..'
+        var xPathJour = "//table[@class='s-result-table']";  // 为得到期刊名称 20221120
 
         var AllJour = Zotero.Utilities.xpath(html, xPathJour)[0].textContent;
         var publicationTitle = item.getField('publicationTitle');
         // 20221023 修改
-        var reg = '(\\d+)\n\\s+' + publicationTitle + // 分组1 序号
-            '\\s+\n\\s+' + '(.*)' +  // 分组2 缩写
-            '\\s+' + '(.*)' + // 分组3 ISSN
-            '\\s+' + '(.*)' +  //分组4文章数
-            '\\s+' + '(.*)' + //分组5 5年平均分
-            '\\s+' + '(.*)' + //分组6 非自引分
-            '\\s+' + '(.*)'; //分组7 影响因子
+        var reg = '\n\\s+' + publicationTitle + '\\s' + // 匹配期刊
+            '\\s+\n\\s+' + '(.*)' +  // 分组1 缩写
+            '\\s+' + '(.*)' + // 分组2 ISSN
+            '\\s+' + '(.*)' +  //分组3文章数
+            '\\s+' + '(.*)' + //分组4 5年平均分
+            '\\s+' + '(.*)' + //分组5 非自引分
+            '\\s+' + '(.*)'; //分组6 影响因子  // 20221124
         // 20221023 注释    
         // var reg = '\n\t(.*)\n\t' + publicationTitle + // 分组1序号
         //     '\n\t(.*)\n\t(.*)' + // 分组3 ISSN，分组4文章数
@@ -775,11 +793,13 @@ Zotero.UpdateIFs.getIFs = async function (item) {
         //     '\n\t(.*)\n\t(.*)'; // 分组7 影响因子
         var patt = new RegExp(reg, 'i'); // 
         var jour = AllJour.match(patt);
-        var abbr = Zotero.UpdateIFs.titleCase(jour[2]); // 转为首字母大写
-        var if5Year = jour[5];
-        var ifCurrent = jour[7];
-
-        var xPathUrl = "//table[@class='tb1']//a[contains(concat('  ', normalize-space(text()), '  '), '  " +
+        // var abbr = Zotero.UpdateIFs.titleCase(jour[2]); // 转为首字母大写 20221124
+        // var if5Year = jour[5];
+        // var ifCurrent = jour[7];
+        var abbr = Zotero.UpdateIFs.titleCase(jour[1]); // 转为首字母大写 20221124
+        var if5Year = jour[4];
+        var ifCurrent = jour[6];
+        var xPathUrl = "//table[@class='s-result-table']//a[contains(concat('  ', normalize-space(text()), '  '), '  " +
             publicationTitle +
             "  ')]"; // 20221024 可用 小林的xPath，为得到详情URL
 
@@ -803,8 +823,9 @@ Zotero.UpdateIFs.getIFs = async function (item) {
 
     try { // 期刊名字中有&的情况
         var html = await Zotero.UpdateIFs.getHtml(item);
+        // var xPathJour = "//table[@class='tb1']";  // 为得到期刊名称
 
-        var xPathJour = "//table[@class='tb1']";  // 为得到期刊名称
+        var xPathJour = "//table[@class='s-result-table']";  // 为得到期刊名称 20221120
 
         var AllJour = Zotero.Utilities.xpath(html, xPathJour)[0].textContent;
         var publicationTitle = item.getField('publicationTitle').
@@ -812,7 +833,7 @@ Zotero.UpdateIFs.getIFs = async function (item) {
             replace(/ - /g, '-').
             replace(/,/g, '').    // 替换逗号（，）
             replace(/: /g, '-');  // 替换冒号空格（：）  全局替换代码源于@crazyi
-        var reg = '(\\d+)\n\\s+' + publicationTitle + // 分组1 序号
+        var reg = '\n\\s+' + publicationTitle + '\\s' + // 匹配期刊
             '\\s+\n\\s+' + '(.*)' +  // 分组2 缩写
             '\\s+' + '(.*)' + // 分组3 ISSN
             '\\s+' + '(.*)' +  //分组4文章数
@@ -821,11 +842,11 @@ Zotero.UpdateIFs.getIFs = async function (item) {
             '\\s+' + '(.*)'; //分组7 影响因子
         var patt = new RegExp(reg, 'i'); // 
         var jour = AllJour.match(patt);
-        var abbr = Zotero.UpdateIFs.titleCase(jour[2]); // 转为首字母大写
-        var if5Year = jour[5];
-        var ifCurrent = jour[7];
+        var abbr = Zotero.UpdateIFs.titleCase(jour[1]); // 转为首字母大写
+        var if5Year = jour[4];
+        var ifCurrent = jour[6];
 
-        var xPathUrl = "//table[@class='tb1']//a[contains(concat('  ', normalize-space(text()), '  '), '  " +
+        var xPathUrl = "//table[@class='s-result-table']//a[contains(concat('  ', normalize-space(text()), '  '), '  " +
             publicationTitle +
             "  ')]";
         var detailURLPre = Zotero.Utilities.xpath(html, xPathUrl)[0].href; // 20221024
@@ -841,13 +862,13 @@ Zotero.UpdateIFs.getIFs = async function (item) {
     try { // 更名或剔除情况
         var html = await Zotero.UpdateIFs.getHtml(item);
 
-        var xPathJour = "//table[@class='tb1']";  // 为得到期刊名称
+        var xPathJour = "//table[@class='s-result-table']";  // 为得到期刊名称
 
         var AllJour = Zotero.Utilities.xpath(html, xPathJour)[0].textContent;
         var publicationTitle = item.getField('publicationTitle').
             replace('&', 'and').
             replace(' - ', '-');
-        var reg = '(\\d+)\n\\s+' + publicationTitle + '(更名\/剔除)(.*)' + // 分组1序号 后面还有两个分组
+        var reg = '\n\\s+' + publicationTitle + '\\s' + '(更名\/剔除)(.*)' + // 分组1序号 后面还有两个分组
             '\\s+\n\\s+' + '(.*)' +  // 分组4 缩写
             '\\s+' + '(.*)' + // 分组3 ISSN
             '\\s+' + '(.*)' +  //分组6文章数
@@ -858,11 +879,11 @@ Zotero.UpdateIFs.getIFs = async function (item) {
         var jour = AllJour.match(patt);
 
 
-        var abbr = Zotero.UpdateIFs.titleCase(jour[4]); // 转为首字母大写
-        var if5Year = jour[7];
-        var ifCurrent = jour[9];
+        var abbr = Zotero.UpdateIFs.titleCase(jour[3]); // 转为首字母大写
+        var if5Year = jour[6];
+        var ifCurrent = jour[8];
 
-        var xPathUrl = "//table[@class='tb1']//a[contains(concat('  ', normalize-space(text()), '  '), '  " +
+        var xPathUrl = "//table[@class='s-result-table']//a[contains(concat('  ', normalize-space(text()), '  '), '  " +
             publicationTitle +
             "  ')]";
         var detailURLPre = Zotero.Utilities.xpath(html, xPathUrl)[0].href; // 20221024
@@ -884,9 +905,11 @@ Zotero.UpdateIFs.getIFs = async function (item) {
 Zotero.UpdateIFs.getHtml = async function (item) {
     try {
         var pubTitle = item.getField('publicationTitle');
-        var url = 'http://sci.justscience.cn/index.php?q=' +
-            encodeURIComponent(pubTitle) + '&sci=1';
-        // 20220506 尝试使用科研通得到数据
+        var url = 'http://sci.justscience.cn/list?sci=1&q=' +
+            encodeURIComponent(pubTitle); // 20221120
+        // var url = 'http://sci.justscience.cn/index.php?q=' +
+        // encodeURIComponent(pubTitle) + '&sci=1'; // 20221120
+        // 20220506 尝试使用科研通得到数据 
         // var url = 'https://www.ablesci.com/journal/index?keywords=' +
         //     encodeURIComponent(pubTitle).replace(/%20/g, '+');
         var resp = await Zotero.HTTP.request("GET", url);
@@ -1005,17 +1028,21 @@ Zotero.UpdateIFs.generateJCR = async function (detailURL) {
         // var xPath2 = '//table[3]'; // 20221024
         // var xPath2 = "//td[contains(text(), 'JCR')]/../.."; // 20221024
         // var xPath2 = "//div[@class='detail-table']"; // 20221024
-        var xPath2 = "//table[@class='tb1']";  // 20221024 来自林 //div[@class='detail-table']
+        // var xPath2 = "//table[@class='tb1']";  // 20221024 来自林 //div[@class='detail-table']
+        var xPath2 = "//table[@class='list_table_blue_y hover_table_tr box_mt20 font_16 blue_bj_light']";  // 20221124  
         var jourJCR = Zotero.Utilities.xpath(html, xPath2)[0].innerText;
 
         // var pattJCR2 = /JCR分区(.*)|大类\n.(.*)\n{3}.小类\n.(.*)/g // 20221025
-        var pattJCR2 = /JCR分区(.*)|大类\n.(.*)\n\s*小类\n\s*(.*)/g // 20221025
+        // var pattJCR2 = /JCR分区\n(.*)|大类\n.(.*)\n\s*小类\n\s*(.*)/g // 20221025
+        var pattJCR2 = /JCR分区\n(.*)|大类：(.*)\n\s+小类：(.*)/g // 20221124
         var getJCR = jourJCR.match(pattJCR2);
-        var qu = getJCR[0].match('JCR分区(.*)')[1].replace(/\/以上面为准/g, '');
+        var qu = getJCR[0].match(/JCR分区\n\s+(.*)/)[1].replace(/\/以上面为准/g, ''); //20221124
         // var basic21 = getJCR[1].match('大类\n\t(.*)\n\n\n\t小类\n\t(.*)'); 
         // var update21 = getJCR[2].match('大类\n\t(.*)\n\n\n\t小类\n\t(.*)');
-        var basic21 = getJCR[1].match(/大类\n\s+(.*)\n\s+小类\n\s+(.*)/); // 20221025
-        var update21 = getJCR[2].match(/大类\n\s+(.*)\n\s+小类\n\s+(.*)/); // 20221025
+        // var basic21 = getJCR[1].match(/大类\n\s+(.*)\n\s+小类\n\s+(.*)/); // 20221025
+        // var update21 = getJCR[2].match(/大类\n\s+(.*)\n\s+小类\n\s+(.*)/); // 20221025
+        var basic21 = getJCR[1].match(/大类：(.*)\n\s+小类：(.*)/); // 20221124
+        var update21 = getJCR[2].match(/大类：(.*)\n\s+小类：(.*)/); // 20221124
         var firstCat = ifsType == 'updated' ? update21[1] : basic21[1]; // 大类：如果为升级版为updated，否则为基础版
         var secCat = ifsType == 'updated' ? update21[2].replace(/区/g, '区 ') : basic21[2].replace(/区/g, '区 '); // 大类：如果为升级版为updated，否则为基础版，并且将区替换为区；，以美化
         JCR.push(qu, firstCat, secCat);
