@@ -1,9 +1,3 @@
-
-
-```diff
-- 已更新修复。--20221125
-```
-
 # Zotero Update IFs
 
 使用[easyScholar](https://easyscholar.cc)数据接口版本可见：<https://github.com/redleafnew/zotero-updateifsE>。
