@@ -393,12 +393,16 @@ Zotero.UpdateIFs.notifierCallback = {
     notify: function (event, type, ids, extraData) {
         var addedItems = Zotero.Items.get(ids);
         var addUppdate = Zotero.Prefs.get('extensions.updateifs.add-update', true); // 是否在添加条目时更新
+        var items = [];
         for (let item of addedItems) {
             if (event == 'add' && addUppdate && !item.isNote() &&
                 item.isRegularItem() && !item.isCollection()) {
-                Zotero.UpdateIFs.updateSelectedItems();
+                //Zotero.UpdateIFs.updateSelectedItems();// 20221126
+                
+                items.push(item);// 20221126
             }
         }
+        Zotero.UpdateIFs.updateSelectedItem(items);
     }
 };
 
