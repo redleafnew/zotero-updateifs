@@ -283,7 +283,7 @@ Zotero.UpdateIFs.getAuthorName = function () {
 Zotero.UpdateIFs.changeTitleCase = async function () {
     var items = Zotero.UpdateIFs.getSelectedItems();
     var alertInfo = '';
-    // progresswindow   // 20220310   
+    // progresswindow   // 20220310
     progressWin = null; // 20220310
     itemProgress = []; // 20220310
     progressWin = new Zotero.ProgressWindow(); // 20220310
@@ -313,12 +313,12 @@ Zotero.UpdateIFs.changeTitleCase = async function () {
                 replace('english', 'English'). // 替换english
                 replace('england', 'England'). // 替换england
                 replace('india', 'India').// 替换india
-                //20220510 增加冒号后面为大写字母   
-                // https://stackoverflow.com/questions/72180052/regexp-match-and-replace-to-its-uppercase-in-javascript#72180194           
+                //20220510 增加冒号后面为大写字母
+                // https://stackoverflow.com/questions/72180052/regexp-match-and-replace-to-its-uppercase-in-javascript#72180194
                 replace(/：|:\s*\w/, fullMatch => fullMatch.toUpperCase()); //匹配冒号后面的空格及一个字母，并转为大写
 
-            //20220509 增加冒号后面为大写字母  
-            //colon_letter = new_title.match((/(：|:\s*\w)/))[0];  
+            //20220509 增加冒号后面为大写字母
+            //colon_letter = new_title.match((/(：|:\s*\w)/))[0];
             //new_title = new_title.replace(colon_letter, colon_letter.toUpperCase()); //转为大写
 
             // result += "-> " + new_title + "\n\n";
@@ -401,11 +401,11 @@ Zotero.UpdateIFs.notifierCallback = {
                 item.isRegularItem() && !item.isCollection()) {
                 //Zotero.UpdateIFs.updateSelectedItems();// 20221126
 
-                items.push(item);// 20221126
+                items.push(item);// 20221126 正常条目才纳入更新
             }
 
         }
-        if (event == 'add' && addUppdate) {
+        if (event == 'add' && addUppdate && items != '') { //20221203得到的items不为空时才更新。
             Zotero.UpdateIFs.updateSelectedItem(items);
         }
     } //此处如果以“，”结尾会提示两次。
@@ -433,7 +433,7 @@ Zotero.UpdateIFs.updateSelectedItems = async function () {
 Zotero.UpdateIFs.getSelectedItems = function () {
     var zoteroPane = Zotero.getActiveZoteroPane();
     var items = zoteroPane.getSelectedItems();
-    return items; // 
+    return items; //
 };
 
 
@@ -513,7 +513,7 @@ Zotero.UpdateIFs.updateSelectedItem = async function (items) {
                 var ifs = ifsc + ifs5;
                 var patt = /影响因子: (([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)\n5年影响因子: (([1-9][\d]{0,6}|0)(\.[\d]{1,5})?)/;   // 匹配以前影响因子的正则
                 var enAbbr = Zotero.Prefs.get('extensions.updateifs.en-abbr', true) // 设置中 英文期刊缩写选项
-                // if (enAbbr) { 
+                // if (enAbbr) {
                 item.setField('journalAbbreviation', jourAbb); // 设置期刊缩写
                 // }
 
@@ -566,7 +566,7 @@ Zotero.UpdateIFs.updateSelectedItem = async function (items) {
                 // var urlCN = 'http://sci.justscience.cn/?q=' +
                 //    encodeURIComponent(pubTitle) +
                 //    '&sci=0';// 为中文期刊详情查询地址
-                //  使用函数获取html  
+                //  使用函数获取html
                 // var respCN = await Zotero.HTTP.request("GET", urlCN);
 
                 // var parserCN = Components.classes["@mozilla.org/xmlextras/domparser;1"]
@@ -584,7 +584,7 @@ Zotero.UpdateIFs.updateSelectedItem = async function (items) {
 
                 // var shouLuReg = /最新版本(\s.+){6,10}\s+(.*)\s+(.*)\s+(.*)/; //期刊收录情况正则 20221124
                 var shouLuReg = '\\s+' + pubTitle + '\\s+(.*)\\s+(.*)\\s+(.*)'; //期刊收录情况正则 20221124
-                var pattSL = new RegExp(shouLuReg, 'i'); // 
+                var pattSL = new RegExp(shouLuReg, 'i'); //
                 var shouLu = jourCNSL.replace(searchReg1, '否').replace(searchReg2, '是'). // 替换×√
                     match(pattSL);
                 var jourCN1Extra = shouLu[1]; // 放入Extra用 // CSCD 20221124
@@ -593,7 +593,7 @@ Zotero.UpdateIFs.updateSelectedItem = async function (items) {
                 var jourCN2Extra = shouLu[2]; // 北大核心 //放入Extra用 20221026 20221124
 
                 var jourCN3Extra = shouLu[3]; //科技核心 放入Extra用 20221026 20221124
-                var jourCN3New = jourCN3Extra.replace(/否/, '').replace(/是/, '科技核心');    //放入字段中用 
+                var jourCN3New = jourCN3Extra.replace(/否/, '').replace(/是/, '科技核心');    //放入字段中用
 
                 // 综合影响因子，复合影响因子
                 var xPathCN = "//table[@class='s-result-table']//a[contains(concat('  ', normalize-space(text()), '  '), '  " + // 20221124
@@ -638,7 +638,7 @@ Zotero.UpdateIFs.updateSelectedItem = async function (items) {
 
                 //     var jourCN2New = await Zotero.UpdateIFs.CSSCI_PKU(item); //根据网址获致CSSCI，北大核心
 
-                // } 
+                // }
 
                 // var jourCN2Extra = Zotero.Utilities.xpath(htmlCN, xPathCN + '3]')[0].innerText. // 北大核心
                 //     replace(searchReg1, '否').replace(searchReg2, '是');//放入Extra用 20221026
@@ -649,7 +649,7 @@ Zotero.UpdateIFs.updateSelectedItem = async function (items) {
 
                 // var jourCN3 = Zotero.Utilities.xpath(htmlCN, xPathCN + '4]')[0].innerText // 科技核心
                 // var jourCN3Extra = jourCN3.replace(searchReg1, '否').replace(searchReg2, '是'); //放入Extra用
-                // var jourCN3New = jourCN3.replace(searchReg1, '').replace(searchReg2, '科技核心');    //放入字段中用   
+                // var jourCN3New = jourCN3.replace(searchReg1, '').replace(searchReg2, '科技核心');    //放入字段中用
 
 
                 var jourCNInfo = 'CSCD: ' + jourCN1Extra + '\n' + '北大核心: ' + jourCN2Extra + '\n' + '科技核心: ' + jourCN3Extra + '\n\n' +
@@ -671,7 +671,7 @@ Zotero.UpdateIFs.updateSelectedItem = async function (items) {
 
                 if (sciCore) item.setField( // 设置科技核心
                     chjSciField,
-                    jourCN3New); // 
+                    jourCN3New); //
 
                 if (comIf) item.setField( // 设置复合影响因子
                     chjCIfField,
@@ -719,7 +719,7 @@ Zotero.UpdateIFs.updateSelectedItem = async function (items) {
             }
         }
 
-
+        await new Promise(resolve => setTimeout(resolve, Math.round(Math.random() * 20000))); // 暂停几秒再抓取
 
     }
     var statusInfo = numSuccess > 0 ? 'finished' : 'failed';
@@ -727,6 +727,7 @@ Zotero.UpdateIFs.updateSelectedItem = async function (items) {
     var alertInfo = numSuccess + whiteSpace + Zotero.UpdateIFs.ZUIFGetString(successInfo);
     Zotero.UpdateIFs.showPopUP(alertInfo, statusInfo);
     // alert (numSuccess + whiteSpace + Zotero.UpdateIFs.ZUIFGetString('success'));
+
 };
 // 根据中文期刊名称，得到htmlCN
 Zotero.UpdateIFs.getHtmlCN = async function (url) {
@@ -748,18 +749,18 @@ Zotero.UpdateIFs.getHtmlCN = async function (url) {
 
 };
 
-// 得到影响因子及详细网址函数 
+// 得到影响因子及详细网址函数
 Zotero.UpdateIFs.getIFs = async function (item) {
     var ifs = [];
     try {
         var html = await Zotero.UpdateIFs.getHtml(item);
 
         // 新函数开始
-        // var publicationTitle = item.getField('publicationTitle'); 
+        // var publicationTitle = item.getField('publicationTitle');
 
-        // var xPathJour = '//td/a[contains(text(),' + 
+        // var xPathJour = '//td/a[contains(text(),' +
         //     '\'' +
-        //     publicationTitle + 
+        //     publicationTitle +
         //     '\'' +
         //     ')]/../..';
 
@@ -772,11 +773,11 @@ Zotero.UpdateIFs.getIFs = async function (item) {
         // pattTds = new RegExp('<td class="td1" height="30" align="center">', 'g');
         // pattTde = new RegExp('</td>', 'g');
         // var allInfo = AllJour.replace(pattTds,'').replace(pattTde,'');
-        // var jour = allInfo.match(/href=\"(.*)\"\s.*\n.(.*)\n.(.*)\n.*\n.(.*)\n.(.*)\n.(.*)/);  
+        // var jour = allInfo.match(/href=\"(.*)\"\s.*\n.(.*)\n.(.*)\n.*\n.(.*)\n.(.*)\n.(.*)/);
         // var detailURL = 'http://sci.justscience.cn/' + jour[1];
         // var regAbbr = jour[2];
-        // var if5Year = jour[4]; 
-        // var ifCurrent = jour[6];  
+        // var if5Year = jour[4];
+        // var ifCurrent = jour[6];
 
         //新函数结束
         // var xPathJour = '//*[@id="app"]/div[1]/div/div[1]'; // 20221023为得到期刊名称
@@ -796,12 +797,12 @@ Zotero.UpdateIFs.getIFs = async function (item) {
             '\\s+' + '(.*)' + //分组4 5年平均分
             '\\s+' + '(.*)' + //分组5 非自引分
             '\\s+' + '(.*)'; //分组6 影响因子  // 20221124
-        // 20221023 注释    
+        // 20221023 注释
         // var reg = '\n\t(.*)\n\t' + publicationTitle + // 分组1序号
         //     '\n\t(.*)\n\t(.*)' + // 分组3 ISSN，分组4文章数
         //     '\n\t(.*)\n\t(.*)' + //分组5 5年平均分， 分组6 非自引分
         //     '\n\t(.*)\n\t(.*)'; // 分组7 影响因子
-        var patt = new RegExp(reg, 'i'); // 
+        var patt = new RegExp(reg, 'i'); //
         var jour = AllJour.match(patt);
         // var abbr = Zotero.UpdateIFs.titleCase(jour[2]); // 转为首字母大写 20221124
         // var if5Year = jour[5];
@@ -821,7 +822,7 @@ Zotero.UpdateIFs.getIFs = async function (item) {
         // var detailURL = 'http://sci.justscience.cn/' + detailURLPre[index].value;//20221024
         var detailURLPre = Zotero.Utilities.xpath(html, xPathUrl)[0].href; // 20221024
         var detailURL = 'http://sci.justscience.cn/' + detailURLPre; // 20221024
-        // var regAbbr = '\n\t' + publicationTitle + '\n.(.*)';  // 用于得到期刊缩写 
+        // var regAbbr = '\n\t' + publicationTitle + '\n.(.*)';  // 用于得到期刊缩写
         // var abbr = AllJour.match(regAbbr)[1];  // 匹配得到期刊缩写
 
         ifs.push(if5Year, ifCurrent, detailURL, abbr)
@@ -850,7 +851,7 @@ Zotero.UpdateIFs.getIFs = async function (item) {
             '\\s+' + '(.*)' + //分组5 5年平均分
             '\\s+' + '(.*)' + //分组6 非自引分
             '\\s+' + '(.*)'; //分组7 影响因子
-        var patt = new RegExp(reg, 'i'); // 
+        var patt = new RegExp(reg, 'i'); //
         var jour = AllJour.match(patt);
         var abbr = Zotero.UpdateIFs.titleCase(jour[1]); // 转为首字母大写
         var if5Year = jour[4];
@@ -863,7 +864,7 @@ Zotero.UpdateIFs.getIFs = async function (item) {
         var detailURL = 'http://sci.justscience.cn/' + detailURLPre; // 20221024
 
         ifs.push(if5Year, ifCurrent, detailURL, abbr)
-        // ifs.push(if5Year, ifCurrent, detailURL)        
+        // ifs.push(if5Year, ifCurrent, detailURL)
         return ifs;
     } catch (error) {
         // numFail = numFail + 1;
@@ -885,7 +886,7 @@ Zotero.UpdateIFs.getIFs = async function (item) {
             '\\s+' + '(.*)' + //分组7 5年平均分
             '\\s+' + '(.*)' + //分组8 非自引分
             '\\s+' + '(.*)'; //分组9 影响因子
-        var patt = new RegExp(reg, 'i'); // 
+        var patt = new RegExp(reg, 'i'); //
         var jour = AllJour.match(patt);
 
 
@@ -919,7 +920,7 @@ Zotero.UpdateIFs.getHtml = async function (item) {
             encodeURIComponent(pubTitle); // 20221120
         // var url = 'http://sci.justscience.cn/index.php?q=' +
         // encodeURIComponent(pubTitle) + '&sci=1'; // 20221120
-        // 20220506 尝试使用科研通得到数据 
+        // 20220506 尝试使用科研通得到数据
         // var url = 'https://www.ablesci.com/journal/index?keywords=' +
         //     encodeURIComponent(pubTitle).replace(/%20/g, '+');
         var resp = await Zotero.HTTP.request("GET", url);
@@ -988,7 +989,7 @@ Zotero.UpdateIFs.setItemJCR = async function (detailURL, item) {
                 item.setField(
                     'extra',
                     old.replace(pattJCR, JCRInfo));
-                // 以下注释目的为20220415 恢复原Extra 
+                // 以下注释目的为20220415 恢复原Extra
                 // }  else if (old.search(pattNewJCR) != -1) { // 如果以前有JCR分区则替换
                 //     item.setField(
                 //         'extra',
@@ -1009,7 +1010,7 @@ Zotero.UpdateIFs.setItemJCR = async function (detailURL, item) {
 
             } else {   // 以前没有，且内容不为空
                 item.setField('extra', JCRInfo + '\n' + old); // 20220415 恢复原Extra
-                //item.setField('extra', newJCRinfo + '\n' + old);       
+                //item.setField('extra', newJCRinfo + '\n' + old);
             }
         };
         item.save();
@@ -1039,7 +1040,7 @@ Zotero.UpdateIFs.generateJCR = async function (detailURL) {
         // var xPath2 = "//td[contains(text(), 'JCR')]/../.."; // 20221024
         // var xPath2 = "//div[@class='detail-table']"; // 20221024
         // var xPath2 = "//table[@class='tb1']";  // 20221024 来自林 //div[@class='detail-table']
-        var xPath2 = "//table[@class='list_table_blue_y hover_table_tr box_mt20 font_16 blue_bj_light']";  // 20221124  
+        var xPath2 = "//table[@class='list_table_blue_y hover_table_tr box_mt20 font_16 blue_bj_light']";  // 20221124
         var jourJCR = Zotero.Utilities.xpath(html, xPath2)[0].innerText;
 
         // var pattJCR2 = /JCR分区(.*)|大类\n.(.*)\n{3}.小类\n.(.*)/g // 20221025
@@ -1047,7 +1048,7 @@ Zotero.UpdateIFs.generateJCR = async function (detailURL) {
         var pattJCR2 = /JCR分区\n(.*)|大类：(.*)\n\s+小类：(.*)/g // 20221124
         var getJCR = jourJCR.match(pattJCR2);
         var qu = getJCR[0].match(/JCR分区\n\s+(.*)/)[1].replace(/\/以上面为准/g, ''); //20221124
-        // var basic21 = getJCR[1].match('大类\n\t(.*)\n\n\n\t小类\n\t(.*)'); 
+        // var basic21 = getJCR[1].match('大类\n\t(.*)\n\n\n\t小类\n\t(.*)');
         // var update21 = getJCR[2].match('大类\n\t(.*)\n\n\n\t小类\n\t(.*)');
         // var basic21 = getJCR[1].match(/大类\n\s+(.*)\n\s+小类\n\s+(.*)/); // 20221025
         // var update21 = getJCR[2].match(/大类\n\s+(.*)\n\s+小类\n\s+(.*)/); // 20221025
@@ -1061,12 +1062,12 @@ Zotero.UpdateIFs.generateJCR = async function (detailURL) {
         //   var xPath = '//div[2]/div[1]/table[3]/tbody';
         // //   var pattJCR = /JCR分区\n\t(.*)\n(\s*)(.+\n\s*(.+\n)\s(.+)\n\s*)大类\n\s(.*)\n\s*小类\n\s(.*)\n/;
         //   var pattJCR = /JCR分区(.*)\n{3}\t.*\n{3}\t\n.\t\n.*\n.\n.*\n.*\n{3}.大类\n.(.*)\n{3}.小类\n.(.*)/; // 20220222 修改正则匹配
-        //   var jourJCR = Zotero.Utilities.xpath(html, xPath)[0].innerText;  
+        //   var jourJCR = Zotero.Utilities.xpath(html, xPath)[0].innerText;
 
-        //   var getJCR = jourJCR.match(pattJCR);  
+        //   var getJCR = jourJCR.match(pattJCR);
         // //   JCR.push(getJCR[1], getJCR[6], getJCR[7]);
         // JCR.push(getJCR[1], getJCR[2], getJCR[3]);
-        //   return JCR; 
+        //   return JCR;
     } catch (error) {
         //continue;
     }
@@ -1197,15 +1198,15 @@ Zotero.UpdateIFs.CSSCI_PKU = async function (item) {
 //   Zotero.UpdateIFs.CSSCI_EI = async function(detailURL){
 //     try {
 //         var pubTitle = item.getField('publicationTitle');
-//         var url = 'https://s.wanfangdata.com.cn/magazine?q=' + 
-//                     encodeURIComponent(pubTitle); 
+//         var url = 'https://s.wanfangdata.com.cn/magazine?q=' +
+//                     encodeURIComponent(pubTitle);
 //         var xPathJour = '//*[@class="title-area"]';
 //         var resp = await Zotero.HTTP.request("GET", url);
 //         var parser = new DOMParser();
 //         var html = parser.parseFromString(
 //             resp.responseText,
 //             "text/html"
-//         );  
+//         );
 //        // return html;
 
 //         var AllJour = Zotero.Utilities.xpath(html, xPathJour)[0].innerText;
@@ -1216,7 +1217,7 @@ Zotero.UpdateIFs.CSSCI_PKU = async function (item) {
 //     }
 //   };
 
-// Localization (borrowed from ZotFile sourcecode) 
+// Localization (borrowed from ZotFile sourcecode)
 // 提示语言本地化函数 Zotero.UpdateIFs.updateItem = async function(item) {
 
 Zotero.UpdateIFs.ZUIFGetString = function (name, params) {
@@ -1257,9 +1258,9 @@ Zotero.UpdateIFs.displayMenuitem = function () { // 如果条目不符合，则�
     } else {
         var showMenuColl = false;
     } // 检查分类条目是否适合
-    //   
+    //
 
-    pane.document.getElementById( // 分类/文件夹菜单是否可见 
+    pane.document.getElementById( // 分类/文件夹菜单是否可见
         "zotero-collectionmenu-updateifs"
     ).hidden = !showMenuColl; // 分类条目上不符合则隐藏
 
@@ -1269,7 +1270,7 @@ Zotero.UpdateIFs.displayMenuitem = function () { // 如果条目不符合，则�
 
     pane.document.getElementById( // 条目上是否禁用
         "zotero-itemmenu-updateifs"
-    ).disabled = !showMenuItem; // 如不符合则禁用 
+    ).disabled = !showMenuItem; // 如不符合则禁用
 
 };
 
@@ -1296,7 +1297,7 @@ Zotero.UpdateIFs.whiteSpace = function () {
     return whiteSpace;
 };
 
-// 右下角弹出函数 
+// 右下角弹出函数
 Zotero.UpdateIFs.showPopUP = function (alertInfo, status) {
 
     var progressWindow = new Zotero.ProgressWindow({ closeOnClick: true });
