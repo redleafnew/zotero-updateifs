@@ -719,7 +719,7 @@ Zotero.UpdateIFs.updateSelectedItem = async function (items) {
             }
         }
 
-        await new Promise(resolve => setTimeout(resolve, Math.round(Math.random() * 20000))); // 暂停几秒再抓取
+        await new Promise(resolve => setTimeout(resolve, Math.round(Math.random() * 50000))); // 暂停几秒再抓取，随机等待时间5-50s
 
     }
     var statusInfo = numSuccess > 0 ? 'finished' : 'failed';
